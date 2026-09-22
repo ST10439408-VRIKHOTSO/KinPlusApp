@@ -38,13 +38,8 @@ jobs:
 
       - name: Write local.properties from secrets
         env:
-          GOOGLE_WEB_CLIENT_ID: ${{ secrets.KINPLUS_GOOGLE_WEB_CLIENT_ID }}
           GOOGLE_MAPS_API_KEY: ${{ secrets.KINPLUS_GOOGLE_MAPS_API_KEY }}
-        run: |
-          {
-            echo "KINPLUS_GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID"
-            echo "KINPLUS_GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY"
-          } >> local.properties
+        run: echo "KINPLUS_GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> local.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

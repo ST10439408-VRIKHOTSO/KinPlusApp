@@ -1,8 +1,6 @@
 package za.co.kinplus.app.ui.screens.auth
 
 import android.content.Context
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -69,17 +66,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = authManager.login(s.email, s.password)) {
                 is Resource.Success -> { syncThen(context, onSuccess) }
-                is Resource.Error -> _state.update { it.copy(loading = false, error = result.message) }
-                Resource.Loading -> Unit
-            }
-        }
-    }
-
-    fun googleSignIn(context: Context, onSuccess: () -> Unit) {
-        _state.update { it.copy(loading = true, error = null) }
-        viewModelScope.launch {
-            when (val result = authManager.signInWithGoogle(context)) {
-                is Resource.Success -> syncThen(context, onSuccess)
                 is Resource.Error -> _state.update { it.copy(loading = false, error = result.message) }
                 Resource.Loading -> Unit
             }
@@ -219,38 +205,6 @@ fun LoginScreen(
                         } else {
                             Text(stringResource(R.string.log_in), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
                         }
-                    }
-
-                    Spacer(Modifier.height(24.dp))
-                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                        HorizontalDivider(Modifier.weight(1f), color = AuthDivider)
-                        Text(
-                            stringResource(R.string.or_continue_with),
-                            color = AuthMuted,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            letterSpacing = 1.sp,
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        )
-                        HorizontalDivider(Modifier.weight(1f), color = AuthDivider)
-                    }
-
-                    Spacer(Modifier.height(20.dp))
-                    OutlinedButton(
-                        onClick = { viewModel.googleSignIn(context, onLoggedIn) },
-                        enabled = !state.loading,
-                        modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, AuthDivider),
-                        colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White, contentColor = AuthBody)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.ic_google_logo),
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(10.dp))
-                        Text(stringResource(R.string.continue_with_google), fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
 
                     Spacer(Modifier.height(20.dp))

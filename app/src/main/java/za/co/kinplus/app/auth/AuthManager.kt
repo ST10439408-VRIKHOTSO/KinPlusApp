@@ -1,19 +1,10 @@
 package za.co.kinplus.app.auth
 
-import android.content.Context
 import android.util.Log
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
-import za.co.kinplus.app.BuildConfig
 import za.co.kinplus.app.util.Resource
-import java.security.MessageDigest
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,10 +15,6 @@ import javax.inject.Singleton
  * Firebase Authentication hashes and salts credentials on Google's servers
  * (scrypt), and all traffic is TLS. This is what satisfies the PoE requirement
  * to "encrypt the password" (FR-03).
- *
- * Single sign-on (FR-05, PoE): Google sign-in uses the Android Credential
- * Manager to obtain a Google ID token, which is exchanged for a Firebase
- * credential.
  */
 @Singleton
 class AuthManager @Inject constructor(
@@ -71,51 +58,6 @@ class AuthManager @Inject constructor(
         Resource.Success(Unit)
     } catch (e: Exception) {
         Resource.Error(mapError(e), e)
-    }
-
-    // ----- Google single sign-on -----
-
-    /**
-     * Launches the Credential Manager Google sign-in flow. Requires the web
-     * client id from local.properties (KINPLUS_GOOGLE_WEB_CLIENT_ID).
-     */
-    suspend fun signInWithGoogle(activityContext: Context): Resource<Unit> {
-        if (BuildConfig.GOOGLE_WEB_CLIENT_ID.isBlank()) {
-            return Resource.Error("Google sign-in is not configured (missing web client id).")
-        }
-        return try {
-            val credentialManager = CredentialManager.create(activityContext)
-
-            // A random nonce mitigates token replay.
-            val nonce = MessageDigest.getInstance("SHA-256")
-                .digest(java.util.UUID.randomUUID().toString().toByteArray())
-                .joinToString("") { "%02x".format(it) }
-
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false)
-                .setServerClientId(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-                .setNonce(nonce)
-                .build()
-
-            val request = GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
-            val response = credentialManager.getCredential(activityContext, request)
-
-            val credential = response.credential
-            if (credential is CustomCredential &&
-                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-            ) {
-                val googleIdToken = GoogleIdTokenCredential.createFrom(credential.data).idToken
-                val firebaseCredential = GoogleAuthProvider.getCredential(googleIdToken, null)
-                firebaseAuth.signInWithCredential(firebaseCredential).await()
-                Log.i(TAG, "Google SSO succeeded")
-                Resource.Success(Unit)
-            } else {
-                Resource.Error("Unexpected credential type from Google.")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Google SSO failed", e)
-            Resource.Error("Google sign-in was cancelled or failed.", e)
-        }
     }
 
     fun signOut() {

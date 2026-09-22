@@ -30,12 +30,9 @@ securityCrypto = "1.1.0-alpha06"
 
 # Firebase / Google Play services
 firebaseBom = "33.4.0"
-playServicesAuth = "21.2.0"
 playServicesLocation = "21.3.0"
 playServicesMaps = "20.0.0"
 mapsCompose = "4.4.2"
-credentials = "1.3.0"
-googleid = "1.1.1"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -96,14 +93,10 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 
-# Google sign-in (Credential Manager) + location + maps
-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+# Location + maps
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
-androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
-androidx-credentials-play-services = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
-googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 # Coroutines
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }

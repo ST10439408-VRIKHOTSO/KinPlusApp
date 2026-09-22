@@ -21,7 +21,6 @@
     <string name="create_account">Hlama akhaonto</string>
     <string name="join_kinplus">Kgokela go Kin+</string>
     <string name="forgot_password">O lebetše phasewete?</string>
-    <string name="continue_with_google">Tšwela pele ka Google</string>
     <string name="new_here">O moswa mo? Hlama akhaonto</string>
     <string name="already_have_account">O na le akhaonto? Tsena</string>
     <string name="or">goba</string>
@@ -91,6 +90,7 @@
     <string name="zone_enter_exit">Ditemošo tša go tsena/go tšwa di bulegile</string>
 
     <string name="settings_title">Dipeakanyo</string>
+    <string name="settings_row_sub">Ditsebišo, leleme, diyuniti, sephiri</string>
     <string name="notifications">Ditsebišo</string>
     <string name="notifications_sub">SOS, mafelo, maeto</string>
     <string name="language">Leleme</string>

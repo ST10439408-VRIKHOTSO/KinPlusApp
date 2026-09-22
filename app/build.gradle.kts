@@ -35,14 +35,6 @@ android {
         // Exposed to code as BuildConfig.API_BASE_URL so the endpoint is not hard-coded.
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
 
-        // The Android OAuth client's server (web) client id, used by Google SSO.
-        // Provide it in local.properties; a blank default keeps debug builds compiling.
-        buildConfigField(
-            "String",
-            "GOOGLE_WEB_CLIENT_ID",
-            "\"${localProps.getProperty("KINPLUS_GOOGLE_WEB_CLIENT_ID") ?: ""}\""
-        )
-
         // Google Maps API key (Home screen). Provide it in local.properties as
         // KINPLUS_GOOGLE_MAPS_API_KEY; a blank value means the map tiles won't
         // load, but the app still builds and runs.
@@ -101,6 +93,11 @@ android {
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
+    testOptions {
+        // Unmocked android.jar methods (e.g. android.util.Log) return defaults
+        // instead of throwing, so plain JVM unit tests don't need Robolectric.
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -149,14 +146,10 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
 
-    // ----- Google SSO (Credential Manager) + location + maps -----
-    implementation(libs.play.services.auth)
+    // ----- Location + maps -----
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services)
-    implementation(libs.googleid)
 
     // ----- Coroutines -----
     implementation(libs.coroutines.android)
