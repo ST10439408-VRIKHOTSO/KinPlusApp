@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kin+ Sepedi (Northern Sotho) strings (FR-31). Kept in parity with values/strings.xml. -->
+<resources>
+    <string name="app_name">Kin+</string>
+    <string name="tagline">Dula o Kgokagane. Dula o Bolokegile.</string>
+
+    <string name="nav_map">Mmapa</string>
+    <string name="nav_circles">Disekele</string>
+    <string name="nav_safety">Polokego</string>
+    <string name="nav_profile">Profaele</string>
+
+    <string name="sign_in_title">Tsena go Kin+</string>
+    <string name="welcome_back">Re a go amogela gape</string>
+    <string name="email">Imeile</string>
+    <string name="password">Phasewete</string>
+    <string name="confirm_password">Netefatša phasewete</string>
+    <string name="display_name">Leina la pontšho</string>
+    <string name="phone_number">Nomoro ya mogala</string>
+    <string name="log_in">Tsena</string>
+    <string name="register">Ngwadiša</string>
+    <string name="create_account">Hlama akhaonto</string>
+    <string name="join_kinplus">Kgokela go Kin+</string>
+    <string name="forgot_password">O lebetše phasewete?</string>
+    <string name="continue_with_google">Tšwela pele ka Google</string>
+    <string name="new_here">O moswa mo? Hlama akhaonto</string>
+    <string name="already_have_account">O na le akhaonto? Tsena</string>
+    <string name="or">goba</string>
+    <string name="privacy_consent">Ke dumela Pholisi ya Sephiri (POPIA)</string>
+    <string name="checking_session">Re hlahloba seolo sa gago…</string>
+    <string name="password_hint">Bonnyane ditlhaka tše 8, tlhaka e 1, nomoro e 1</string>
+    <string name="reset_email_sent">Imeile ya go beakanya phasewete e rometšwe.</string>
+
+    <string name="error_invalid_email">Hle tsenya aterese ya imeile ye e nepagetšego.</string>
+    <string name="error_weak_password">Phasewete e swanetše go ba le ditlhaka tše 8, e akaretše tlhaka le nomoro.</string>
+    <string name="error_password_mismatch">Diphasewete ga di swane.</string>
+    <string name="error_name_required">Hle tsenya leina la pontšho.</string>
+    <string name="error_consent_required">O swanetše go amogela Pholisi ya Sephiri go tšwela pele.</string>
+    <string name="error_auth_failed">Go tsena go paletšwe. Hlahloba dintlha tša gago o leke gape.</string>
+    <string name="error_generic">Go na le se se sego sa sepela gabotse. Hle leka gape.</string>
+    <string name="error_offline_banner">Ga o kgokagane. Re bontšha tshedimošo ye e bolokilwego.</string>
+
+    <string name="home_title">Gae</string>
+    <string name="youre_safe">O bolokegile</string>
+    <string name="location_sharing_active">Go abelana ka lefelo go a šoma</string>
+    <string name="updated_ago">E mpshafaditšwe %1$s tše fetilego</string>
+    <string name="battery_pct">Betheri %1$d%%</string>
+
+    <string name="circles_title">Disekele</string>
+    <string name="my_circles">Disekele tša ka</string>
+    <string name="create_or_join_circle">Hlama goba kgokela sekele</string>
+    <string name="create_circle">Hlama sekele</string>
+    <string name="join_circle">Kgokela sekele</string>
+    <string name="create">Hlama</string>
+    <string name="join">Kgokela</string>
+    <string name="circle_name">Leina la sekele</string>
+    <string name="description_optional">Tlhaloso (ka boithaopo)</string>
+    <string name="join_code">Khoutu ya go kgokela</string>
+    <string name="enter_join_code">Tsenya khoutu ya ditlhaka tše 6</string>
+    <string name="share">Abelana</string>
+    <string name="members">Maloko</string>
+    <string name="owner">Mong</string>
+    <string name="member">Leloko</string>
+    <string name="leave_circle">Tlogela sekele</string>
+    <string name="remove_member">Tloša leloko</string>
+    <string name="sharing_on">Go abelana go bulegile</string>
+    <string name="sharing_off">Go abelana go emišitšwe</string>
+    <string name="members_count">Maloko a %1$d</string>
+    <string name="add_member">Oketša leloko</string>
+
+    <string name="sos">SOS</string>
+    <string name="emergency_sos">SOS ya Tšhoganetšo</string>
+    <string name="press_and_hold">Gatelela o swara go tsebiša disekele tša gago</string>
+    <string name="hold_seconds">Swara metsotswana e %1$d</string>
+    <string name="notify">Tsebiša</string>
+    <string name="message_optional">Molaetša (ka boithaopo)</string>
+    <string name="sos_location_note">Lefelo la gago la mafelelo le tla tlaleletšwa</string>
+    <string name="cancel">Khansela</string>
+    <string name="sos_sent">SOS e rometšwe go disekele tša gago.</string>
+    <string name="sos_cancelled">SOS e khanseditšwe.</string>
+
+    <string name="safe_zones_title">Mafelo a Bolokegilego</string>
+    <string name="add_safe_zone">Oketša Lefelo le Bolokegilego</string>
+    <string name="edit_safe_zone">Fetola Lefelo le Bolokegilego</string>
+    <string name="create_safe_zone">Hlama Lefelo le Bolokegilego</string>
+    <string name="zone_name">Leina la lefelo</string>
+    <string name="radius">Radiase</string>
+    <string name="radius_metres">%1$d m</string>
+    <string name="notify_on_enter">Tsebiša ge go tsenwa</string>
+    <string name="notify_on_exit">Tsebiša ge go tšwiwa</string>
+    <string name="save_safe_zone">Boloka Lefelo le Bolokegilego</string>
+    <string name="zone_enter_exit">Ditemošo tša go tsena/go tšwa di bulegile</string>
+
+    <string name="settings_title">Dipeakanyo</string>
+    <string name="notifications">Ditsebišo</string>
+    <string name="notifications_sub">SOS, mafelo, maeto</string>
+    <string name="language">Leleme</string>
+    <string name="units">Diyuniti</string>
+    <string name="units_metric">Metric (km)</string>
+    <string name="units_imperial">Imperial (mi)</string>
+    <string name="privacy_control_centre">Senthara ya Taolo ya Sephiri</string>
+    <string name="privacy_sub">Go abelana, go emiša, lenaneo la phihlelelo</string>
+    <string name="account">Akhaonto</string>
+    <string name="account_sub">Fetola porofaele · Phumola akhaonto</string>
+    <string name="sign_out">Tšwa</string>
+    <string name="delete_account">Phumola akhaonto</string>
+    <string name="delete_account_confirm">Se se phumola akhaonto ya gago le histori ya lefelo ka mo go sa fetogego. Tšwela pele?</string>
+    <string name="language_english">Seisemane</string>
+    <string name="language_zulu">Sezulu</string>
+    <string name="language_sepedi">Sepedi</string>
+    <string name="choose_language">Kgetha leleme</string>
+
+    <string name="pause_all_sharing">Emiša go abelana ka moka</string>
+    <string name="pause_all_sub">E uta lefelo la gago gohle ka pela</string>
+    <string name="sharing_per_circle">Go abelana ka sekele ka tee</string>
+    <string name="who_accessed">Ke mang a bonego lefelo la ka</string>
+    <string name="viewed_your_location">%1$s o bone lefelo la gago</string>
+
+    <string name="safe_journey">Leeto le Bolokegilego</string>
+    <string name="plan_your_journey">Rulaganya leeto la gago. Dula o bolokegile.</string>
+    <string name="destination">Lefelo leo o yago go lona</string>
+    <string name="enter_destination">Tsenya lefelo leo o yago go lona</string>
+    <string name="expected_arrival">Nako yeo e letetšwego ya go fihla</string>
+    <string name="set_time">Beakanya nako</string>
+    <string name="select_watchers">Kgetha bašeledi</string>
+    <string name="choose_circle_members">Kgetha maloko a sekele</string>
+    <string name="start_journey">Thoma leeto</string>
+    <string name="journey_in_progress">Leeto le a tšwela pele</string>
+    <string name="eta">Nako ya go fihla</string>
+    <string name="arrive_by">Fihla ka %1$s</string>
+    <string name="cancel_journey">Khansela leeto</string>
+    <string name="confirm_arrival">Ke fihlile</string>
+    <string name="journey_started">Leeto le Bolokegilego le thomile.</string>
+    <string name="journey_arrived">Go fihla go netefaditšwe. Bašeledi ba tsebišitšwe.</string>
+
+    <string name="community_alerts">Ditemošo tša Setšhaba</string>
+    <string name="nearby">Kgauswi</string>
+    <string name="my_reports">Dipego tša ka</string>
+    <string name="report_incident">Bega tiragalo</string>
+    <string name="category">Legoro</string>
+    <string name="category_crime">Bosenyi</string>
+    <string name="category_hazard">Kotsi</string>
+    <string name="category_medical">Tša kalafo</string>
+    <string name="category_fire">Mollo</string>
+    <string name="category_other">Tše dingwe</string>
+    <string name="submit_report">Romela pego</string>
+    <string name="report_submitted">Pego e rometšwe gore e sekasekwe.</string>
+    <string name="view">Lebelela</string>
+    <string name="confirm">Netefatša</string>
+    <string name="km_away">%1$.1f km go ya</string>
+
+    <string name="save">Boloka</string>
+    <string name="retry">Leka gape</string>
+    <string name="loading">E a laiša…</string>
+    <string name="empty_circles">Ga o na disekele go fihla ga bjale. Hlama e tee goba kgokela ka khoutu.</string>
+    <string name="empty_zones">Ga go na mafelo a bolokegilego go fihla ga bjale. Oketša le tee gore o hwetše ditemošo.</string>
+    <string name="empty_alerts">Ga go na dipego tše amogetšwego kgauswi.</string>
+
+    <string name="channel_safety_name">Ditemošo tša polokego</string>
+    <string name="channel_safety_desc">Ditsebišo tša SOS, tša lefelo le bolokegilego le tša maeto</string>
+</resources>

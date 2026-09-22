@@ -1,0 +1,30 @@
+{
+  "//": "TEMPLATE ONLY. Download the real google-services.json from your Firebase project (Project settings -> Your apps -> Android app, package name za.co.kinplus.app) and save it next to this file as 'google-services.json'. The placeholder values below only let the project compile; Firebase Auth / FCM will not work until you replace it.",
+  "project_info": {
+    "project_number": "000000000000",
+    "project_id": "kinplus-placeholder",
+    "storage_bucket": "kinplus-placeholder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "android_client_info": {
+          "package_name": "za.co.kinplus.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyPLACEHOLDER-PLACEHOLDER-PLACEHOLDER0000"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

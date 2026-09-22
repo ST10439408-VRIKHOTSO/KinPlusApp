@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kin+ brand palette: monochrome (black / white / grey), red kept only
+         for emergency/SOS accents. Matches ui/theme/Color.kt. -->
+    <color name="kin_ink">#0D0D0D</color>
+    <color name="kin_surface">#F5F5F5</color>
+    <color name="kin_divider">#E0E0E0</color>
+    <color name="kin_muted">#9E9E9E</color>
+    <color name="kin_sos_red">#E53935</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Adaptive launcher icon background. -->
+    <color name="ic_launcher_background">#0D0D0D</color>
+</resources>

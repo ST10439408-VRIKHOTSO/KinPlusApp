@@ -1,0 +1,22 @@
+*.iml
+.gradle/
+.kotlin/
+local.properties
+.DS_Store
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Secrets / per-machine config — never commit real values
+app/google-services.json
+
+# Log/profiling files
+*.hprof

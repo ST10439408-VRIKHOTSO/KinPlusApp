@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Kin+ adaptive icon foreground. The 108x108 viewport keeps the artwork inside
+  the 66dp safe zone so device launchers can mask it to any shape. The mark is
+  a location pin enclosing a plus, echoing the Part 1B "shield + plus" concept.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Location pin body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,26
+            C43,26 34,35 34,46
+            C34,61 54,82 54,82
+            C54,82 74,61 74,46
+            C74,35 65,26 54,26 Z" />
+
+    <!-- Plus symbol cut into the pin (uses the background colour) -->
+    <path
+        android:fillColor="#0E1B16"
+        android:pathData="M51,38 L57,38 L57,44 L63,44 L63,50 L57,50 L57,56 L51,56 L51,50 L45,50 L45,44 L51,44 Z" />
+</vector>

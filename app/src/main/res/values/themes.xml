@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Base application theme. The UI is built with Jetpack Compose, so this
+      XML theme only needs to provide a splash background and remove the
+      ActionBar. The real colour scheme lives in ui/theme/Theme.kt.
+    -->
+    <style name="Theme.KinPlus" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/kin_ink</item>
+        <item name="android:windowBackground">@color/kin_ink</item>
+    </style>
+</resources>

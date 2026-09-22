@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Kin+ isiZulu strings (FR-31). Kept in parity with values/strings.xml. -->
+<resources>
+    <string name="app_name">Kin+</string>
+    <string name="tagline">Hlala Uxhumene. Hlala Uphephile.</string>
+
+    <string name="nav_map">Imephu</string>
+    <string name="nav_circles">Iziyingi</string>
+    <string name="nav_safety">Ukuphepha</string>
+    <string name="nav_profile">Iphrofayela</string>
+
+    <string name="sign_in_title">Ngena ku-Kin+</string>
+    <string name="welcome_back">Siyakwamukela futhi</string>
+    <string name="email">I-imeyili</string>
+    <string name="password">Iphasiwedi</string>
+    <string name="confirm_password">Qinisekisa iphasiwedi</string>
+    <string name="display_name">Igama lokubonakala</string>
+    <string name="phone_number">Inombolo yocingo</string>
+    <string name="log_in">Ngena</string>
+    <string name="register">Bhalisa</string>
+    <string name="create_account">Dala i-akhawunti</string>
+    <string name="join_kinplus">Joyina i-Kin+</string>
+    <string name="forgot_password">Ukhohlwe iphasiwedi?</string>
+    <string name="continue_with_google">Qhubeka nge-Google</string>
+    <string name="new_here">Umusha lapha? Dala i-akhawunti</string>
+    <string name="already_have_account">Usunayo i-akhawunti? Ngena</string>
+    <string name="or">noma</string>
+    <string name="privacy_consent">Ngiyavuma Inqubomgomo Yobumfihlo (POPIA)</string>
+    <string name="checking_session">Sihlola iseshini yakho…</string>
+    <string name="password_hint">Okungenani izinhlamvu ezingu-8, uhlamvu olu-1, inombolo e-1</string>
+    <string name="reset_email_sent">I-imeyili yokusetha kabusha ithunyelwe.</string>
+
+    <string name="error_invalid_email">Sicela ufake ikheli le-imeyili elivumelekile.</string>
+    <string name="error_weak_password">Iphasiwedi kufanele ibe nezinhlamvu ezingu-8, ihlanganise uhlamvu nenombolo.</string>
+    <string name="error_password_mismatch">Amaphasiwedi awafani.</string>
+    <string name="error_name_required">Sicela ufake igama lokubonakala.</string>
+    <string name="error_consent_required">Kumele wamukele Inqubomgomo Yobumfihlo ukuze uqhubeke.</string>
+    <string name="error_auth_failed">Ukungena kwehlulekile. Hlola imininingwane yakho uzame futhi.</string>
+    <string name="error_generic">Kukhona okungahambanga kahle. Sicela uzame futhi.</string>
+    <string name="error_offline_banner">Awuxhumekile. Sikhombisa ulwazi olulondoloziwe.</string>
+
+    <string name="home_title">Ekhaya</string>
+    <string name="youre_safe">Uphephile</string>
+    <string name="location_sharing_active">Ukwabelana ngendawo kuyasebenza</string>
+    <string name="updated_ago">Kubuyekezwe %1$s edlule</string>
+    <string name="battery_pct">Ibhethri %1$d%%</string>
+
+    <string name="circles_title">Iziyingi</string>
+    <string name="my_circles">Iziyingi Zami</string>
+    <string name="create_or_join_circle">Dala noma joyina isiyingi</string>
+    <string name="create_circle">Dala isiyingi</string>
+    <string name="join_circle">Joyina isiyingi</string>
+    <string name="create">Dala</string>
+    <string name="join">Joyina</string>
+    <string name="circle_name">Igama lesiyingi</string>
+    <string name="description_optional">Incazelo (okuzikhethela)</string>
+    <string name="join_code">Ikhodi yokujoyina</string>
+    <string name="enter_join_code">Faka ikhodi enezinhlamvu ezingu-6</string>
+    <string name="share">Yabelana</string>
+    <string name="members">Amalungu</string>
+    <string name="owner">Umnikazi</string>
+    <string name="member">Ilungu</string>
+    <string name="leave_circle">Phuma esiyingini</string>
+    <string name="remove_member">Susa ilungu</string>
+    <string name="sharing_on">Ukwabelana kuvuliwe</string>
+    <string name="sharing_off">Ukwabelana kumisiwe</string>
+    <string name="members_count">Amalungu angu-%1$d</string>
+    <string name="add_member">Engeza ilungu</string>
+
+    <string name="sos">SOS</string>
+    <string name="emergency_sos">I-SOS Yesimo Esiphuthumayo</string>
+    <string name="press_and_hold">Cindezela ubambe ukuze wazise iziyingi zakho</string>
+    <string name="hold_seconds">Bamba imizuzwana engu-%1$d</string>
+    <string name="notify">Yazisa</string>
+    <string name="message_optional">Umlayezo (okuzikhethela)</string>
+    <string name="sos_location_note">Indawo yakho yakamuva izohlanganiswa</string>
+    <string name="cancel">Khansela</string>
+    <string name="sos_sent">I-SOS ithunyelwe eziyingini zakho.</string>
+    <string name="sos_cancelled">I-SOS ikhanseliwe.</string>
+
+    <string name="safe_zones_title">Izindawo Eziphephile</string>
+    <string name="add_safe_zone">Engeza Indawo Ephephile</string>
+    <string name="edit_safe_zone">Hlela Indawo Ephephile</string>
+    <string name="create_safe_zone">Dala Indawo Ephephile</string>
+    <string name="zone_name">Igama lendawo</string>
+    <string name="radius">Ububanzi</string>
+    <string name="radius_metres">%1$d m</string>
+    <string name="notify_on_enter">Yazisa uma kungenwa</string>
+    <string name="notify_on_exit">Yazisa uma kuphumwa</string>
+    <string name="save_safe_zone">Londoloza Indawo Ephephile</string>
+    <string name="zone_enter_exit">Izexwayiso zokungena/zokuphuma zivuliwe</string>
+
+    <string name="settings_title">Izilungiselelo</string>
+    <string name="notifications">Izaziso</string>
+    <string name="notifications_sub">I-SOS, izindawo, uhambo</string>
+    <string name="language">Ulimi</string>
+    <string name="units">Amayunithi</string>
+    <string name="units_metric">I-Metric (km)</string>
+    <string name="units_imperial">I-Imperial (mi)</string>
+    <string name="privacy_control_centre">Isikhungo Sokulawula Ubumfihlo</string>
+    <string name="privacy_sub">Ukwabelana, ukumisa, irekhodi lokufinyelela</string>
+    <string name="account">I-akhawunti</string>
+    <string name="account_sub">Hlela iphrofayela · Susa i-akhawunti</string>
+    <string name="sign_out">Phuma</string>
+    <string name="delete_account">Susa i-akhawunti</string>
+    <string name="delete_account_confirm">Lokhu kususa unomphela i-akhawunti nomlando wendawo. Qhubeka?</string>
+    <string name="language_english">IsiNgisi</string>
+    <string name="language_zulu">IsiZulu</string>
+    <string name="language_sepedi">IsiPedi</string>
+    <string name="choose_language">Khetha ulimi</string>
+
+    <string name="pause_all_sharing">Misa konke ukwabelana</string>
+    <string name="pause_all_sub">Ifihla ngokushesha indawo yakho yonke indawo</string>
+    <string name="sharing_per_circle">Ukwabelana ngesiyingi ngasinye</string>
+    <string name="who_accessed">Ubani obone indawo yami</string>
+    <string name="viewed_your_location">%1$s ubone indawo yakho</string>
+
+    <string name="safe_journey">Uhambo Oluphephile</string>
+    <string name="plan_your_journey">Hlela uhambo lwakho. Hlala uphephile.</string>
+    <string name="destination">Indawo oya kuyo</string>
+    <string name="enter_destination">Faka indawo oya kuyo</string>
+    <string name="expected_arrival">Isikhathi esilindelekile sokufika</string>
+    <string name="set_time">Setha isikhathi</string>
+    <string name="select_watchers">Khetha ababukeli</string>
+    <string name="choose_circle_members">Khetha amalungu esiyingi</string>
+    <string name="start_journey">Qala uhambo</string>
+    <string name="journey_in_progress">Uhambo luyaqhubeka</string>
+    <string name="eta">Isikhathi sokufika</string>
+    <string name="arrive_by">Fika ngo-%1$s</string>
+    <string name="cancel_journey">Khansela uhambo</string>
+    <string name="confirm_arrival">Sengifikile</string>
+    <string name="journey_started">Uhambo Oluphephile luqalile.</string>
+    <string name="journey_arrived">Ukufika kuqinisekisiwe. Ababukeli baziisiwe.</string>
+
+    <string name="community_alerts">Izexwayiso Zomphakathi</string>
+    <string name="nearby">Eduze</string>
+    <string name="my_reports">Imibiko Yami</string>
+    <string name="report_incident">Bika isigameko</string>
+    <string name="category">Isigaba</string>
+    <string name="category_crime">Ubugebengu</string>
+    <string name="category_hazard">Ingozi</string>
+    <string name="category_medical">Ezempilo</string>
+    <string name="category_fire">Umlilo</string>
+    <string name="category_other">Okunye</string>
+    <string name="submit_report">Thumela umbiko</string>
+    <string name="report_submitted">Umbiko uthunyelwe ukuze ubuyekezwe.</string>
+    <string name="view">Buka</string>
+    <string name="confirm">Qinisekisa</string>
+    <string name="km_away">%1$.1f km ukuya</string>
+
+    <string name="save">Londoloza</string>
+    <string name="retry">Zama futhi</string>
+    <string name="loading">Iyalayisha…</string>
+    <string name="empty_circles">Awukabi nazo iziyingi. Dala esisodwa noma joyina ngekhodi.</string>
+    <string name="empty_zones">Azikho izindawo eziphephile okwamanje. Engeza eyodwa ukuze uthole izexwayiso.</string>
+    <string name="empty_alerts">Ayikho imibiko evunyiwe eduze.</string>
+
+    <string name="channel_safety_name">Izexwayiso zokuphepha</string>
+    <string name="channel_safety_desc">Izaziso ze-SOS, zendawo ephephile nezohambo</string>
+</resources>
