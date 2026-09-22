@@ -21,7 +21,6 @@
     <string name="create_account">Dala i-akhawunti</string>
     <string name="join_kinplus">Joyina i-Kin+</string>
     <string name="forgot_password">Ukhohlwe iphasiwedi?</string>
-    <string name="continue_with_google">Qhubeka nge-Google</string>
     <string name="new_here">Umusha lapha? Dala i-akhawunti</string>
     <string name="already_have_account">Usunayo i-akhawunti? Ngena</string>
     <string name="or">noma</string>
@@ -91,6 +90,7 @@
     <string name="zone_enter_exit">Izexwayiso zokungena/zokuphuma zivuliwe</string>
 
     <string name="settings_title">Izilungiselelo</string>
+    <string name="settings_row_sub">Izaziso, ulimi, amayunithi, ubumfihlo</string>
     <string name="notifications">Izaziso</string>
     <string name="notifications_sub">I-SOS, izindawo, uhambo</string>
     <string name="language">Ulimi</string>

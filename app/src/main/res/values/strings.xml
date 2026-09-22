@@ -23,7 +23,6 @@
     <string name="tab_sign_in">Sign In</string>
     <string name="tab_sign_up">Sign Up</string>
     <string name="keep_signed_in">Keep me signed in</string>
-    <string name="or_continue_with">OR CONTINUE WITH</string>
     <string name="new_to_kinplus">New to Kin+? </string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -37,7 +36,6 @@
     <string name="create_account">Create account</string>
     <string name="join_kinplus">Join Kin+</string>
     <string name="forgot_password">Forgot password?</string>
-    <string name="continue_with_google">Continue with Google</string>
     <string name="new_here">New here? Create an account</string>
     <string name="already_have_account">Already have an account? Log in</string>
     <string name="already_have_account_prompt">Already have an account? </string>
@@ -136,8 +134,9 @@
     <string name="save_safe_zone">Save Safe Zone</string>
     <string name="zone_enter_exit">Enter/Exit alerts on</string>
 
-    <!-- Settings / Preferences (now hosted on the Profile screen) -->
+    <!-- Settings menu -->
     <string name="settings_title">Settings</string>
+    <string name="settings_row_sub">Notifications, language, units, privacy</string>
     <string name="notifications">Notifications</string>
     <string name="notifications_sub">SOS, zones, journeys</string>
     <string name="language">Language</string>

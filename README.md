@@ -1,6 +1,5 @@
 # KinPlus (Kin+)
 
-[![Build & test](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/actions/workflows/build.yml/badge.svg)](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/actions/workflows/build.yml)
 
 An Android app for family and circle safety, real time location sharing, Safe Zones with geofencing, SOS alerts, journey monitoring and community alerts. The app also supports offline use and background sync.
 
@@ -8,7 +7,7 @@ An Android app for family and circle safety, real time location sharing, Safe Zo
 
 Grab the latest installable APK from the [GitHub Releases page](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/releases/latest).
 
-> The release APK is a debug build (uses a placeholder Firebase config), so Google Sign In and Maps require your own `local.properties` keys as described below. See [Setup](#setup) to build a fully configured version yourself.
+> The release APK is a debug build (uses a placeholder Firebase config), so Maps requires your own `local.properties` key as described below. See [Setup](#setup) to build a fully configured version yourself.
 
 ## Tech stack
 
@@ -19,7 +18,7 @@ Grab the latest installable APK from the [GitHub Releases page](https://github.c
 * **Background work:** WorkManager (offline sync queue)
 * **Firebase:** Auth, Cloud Messaging, Analytics
 * **Location:** Play Services Location, Maps Compose, geofencing
-* **Auth:** Google Sign In using Credential Manager
+* **Auth:** Firebase email/password sign-in
 
 Minimum SDK 26 (Android 8.0), target and compile SDK 34, Kotlin and Java 17.
 
@@ -52,9 +51,6 @@ Create `local.properties` in the project root. Never commit this file. Add the f
 sdk.dir=/path/to/your/Android/Sdk
 
 KINPLUS_API_BASE_URL=https://your-api-base-url/
-
-# Optional: Google Sign In will not work without this
-KINPLUS_GOOGLE_WEB_CLIENT_ID=your-oauth-web-client-id
 
 # Optional: Map tiles will not load without this, but the app will still build
 KINPLUS_GOOGLE_MAPS_API_KEY=your-maps-sdk-android-key
