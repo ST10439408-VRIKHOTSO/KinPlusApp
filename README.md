@@ -1,6 +1,14 @@
 # KinPlus (Kin+)
 
+[![Build & test](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/actions/workflows/build.yml/badge.svg)](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/actions/workflows/build.yml)
+
 An Android app for family and circle safety, real time location sharing, Safe Zones with geofencing, SOS alerts, journey monitoring and community alerts. The app also supports offline use and background sync.
+
+## Download
+
+Grab the latest installable APK from the [GitHub Releases page](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/releases/latest).
+
+> The release APK is a debug build (uses a placeholder Firebase config), so Google Sign In and Maps require your own `local.properties` keys as described below. See [Setup](#setup) to build a fully configured version yourself.
 
 ## Tech stack
 
