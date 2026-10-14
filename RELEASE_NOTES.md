@@ -1,5 +1,34 @@
 # Kin+ Release Notes
 
+## Version 1.2 PoE (Part 3): XML views and release build
+
+This version rebuilds the whole user interface with Android XML layouts, brings back Google sign in, completes the translations and adds a signed release build.
+
+### Changed: user interface rebuilt with XML views
+
+* Every screen is now an XML layout shown by a Fragment, with ViewBinding instead of Jetpack Compose. Compose has been removed from the project.
+* Screens are connected with the Navigation component (`nav_graph.xml`) and a BottomNavigationView, with a red SOS tab.
+* Lists use RecyclerView with ListAdapter and DiffUtil, so only changed rows are redrawn.
+* Each Fragment observes its ViewModel's StateFlow only while the screen is visible (`repeatOnLifecycle`). The ViewModels, repositories, Room database and API code did not change.
+* The "calm guardian" design from version 1.1 was kept using a Material 3 theme, styles, colours and vector drawables.
+
+### Added
+
+* **Single sign on with Google (FR-05).** A "Continue with Google" button on the Sign in screen, using the Android Credential Manager and Firebase Authentication. Cancelling the Google picker is not shown as an error.
+* **Signed release build.** The app is signed with a private upload key for Google Play. The key and its passwords are kept outside the repository.
+
+### Fixed
+
+* Some screens still showed English text in isiZulu and Sepedi. Both languages now contain every string in the app.
+* Community Alert categories now show in the user's language.
+* SOS coordinates now show the correct hemisphere (S and E) for South Africa.
+* The SOS screen now says it dials 112 emergency dispatch.
+
+### Tests
+
+* GitHub Actions builds the app and runs the unit tests on every push.
+
+
 ## Version 1.1 PoE: Final polish
 
 This update adds innovative features to our user defined features, refreshes the visual design and fixes a bug found while testing on a phone.
