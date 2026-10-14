@@ -108,15 +108,48 @@ class CircleRepository @Inject constructor(
      * cleared immediately on success so the circle disappears from the list
      * without waiting on a follow-up [refreshCircles] round-trip.
      */
-    suspend fun leaveOrRemove(circleId: String, memberUid: String): Resource<Unit> = try {
-        api.removeMember(circleId, memberUid)
-        circleDao.deleteById(circleId)
-        locationDao.clearCircle(circleId)
-        Log.i(TAG, "Left/removed from circle $circleId")
-        Resource.Success(Unit)
-    } catch (e: Exception) {
-        Log.e(TAG, "Leave/remove failed for circle $circleId", e)
-        Resource.Error("Could not leave this circle. Check your connection and try again.", e)
+    /**
+     * Leaves a circle (or, for the owner, removes another member). Retrofit does
+     * not throw for HTTP errors when the call returns Response, so the status is
+     * checked before anything is removed locally. Otherwise a refused request
+     * would delete the circle from the cache and the next refresh would bring
+     * it straight back.
+     */
+    suspend fun leaveOrRemove(circleId: String, memberUid: String): Resource<Unit> {
+        return try {
+            val res = api.removeMember(circleId, memberUid)
+            if (!res.isSuccessful) {
+                Log.w(TAG, "Leave/remove refused for circle $circleId: HTTP ${res.code()}")
+                val message = if (res.code() == 400) "As the owner you can't leave this circle. Delete it from the Circles screen instead."
+                else "Could not leave this circle. Please try again."
+                return Resource.Error(message)
+            }
+            circleDao.deleteById(circleId)
+            locationDao.clearCircle(circleId)
+            Log.i(TAG, "Left/removed from circle $circleId")
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Leave/remove failed for circle $circleId", e)
+            Resource.Error("Could not leave this circle. Check your connection and try again.", e)
+        }
+    }
+
+    /** Deletes a circle the signed in user owns, for every member. */
+    suspend fun deleteCircle(circleId: String): Resource<Unit> {
+        return try {
+            val res = api.deleteCircle(circleId)
+            if (!res.isSuccessful) {
+                Log.w(TAG, "Delete refused for circle $circleId: HTTP ${res.code()}")
+                return Resource.Error("Could not delete this circle. Please try again.")
+            }
+            circleDao.deleteById(circleId)
+            locationDao.clearCircle(circleId)
+            Log.i(TAG, "Deleted circle $circleId")
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Log.e(TAG, "Delete failed for circle $circleId", e)
+            Resource.Error("Could not delete this circle. Check your connection and try again.", e)
+        }
     }
 
     /**
