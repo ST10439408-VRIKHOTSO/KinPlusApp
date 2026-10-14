@@ -104,6 +104,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/plus_jakarta_sans_bold"
+                app:fontFamily="@font/plus_jakarta_sans_bold"
                 android:text="@string/checkin_stop"
                 app:shapeAppearance="@style/ShapeAppearance.Kin.Pill" />
         </LinearLayout>

@@ -41,6 +41,7 @@
                 android:id="@+id/segmentZones"
                 style="@style/Kin.Segment"
                 android:fontFamily="@font/plus_jakarta_sans_semibold"
+                app:fontFamily="@font/plus_jakarta_sans_semibold"
                 tools:text="Safe Zones (2)" />
         </LinearLayout>
 

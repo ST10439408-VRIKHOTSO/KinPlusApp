@@ -80,6 +80,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:fontFamily="@font/plus_jakarta_sans_semibold"
+        app:fontFamily="@font/plus_jakarta_sans_semibold"
         android:text="@string/add_safe_zone"
         android:textAllCaps="false"
         app:icon="@drawable/ic_add" />
