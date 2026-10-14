@@ -29,17 +29,17 @@ This checklist tracks what is needed to publish Kin+ on the Google Play Store, a
 
 | Item | Status |
 | ---- | ------ |
-| App name, short description (80 characters) and full description | Done, see `docs/STORE_LISTING.md` |
-| High resolution icon, 512 x 512 PNG | Done, `docs/store/icon-512.png` |
-| Feature graphic, 1024 x 500 | Done, `docs/store/feature-graphic-1024x500.png` |
+| App name, short description (80 characters) and full description | Done, see `docs/Store Listing.md` |
+| High resolution icon, 512 x 512 PNG | Done, `docs/store/Icon 512.png` |
+| Feature graphic, 1024 x 500 | Done, `docs/store/Feature Graphic 1024x500.png` |
 | At least 2 phone screenshots from a real device (see `docs/screenshots`) | Done |
-| Privacy policy URL (required because Kin+ uses location) | Done, see `docs/privacy-policy.md` |
-| Data safety form: location, name, email, device ID, push token | Answers ready in `docs/STORE_LISTING.md` |
-| Location permissions declaration (background location for Safe Zones) | Text ready in `docs/STORE_LISTING.md` |
-| Content rating questionnaire | Answers ready in `docs/STORE_LISTING.md` |
+| Privacy policy URL (required because Kin+ uses location) | Done, see `docs/Privacy Policy.md` |
+| Data safety form: location, name, email, device ID, push token | Answers ready in `docs/Store Listing.md` |
+| Location permissions declaration (background location for Safe Zones) | Text ready in `docs/Store Listing.md` |
+| Content rating questionnaire | Answers ready in `docs/Store Listing.md` |
 | Target audience and app category (Lifestyle or Tools) | Done: Lifestyle, 13 and over |
 | Signed AAB built (`app-release.aab`) | Done |
 | Upload the AAB to an internal testing track | Blocked: needs a paid developer account (USD 25) |
-| Screenshot of the Play Console signup for the PoE evidence | Done, see `docs/screenshots/play-console-signup.png` |
+| Screenshot of the Play Console signup for the PoE evidence | Done, see `docs/screenshots/Play Console Signup.png` |
 
 Update the Status column as each item is done.

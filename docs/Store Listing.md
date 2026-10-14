@@ -10,7 +10,7 @@ Everything needed to fill in the Play Console store listing. Character limits ar
 | Category | Lifestyle |
 | Tags | Safety, Family, Location sharing |
 | Contact email | st10439408@rcconnect.edu.za |
-| Privacy policy | https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/blob/master/docs/privacy-policy.md |
+| Privacy policy | https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/blob/master/docs/Privacy%20Policy.md |
 | Price | Free, no ads, no in app purchases |
 | Countries | South Africa |
 
@@ -55,8 +55,8 @@ Kin+ does not replace emergency services. In an emergency, call 10111 (police) o
 
 | Asset | Size | Status |
 | ----- | ---- | ------ |
-| App icon | 512 x 512 PNG | Done, `docs/store/icon-512.png` |
-| Feature graphic | 1024 x 500 PNG or JPG | Done, `docs/store/feature-graphic-1024x500.png` |
+| App icon | 512 x 512 PNG | Done, `docs/store/Icon 512.png` |
+| Feature graphic | 1024 x 500 PNG or JPG | Done, `docs/store/Feature Graphic 1024x500.png` |
 | Phone screenshots | 2 to 8, in `docs/screenshots` | Done |
 
 ## Data safety answers
