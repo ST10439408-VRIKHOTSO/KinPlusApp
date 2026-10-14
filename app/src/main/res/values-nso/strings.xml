@@ -287,7 +287,7 @@
     <string name="select_a_number">Kgetha nomoro ya go letša</string>
     <string name="num_police">Maphodisa</string>
     <string name="num_ambulance">Ambulense</string>
-    <string name="num_112">112</string>
+    <string name="num_112">Tšhoganetšo (neteweke efe goba efe)</string>
     <string name="num_flying_squad">Flying Squad</string>
     <string name="profile_title">Profaele</string>
     <string name="account_section">AKHAONTO</string>
@@ -352,7 +352,7 @@
     <string name="action_manage_permissions_sub">Ditumelelo</string>
     <string name="section_live_member_status">MAEMO A MALOKO A BJALE</string>
     <string name="label_mesh_live">Go šoma bjale</string>
-    <string name="you_suffix"> (Wena)</string>
+    <string name="you_suffix">\u0020(Wena)</string>
     <string name="status_sharing">Go abelana</string>
     <string name="section_other_connected_circles">DISEKELE TŠE DINGWE TŠEO O KGOKAGANEGO LE TŠONA</string>
     <string name="create_new_circle_cta">Hlama Sekele se Seswa</string>
@@ -384,7 +384,7 @@
     <string name="designated_responders_title">BATHUŠI BA BAKGETHILWEGO (%1$d)</string>
     <string name="high_priority_reach">Ba fihlelelwa pele</string>
     <string name="emergency_protocol_title">Tshepedišo ya Tšhoganetšo ya Kin+:</string>
-    <string name="emergency_protocol_body">Data e notlelwa ge e romelwa ebile ga re e šomiše go dira tšhelete. Lefelo le dintlha tša seemo di abelanwa fela nakong ya tšhoganetšo ye e netefaditšwego.</string>
+    <string name="emergency_protocol_body">Ge o romela SOS, lefelo la gago le mohuta wa tiragalo di ya go disekele tša gago fela. Kin+ ga e rekiše data ya gago ebile ga e bontšhe dipapatšo.</string>
     <string name="safety_hub_title">Sekgoba sa Polokego</string>
     <string name="security_score_label">Dintlha tša Polokego</string>
     <string name="safety_setup_complete">%1$d%% go Feditšwe</string>
@@ -400,10 +400,10 @@
     <string name="emergency_contacts_count">Ba %1$d ba Beakantšwe</string>
     <string name="priority_badge">Bohlokwa %1$d</string>
     <string name="add_trusted_contact">Oketša Motho yo o Mo Tshepago</string>
-    <string name="local_device_vault_title">Polokelo ye e Šireleditšwego ya Mogala</string>
-    <string name="encrypted_label">Go notletšwe</string>
-    <string name="vault_card_title">Polokelo ye e Notletšwego mo Mogaleng</string>
-    <string name="vault_card_body">Go šireleditšwe mo mogaleng wo. Ga go romelwe marung, gomme go bonwa fela ke bathuši ba pele nakong ya tšhoganetšo.</string>
+    <string name="local_device_vault_title">Polokelo ya Mogala</string>
+    <string name="encrypted_label">Sephiri</string>
+    <string name="vault_card_title">E bolokilwe mo mogaleng wo fela</string>
+    <string name="vault_card_body">Dintlha tša gago tša maphelo le tša koloi ga di tšwe mogaleng wo. Di bontšhe bathuši ba pele nakong ya tšhoganetšo.</string>
     <string name="vault_medical_id">Tshedimošo ya Maphelo</string>
     <string name="vault_vehicle">Koloi</string>
     <string name="vault_not_added">Ga se ya tsenywa</string>
