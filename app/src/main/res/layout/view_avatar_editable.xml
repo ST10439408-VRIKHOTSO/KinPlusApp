@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Editable avatar: the picked photo (or the first letter on an evergreen
+  circle) with a small camera badge that opens the photo picker.
+  Includes set their own size with layout_width and layout_height.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="96dp"
+    android:layout_height="96dp">
+
+    <TextView
+        android:id="@+id/initial"
+        style="@style/Kin.Text.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/kin_green_container"
+        android:gravity="center"
+        android:textColor="@color/kin_green_on_container"
+        android:textSize="34sp"
+        tools:text="V" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Kin.Pill" />
+
+    <ImageView
+        android:id="@+id/cameraBadge"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="bottom|end"
+        android:background="@drawable/bg_camera_badge"
+        android:contentDescription="@string/change_photo"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="7dp"
+        android:src="@drawable/ic_photo_camera"
+        app:tint="@color/white" />
+</FrameLayout>

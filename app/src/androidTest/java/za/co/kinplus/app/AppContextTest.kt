@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 
 /**
  * Minimal instrumented test that runs on a device/emulator and confirms the
- * application id is correct. Extend with Compose UI tests as needed.
+ * application id is correct. Extend with Espresso UI tests as needed.
  */
 @RunWith(AndroidJUnit4::class)
 class AppContextTest {

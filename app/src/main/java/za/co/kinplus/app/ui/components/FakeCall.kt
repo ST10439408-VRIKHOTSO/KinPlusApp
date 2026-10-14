@@ -66,7 +66,7 @@ fun showFakeCallSetupDialog(
         .setNegativeButton(R.string.cancel, null)
         .show()
 
-    // The caller name is required, matching the Compose version's validation.
+    // The caller name is required before the call can be scheduled.
     fun validate() {
         val missing = view.callerInput.text.isNullOrBlank()
         view.callerLayout.error = if (missing) context.getString(R.string.error_name_required) else null

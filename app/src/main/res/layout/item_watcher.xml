@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A circle member who can be notified about a journey, with an on/off switch. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/initial"
+        style="@style/Kin.Text.Bold"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/kin_green_container"
+        android:gravity="center"
+        android:textColor="@color/kin_green_on_container"
+        tools:text="S" />
+
+    <TextView
+        android:id="@+id/name"
+        style="@style/Kin.Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="15sp"
+        tools:text="Sarah Miller" />
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/watchSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

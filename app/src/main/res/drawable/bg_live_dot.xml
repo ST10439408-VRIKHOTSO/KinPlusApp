@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Small green "live" dot with a white ring, on member avatars. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/kin_green_bright" />
+    <stroke android:width="2dp" android:color="@color/kin_surface" />
+</shape>
