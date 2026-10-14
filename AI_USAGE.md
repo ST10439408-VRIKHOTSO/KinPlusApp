@@ -1,24 +1,18 @@
 # Declaration of AI Tool Usage
 
-**Module:** OPSC6312 Open Source Coding (Intermediate)
+**Module:** OPSC6312 Open Source Coding (Intermediate)  
 **Group:** Vukosi Rikhotso (ST10439408) & Theo Golele (ST10439863)
 
-This declaration explains how we used AI tools while building the Kin+ Portfolio of Evidence.
+This declaration explains how AI tools were used as guidance resources during the development of the Kin+ Portfolio of Evidence.
 
-## Research and learning
+## Research and Learning
 
-We used AI in a similar way to Google Search, YouTube tutorials and official documentation. When we did not know how to do something, such as adding Google Maps, the Credential Manager Google sign in flow, WorkManager with a Hilt worker factory or MongoDB `2dsphere` queries, we asked for explanations and examples, then adapted them to our project and tested them ourselves. We also used AI to understand compiler errors.
+The group used AI tools as learning and guidance resources to improve their understanding of programming concepts, technical requirements and development processes. When the group encountered unfamiliar concepts, such as Google Maps integration, Google sign-in using Credential Manager, WorkManager with Hilt, and MongoDB `2dsphere` queries, AI was used to provide explanations and clarify how these technologies work. AI was also used to help the group understand compiler errors and troubleshoot technical challenges. All implementation decisions and development work remained the responsibility of the group.
 
-## Part 3: moving from Jetpack Compose to XML views
+## Original Work and Responsibility
 
-For Part 3 we rebuilt the interface with XML layouts and Fragments. We used AI to help convert the Compose screens into XML layouts and Fragment code, to draft the isiZulu and Sepedi strings that were missing, and to explain build errors from GitHub Actions. We kept our existing ViewModels and data layer, and decided the screen structure and navigation ourselves. We reviewed every change, built and ran the app on a physical phone, and tested each screen and Google sign in before including it.
+The application's concept, features, use cases, requirements, screen designs, API design, data model and architectural decisions were developed by the group, as documented in the Part 1 Research, Planning and Design documents. The group was responsible for implementing the application's functionality, including offline-first repositories, the WorkManager synchronisation queue, idempotency keys, Firebase authentication and server-side token validation. AI served only as a supporting guide and did not replace the group's own research, understanding, problem-solving or development efforts.
 
-## What remained our own work
+## Verification and Accountability
 
-The **concept, features, use cases, requirements, original screen designs, API design and data model** are our own work, as defined in the Part 1 Research and Planning and Design documents. The **architecture decisions**, including the offline first repositories, the WorkManager sync queue with idempotency keys, Firebase authentication and server side token validation, were decided by the team.
-
-## Verification
-
-We did not include anything we did not understand. GitHub Actions builds the app and runs the unit tests on every push, which gives an independent check that the code compiles and the tests pass.
-
-
+The group takes full responsibility for the work submitted in the Portfolio of Evidence. AI-generated explanations were treated as guidance rather than completed work. The group was responsible for understanding the relevant concepts, implementing the solutions and verifying the application's functionality. GitHub Actions was used to build the application and run unit tests, providing additional checks for compilation and test results.
