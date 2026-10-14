@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -53,6 +54,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.LocationRepository
@@ -62,6 +64,7 @@ import za.co.kinplus.app.domain.MemberLocation
 import za.co.kinplus.app.location.LocationFix
 import za.co.kinplus.app.location.LocationProvider
 import za.co.kinplus.app.location.hasAnyLocationPermission
+import za.co.kinplus.app.ui.components.IconBadge
 import za.co.kinplus.app.ui.components.KinAppTopBar
 import za.co.kinplus.app.ui.components.OfflineBanner
 import za.co.kinplus.app.util.ConnectivityObserver
@@ -183,18 +186,18 @@ private fun FamilyCirclePanel(circle: Circle?, members: List<MemberLocation>, sa
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.family_circle_header), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.family_circle_header), fontSize = 18.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
                     Spacer(Modifier.width(8.dp))
                     Text(circle.memberCount.toString(), color = AuthMutedColor(), fontSize = 15.sp)
                 }
-                Button(onClick = {}, shape = RoundedCornerShape(50), contentPadding = PaddingValues(horizontal = 18.dp, vertical = 8.dp)) {
-                    Text(stringResource(R.string.action_check_in), fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Button(onClick = {}, shape = RoundedCornerShape(50), contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp)) {
+                    Text(stringResource(R.string.action_check_in), fontSize = 13.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
 
         if (members.isEmpty()) {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
                 Text(
                     stringResource(R.string.location_sharing_active),
                     color = AuthMutedColor(), fontSize = 13.sp,
@@ -202,7 +205,7 @@ private fun FamilyCirclePanel(circle: Circle?, members: List<MemberLocation>, sa
                 )
             }
         } else {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
                 Column {
                     members.forEachIndexed { index, member ->
                         FamilyMemberRow(member)
@@ -235,15 +238,25 @@ private fun FamilyCirclePanel(circle: Circle?, members: List<MemberLocation>, sa
 private fun FamilyMemberRow(member: MemberLocation) {
     ListItem(
         leadingContent = {
-            Box(Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
-                Text(member.displayName.take(1).uppercase(), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            Box(Modifier.size(42.dp)) {
+                Box(Modifier.fillMaxSize().clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
+                    Text(initialsOf(member.displayName), color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                }
+                Box(
+                    Modifier.size(12.dp).align(Alignment.BottomEnd).clip(CircleShape)
+                        .background(Color(0xFF3FB68B)).border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
+                )
             }
         },
-        headlineContent = { Text(member.displayName, fontWeight = FontWeight.Medium) },
+        headlineContent = { Text(member.displayName, fontWeight = FontWeight.SemiBold) },
         supportingContent = { Text(stringResource(R.string.location_sharing_active), color = AuthMutedColor(), fontSize = 12.sp, maxLines = 1) },
         trailingContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.battery_pct, member.batteryPct), color = AuthMutedColor(), fontSize = 13.sp)
+                Text(
+                    stringResource(R.string.battery_pct, member.batteryPct),
+                    color = if (member.batteryPct < 20) MaterialTheme.colorScheme.error else AuthMutedColor(),
+                    fontSize = 13.sp, fontWeight = FontWeight.SemiBold
+                )
                 Spacer(Modifier.width(4.dp))
                 Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = AuthMutedColor())
             }
@@ -255,12 +268,12 @@ private fun FamilyMemberRow(member: MemberLocation) {
 @Composable
 private fun InfoTile(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, sub: String, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     val tileModifier = if (onClick != null) modifier.clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick) else modifier
-    Surface(modifier = tileModifier, color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+    Surface(modifier = tileModifier, color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(14.dp)) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.height(8.dp))
-            Text(title, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-            Text(sub, fontSize = 11.sp, color = AuthMutedColor())
+            IconBadge(icon, size = 36.dp)
+            Spacer(Modifier.height(10.dp))
+            Text(title, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+            Text(sub, fontSize = 12.sp, color = AuthMutedColor())
         }
     }
 }
@@ -375,7 +388,7 @@ private fun MemberMap(
     }
     val mapUiSettings = remember { MapUiSettings(zoomControlsEnabled = false, myLocationButtonEnabled = false) }
 
-    Box(modifier = modifier.clip(RoundedCornerShape(16.dp))) {
+    Box(modifier = modifier.clip(RoundedCornerShape(20.dp)).border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(20.dp))) {
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
@@ -383,7 +396,7 @@ private fun MemberMap(
             uiSettings = mapUiSettings
         ) {
             val markerColor = MaterialTheme.colorScheme.primary.toArgb()
-            val selfMarkerColor = MaterialTheme.colorScheme.error.toArgb()
+            val selfMarkerColor = MaterialTheme.colorScheme.inverseSurface.toArgb()
             members.forEach { m ->
                 val isMe = m.uid == myUid
                 val icon = remember(m.uid, m.displayName, markerColor, isMe) {
@@ -416,15 +429,15 @@ private fun MemberMap(
 
         Surface(
             modifier = Modifier.align(Alignment.TopStart).padding(12.dp),
-            color = Color.Black.copy(alpha = 0.6f),
+            color = MaterialTheme.colorScheme.inverseSurface.copy(alpha = 0.88f),
             shape = RoundedCornerShape(50)
         ) {
             Row(Modifier.padding(horizontal = 12.dp, vertical = 7.dp), verticalAlignment = Alignment.CenterVertically) {
-                Box(Modifier.size(6.dp).clip(CircleShape).background(if (isOffline) AuthMutedColor() else Color(0xFF34C759)))
+                Box(Modifier.size(7.dp).clip(CircleShape).background(if (isOffline) AuthMutedColor() else Color(0xFF3FB68B)))
                 Spacer(Modifier.width(6.dp))
                 Text(
                     if (isOffline) stringResource(R.string.map_status_offline) else stringResource(R.string.map_status_live),
-                    color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Medium
+                    color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -490,16 +503,17 @@ private fun initialsMarkerIcon(context: Context, initials: String, backgroundCol
 private fun LocateMeButton(loading: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
-            .size(44.dp)
+            .size(48.dp)
             .clip(CircleShape)
-            .background(Color.Black.copy(alpha = 0.75f))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
             .clickable(enabled = !loading, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         if (loading) {
-            CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White)
+            CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.primary)
         } else {
-            Icon(Icons.Filled.MyLocation, contentDescription = stringResource(R.string.locate_me), tint = Color.White)
+            Icon(Icons.Filled.MyLocation, contentDescription = stringResource(R.string.locate_me), tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -508,20 +522,23 @@ private fun LocateMeButton(loading: Boolean, onClick: () -> Unit, modifier: Modi
 private fun MapModeSwitcher(selected: HomeMapMode, onSelect: (HomeMapMode) -> Unit, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
-        color = Color.Black.copy(alpha = 0.65f),
-        shape = RoundedCornerShape(50)
+        color = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(50),
+        shadowElevation = 4.dp
     ) {
-        Row {
+        Row(Modifier.padding(4.dp)) {
             HomeMapMode.entries.forEach { mode ->
                 val selectedNow = mode == selected
                 Text(
                     stringResource(mode.labelRes),
-                    color = if (selectedNow) Color.White else Color.White.copy(alpha = 0.6f),
-                    fontWeight = if (selectedNow) FontWeight.Bold else FontWeight.Normal,
+                    color = if (selectedNow) Color.White else AuthMutedColor(),
+                    fontWeight = if (selectedNow) FontWeight.Bold else FontWeight.SemiBold,
                     fontSize = 12.sp,
                     modifier = Modifier
+                        .clip(RoundedCornerShape(50))
+                        .background(if (selectedNow) MaterialTheme.colorScheme.inverseSurface else Color.Transparent)
                         .clickable { onSelect(mode) }
-                        .padding(horizontal = 12.dp, vertical = 8.dp)
+                        .padding(horizontal = 12.dp, vertical = 7.dp)
                 )
             }
         }

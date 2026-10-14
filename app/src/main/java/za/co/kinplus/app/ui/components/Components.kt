@@ -1,8 +1,10 @@
 package za.co.kinplus.app.ui.components
 
 import android.graphics.BitmapFactory
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.filled.Tune
@@ -26,6 +29,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -52,7 +56,9 @@ fun KinPrimaryButton(
     Button(
         onClick = onClick,
         enabled = enabled && !loading,
-        modifier = modifier.fillMaxWidth().height(52.dp)
+        modifier = modifier.fillMaxWidth().height(56.dp),
+        shape = RoundedCornerShape(50),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp, pressedElevation = 0.dp)
     ) {
         if (loading) {
             CircularProgressIndicator(
@@ -61,7 +67,7 @@ fun KinPrimaryButton(
                 color = MaterialTheme.colorScheme.onPrimary
             )
         } else {
-            Text(text, style = MaterialTheme.typography.labelLarge)
+            Text(text, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -85,6 +91,8 @@ fun KinTextField(
             singleLine = singleLine,
             isError = isError,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            shape = RoundedCornerShape(14.dp),
+            colors = kinFieldColors(),
             modifier = Modifier.fillMaxWidth()
         )
         if (supportingText != null) {
@@ -119,9 +127,11 @@ fun KinPasswordField(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             trailingIcon = {
                 TextButton(onClick = { visible = !visible }) {
-                    Text(if (visible) "Hide" else "Show")
+                    Text(if (visible) "Hide" else "Show", fontWeight = FontWeight.SemiBold)
                 }
             },
+            shape = RoundedCornerShape(14.dp),
+            colors = kinFieldColors(),
             modifier = Modifier.fillMaxWidth()
         )
         if (supportingText != null) {
@@ -139,13 +149,26 @@ fun KinPasswordField(
 @Composable
 fun OfflineBanner(visible: Boolean) {
     if (!visible) return
-    Surface(color = MaterialTheme.colorScheme.errorContainer, modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = stringResourceSafe(R.string.error_offline_banner),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onErrorContainer,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-        )
+    Surface(
+        color = MaterialTheme.colorScheme.errorContainer,
+        shape = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 6.dp)
+    ) {
+        Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.Filled.CloudOff,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(10.dp))
+            Text(
+                text = stringResourceSafe(R.string.error_offline_banner),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
+        }
     }
 }
 
@@ -164,7 +187,7 @@ fun KinTopAppBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
-        title = { Text(title, fontWeight = FontWeight.Bold) },
+        title = { Text(title, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp, letterSpacing = (-0.2).sp) },
         navigationIcon = {
             if (onBack != null) {
                 IconButton(onClick = onBack) {
@@ -183,9 +206,9 @@ fun KinTopAppBar(
 
 /**
  * The primary top bar used across the four main tabs (Map, Circles, SOS,
- * Safety): a small "Kin+" wordmark (or a back chevron on pushed screens) on
- * the start edge, the screen title centred, and filter / profile actions on
- * the end edge — matching the shared header across those screens' designs.
+ * Safety): the Kin+ brand mark (or a round back button on pushed screens) on
+ * the start edge, a large left aligned screen title, and round filter and
+ * profile actions on the end edge.
  */
 @Composable
 fun KinAppTopBar(
@@ -195,56 +218,91 @@ fun KinAppTopBar(
     onFilter: (() -> Unit)? = null,
     onProfile: (() -> Unit)? = null
 ) {
-    Box(modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp)) {
-        Row(Modifier.align(Alignment.CenterStart), verticalAlignment = Alignment.CenterVertically) {
-            if (onBack != null) {
+    Row(
+        modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (onBack != null) {
+            Box(
+                Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
+                    .clickable(onClick = onBack),
+                contentAlignment = Alignment.Center
+            ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.cancel),
-                    modifier = Modifier.size(22.dp).clickable(onClick = onBack)
+                    modifier = Modifier.size(20.dp)
                 )
-                Spacer(Modifier.width(10.dp))
             }
+            Spacer(Modifier.width(12.dp))
+        } else {
             Box(
-                Modifier.size(24.dp).clip(RoundedCornerShape(7.dp)).background(colorResource(R.color.ic_launcher_background)),
+                Modifier.size(32.dp).clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.inverseSurface),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     painter = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
+                    contentDescription = stringResource(R.string.app_name),
+                    modifier = Modifier.size(32.dp)
                 )
             }
-            Spacer(Modifier.width(6.dp))
-            Text(stringResource(R.string.app_name), fontWeight = FontWeight.Bold, fontSize = 14.sp, color = AuthMuted)
+            Spacer(Modifier.width(12.dp))
         }
 
         Text(
             title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 19.sp,
-            modifier = Modifier.align(Alignment.Center)
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 22.sp,
+            letterSpacing = (-0.3).sp,
+            maxLines = 1,
+            modifier = Modifier.weight(1f)
         )
 
-        Row(Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically) {
-            if (onFilter != null) {
-                IconButton(onClick = onFilter, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Filled.Tune, contentDescription = null, tint = AuthMuted, modifier = Modifier.size(20.dp))
-                }
-                Spacer(Modifier.width(6.dp))
+        if (onFilter != null) {
+            Box(
+                Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surface)
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape)
+                    .clickable(onClick = onFilter),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Filled.Tune, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(19.dp))
             }
-            if (onProfile != null) {
-                Box(
-                    Modifier.size(34.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary)
-                        .clickable(onClick = onProfile),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(Icons.Filled.PersonOutline, contentDescription = stringResource(R.string.profile_title), tint = Color.White, modifier = Modifier.size(18.dp))
-                }
+            Spacer(Modifier.width(8.dp))
+        }
+        if (onProfile != null) {
+            Box(
+                Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary)
+                    .clickable(onClick = onProfile),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Filled.PersonOutline, contentDescription = stringResource(R.string.profile_title), tint = Color.White, modifier = Modifier.size(20.dp))
             }
         }
     }
 }
+
+/** The hairline border every white card carries, so it lifts cleanly off the warm stone page. */
+@Composable
+fun kinCardBorder(): BorderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+
+/** Shared colours for the outlined text fields: white fill, warm hairline, evergreen focus ring. */
+@Composable
+private fun kinFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedContainerColor = MaterialTheme.colorScheme.surface,
+    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+    disabledContainerColor = MaterialTheme.colorScheme.surface,
+    focusedBorderColor = MaterialTheme.colorScheme.primary,
+    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+    focusedLabelColor = MaterialTheme.colorScheme.primary,
+    cursorColor = MaterialTheme.colorScheme.primary
+)
 
 enum class IconBadgeVariant { NEUTRAL, DANGER }
 
@@ -268,8 +326,8 @@ fun IconBadge(
     val tint: Color
     when (variant) {
         IconBadgeVariant.NEUTRAL -> {
-            bg = MaterialTheme.colorScheme.surfaceContainer
-            tint = MaterialTheme.colorScheme.onSurface
+            bg = MaterialTheme.colorScheme.primaryContainer
+            tint = MaterialTheme.colorScheme.primary
         }
         IconBadgeVariant.DANGER -> {
             bg = MaterialTheme.colorScheme.errorContainer
@@ -277,7 +335,7 @@ fun IconBadge(
         }
     }
     Box(
-        modifier.size(size).clip(CircleShape).background(bg),
+        modifier.size(size).clip(RoundedCornerShape(size * 0.32f)).background(bg),
         contentAlignment = Alignment.Center
     ) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.5f))
@@ -297,7 +355,7 @@ fun AvatarImage(photoPath: String?, fallbackText: String, modifier: Modifier = M
         photoPath?.let { path -> runCatching { BitmapFactory.decodeFile(path)?.asImageBitmap() }.getOrNull() }
     }
     Box(
-        modifier.size(size).clip(CircleShape).background(Color.Black),
+        modifier.size(size).clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer),
         contentAlignment = Alignment.Center
     ) {
         if (bitmap != null) {
@@ -305,7 +363,7 @@ fun AvatarImage(photoPath: String?, fallbackText: String, modifier: Modifier = M
         } else {
             Text(
                 fallbackText.take(1).ifBlank { "?" }.uppercase(),
-                color = Color.White, fontWeight = FontWeight.SemiBold, fontSize = (size.value / 2.6f).sp
+                color = MaterialTheme.colorScheme.onPrimaryContainer, fontWeight = FontWeight.Bold, fontSize = (size.value / 2.6f).sp
             )
         }
     }
@@ -321,14 +379,15 @@ fun EditableAvatar(photoPath: String?, fallbackText: String, onPick: () -> Unit,
                 .size(size * 0.34f)
                 .align(Alignment.BottomEnd)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .background(MaterialTheme.colorScheme.primary)
+                .border(2.dp, MaterialTheme.colorScheme.surface, CircleShape)
                 .clickable(onClick = onPick),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 Icons.Filled.PhotoCamera,
                 contentDescription = stringResource(R.string.change_photo),
-                tint = MaterialTheme.colorScheme.onSurface,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(size * 0.18f)
             )
         }
@@ -348,6 +407,8 @@ fun EmptyState(message: String, modifier: Modifier = Modifier) {
         Text(
             message,
             style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }

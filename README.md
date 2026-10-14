@@ -1,92 +1,176 @@
-# KinPlus (Kin+)
+<div align="center">
 
+# Kin+
 
-An Android app for family and circle safety, real time location sharing, Safe Zones with geofencing, SOS alerts, journey monitoring and community alerts. The app also supports offline use and background sync.
+### Stay Connected. Stay Safe.
 
-## Download
+A South African family and community safety app for Android.
 
-Grab the latest installable APK from the [GitHub Releases page](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/releases/latest).
+**OPSC6312 Open Source Coding (Intermediate) · Portfolio of Evidence**
+Rosebank College (IIE) · Pretoria Campus
+Vukosi Rikhotso (ST10439408) & Theo Golele (ST10439863)
 
-> The release APK is a debug build (uses a placeholder Firebase config), so Maps requires your own `local.properties` key as described below. See [Setup](#setup) to build a fully configured version yourself.
+</div>
 
-## Tech stack
+---
 
-* **UI:** Jetpack Compose, Material 3
-* **DI:** Hilt
-* **Networking:** Retrofit + OkHttp
-* **Local storage:** Room, DataStore, EncryptedSharedPreferences (security crypto)
-* **Background work:** WorkManager (offline sync queue)
-* **Firebase:** Auth, Cloud Messaging, Analytics
-* **Location:** Play Services Location, Maps Compose, geofencing
-* **Auth:** Firebase email/password sign-in
+## 1. Purpose
 
-Minimum SDK 26 (Android 8.0), target and compile SDK 34, Kotlin and Java 17.
+Kin+ helps people stay connected with the people they trust and get help quickly in an emergency. Our Part 1 research found that Namola, Life360 and Google Family Link each solve part of the problem, but none combines location circles, a deliberate emergency SOS, geofenced Safe Zones, safe journey monitoring, community safety reporting, offline resilience and a multilingual South African interface in one app. Kin+ does.
 
-## Project structure
+## 2. Download
+
+Get the latest installable APK from the [GitHub Releases page](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/releases/latest).
+
+> The release APK on GitHub is a debug build with a placeholder Firebase config, so Maps needs your own key as described in [Setup](#7-setup).
+
+## 3. Features
+
+| #  | Feature                                       | Requirement | Where in the code                                         |
+| -- | --------------------------------------------- | ----------- | --------------------------------------------------------- |
+| 1  | Register and log in (Firebase Auth)           | FR 01 to 03 | `auth/AuthManager.kt`, `ui/screens/auth`                  |
+| 2  | Single sign on with Google                    | FR 05       | `AuthManager.signInWithGoogle()` (Credential Manager)     |
+| 3  | Settings, including language                  | FR 32       | `ui/screens/settings`, `data/local/SettingsStore.kt`      |
+| 4  | REST API integration                          | n/a         | `data/remote` (Retrofit) and `data/repository`            |
+| 5  | Offline mode with sync                        | FR 28, 29   | `data/local` (Room), `data/sync` (WorkManager)            |
+| 6  | Real time notifications                       | FR 30       | `messaging/KinPlusMessagingService.kt` (FCM)              |
+| 7  | English, isiZulu and Sepedi                   | FR 31       | `res/values`, `values-zu`, `values-nso`, `LocaleManager`  |
+| 8  | **Kin+ Circles**                              | FR 09 to 16 | `ui/screens/circles`                                      |
+| 9  | **Emergency SOS**                             | FR 17 to 19 | `ui/screens/sos`                                          |
+| 10 | **Safe Zones** with geofencing                | FR 20 to 22 | `ui/screens/zones`, `location/GeofenceManager.kt`         |
+| 11 | **Safe Journey**                              | FR 23, 24   | `ui/screens/journey`                                      |
+| 12 | **Community Alerts**                          | FR 25 to 27 | `ui/screens/alerts`                                       |
+| 13 | **Privacy Control Centre**                    | FR 15, 16   | Safety hub and Profile                                    |
+
+### Added in Version 1.1
+
+| Feature                                   | Part of          | Where in the code                                          |
+| ----------------------------------------- | ---------------- | ---------------------------------------------------------- |
+| Fake incoming call                        | Emergency SOS    | `ui/components/FakeCall.kt`                                |
+| Siren and flashlight strobe               | Emergency SOS    | `ui/components/SirenStrobe.kt`                             |
+| "I'm OK" check in timer                   | Safe Journey     | `data/checkin/*`, `ui/screens/journey/CheckInCard.kt`      |
+| Distance filter and report details        | Community Alerts | `ui/screens/alerts/CommunityAlertsScreen.kt`               |
+| Nearby police, hospitals and clinics      | Safety hub       | `ui/screens/safety/SafetyScreen.kt`                        |
+
+Full details are in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
+
+## 4. Screenshots
+
+<!-- Add phone screenshots to docs/screenshots and they will show here. -->
+
+| Sign in | Map | SOS | Safety |
+| ------- | --- | --- | ------ |
+| ![Sign in](docs/screenshots/login.png) | ![Map](docs/screenshots/home_map.png) | ![SOS](docs/screenshots/sos.png) | ![Safety](docs/screenshots/safety.png) |
+
+## 5. Design considerations
+
+* **Calm, not alarming.** A safety app should feel steady and reassuring. Kin+ uses a warm stone background, white cards with fine borders and deep evergreen as the single brand colour.
+* **Red means emergency.** Red is used only for SOS, danger and destructive actions, so it always stands out when it matters.
+* **One handed use under stress.** Buttons are at least 48 dp tall, main actions are 56 dp, and the SOS button is large and needs a 3 second hold so it is never pressed by accident.
+* **Readable everywhere.** The Plus Jakarta Sans font stays clear at small sizes, and secondary text is dark enough to read on both the background and the cards.
+* **Consistent.** Every colour, font and shape is defined once in `ui/theme`, and shared pieces such as buttons, text fields and top bars live in `ui/components`, so all screens look and behave the same.
+* **Only the data we need (POPIA).** Location is used for circles, Safe Zones and SOS. Emergency information and contacts stay on the device. Users can pause sharing at any time and delete their account.
+
+## 6. Architecture
+
+```text
+UI (Jetpack Compose) -> ViewModels (MVVM) -> Repositories -> Retrofit API client / Room cache
+                                                          -> Firebase Auth, FCM, WorkManager
+```
+
+* **Offline first:** reads come from Room, so cached data shows without a connection. Writes that must not be lost (location, SOS, zone crossings, reports) are queued and sent by WorkManager when the connection returns, with a client action ID so the server ignores duplicates.
+* **Authentication** is handled by Firebase. The API checks the Firebase ID token on every request and never sees a password.
+* **REST API:** our own ASP.NET Core Web API (.NET 8) with MongoDB Atlas and Azure Blob Storage, in the `KinPlusApi` project.
 
 ```text
 app/src/main/java/za/co/kinplus/app/
-├── auth/          # Auth manager
-├── data/          # local (Room), remote (Retrofit), repository, sync (WorkManager)
-├── di/            # Hilt modules
-├── domain/        # Domain models
-├── location/      # Location, geofencing, compass providers
-├── messaging/     # FCM service
-├── ui/            # Compose screens, navigation, theme, shared components
-└── util/          # Connectivity, locale, Resource wrapper
+├── auth/          Firebase email and password, Google SSO
+├── data/          local (Room), remote (Retrofit), repository, sync and checkin (WorkManager)
+├── di/            Hilt modules
+├── domain/        Domain models
+├── location/      Location, geofencing, compass
+├── messaging/     Firebase Cloud Messaging
+├── ui/            Compose screens, navigation, theme, shared components
+└── util/          Connectivity, locale, Resource wrapper
 ```
 
-## Setup
+**Tech stack:** Jetpack Compose and Material 3, Hilt, Retrofit and OkHttp, Room, DataStore, WorkManager, Firebase (Auth, Cloud Messaging, Analytics), Play Services Location, Maps Compose. Minimum SDK 26, target SDK 34, Kotlin and Java 17.
 
-### 1. Prerequisites
+## 7. Setup
+
+### Prerequisites
 
 * Android Studio (latest stable) with Android SDK 34
 * JDK 17
 
-### 2. `local.properties`
+### `local.properties`
 
-Create `local.properties` in the project root. Never commit this file. Add the following:
+Create `local.properties` in the project root. Never commit this file.
 
 ```properties
 sdk.dir=/path/to/your/Android/Sdk
-
 KINPLUS_API_BASE_URL=https://your-api-base-url/
-
-# Optional: Map tiles will not load without this, but the app will still build
+# Optional: map tiles will not load without this, but the app still builds
 KINPLUS_GOOGLE_MAPS_API_KEY=your-maps-sdk-android-key
 ```
 
-Get a Maps SDK for Android key from the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis/credentials). It has a free monthly quota.
+Get a Maps SDK for Android key from the [Google Cloud Console](https://console.cloud.google.com/google/maps-apis/credentials).
 
-### 3. Firebase config
+### Firebase
 
-Firebase Authentication and Cloud Messaging require a real `google-services.json` file.
+1. In the [Firebase Console](https://console.firebase.google.com/), register an Android app with the package name `za.co.kinplus.app`.
+2. Download `google-services.json` into `app/`. A placeholder is provided at `app/google-services.json.template`.
+3. `app/google-services.json` is ignored by git and must stay out of version control.
 
-1. Create or open your project in the [Firebase Console](https://console.firebase.google.com/) and register an Android app using the package name `za.co.kinplus.app`.
-2. Download `google-services.json` and place it at `app/google-services.json`.
-
-A placeholder is included at `app/google-services.json.template`. Copy it and replace the placeholder values with your real values, or download the real file directly.
-
-The file `app/google-services.json` must remain out of version control. This is already configured in `.gitignore`.
-
-### 4. Build and run
+### Build and run
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-Alternatively, open the project in Android Studio and run the `app` configuration.
+Or open the project in Android Studio and run the `app` configuration on a phone.
 
-## Testing
+## 8. GitHub and automated testing
 
-```bash
-./gradlew test
-```
+Two GitHub Actions workflows live in `.github/workflows`:
 
-Runs the unit tests.
+* **`build.yml`** runs on every push and pull request. It sets up JDK 17 and the Android SDK, adds the placeholder Firebase config, runs the unit tests (`testDebugUnitTest`) and builds the debug APK. Test reports are uploaded as an artifact. This proves the app builds and the tests pass on a clean machine, not only on our laptops.
+* **`release.yml`** runs when a version tag such as `v1.1` is pushed. It builds the APK and attaches it to a GitHub Release.
 
-```bash
-./gradlew connectedAndroidTest
-```
+Unit tests in `app/src/test`:
 
-Runs the instrumented tests. A device or emulator is required.
+* `AuthValidationTest.kt`: email and password rules.
+* `SosRepositoryTest.kt`: the offline SOS queue, using MockK.
+* `AlertDistanceTest.kt`: the Community Alerts distance calculation and the check in timer settings.
+
+Run them locally with `./gradlew test`.
+
+## 9. Permissions
+
+| Permission | Why |
+| ---------- | --- |
+| Location (fine, coarse, background) | Sharing location with circles, Safe Zone geofences and SOS location |
+| Notifications | SOS, Safe Zone, Safe Journey and check in alerts |
+| Internet and network state | Talking to the Kin+ API and detecting offline mode |
+| Vibrate | Fake call ringing |
+| Receive boot completed | Lets scheduled background work (offline sync and the check in timer) continue after a restart |
+
+## 10. Release notes, AI use and Play Store
+
+* [`RELEASE_NOTES.md`](RELEASE_NOTES.md): every update since the prototype, including which innovative features were added.
+* [`AI_USAGE.md`](AI_USAGE.md): how AI tools were used and cited.
+* [`PLAY_STORE.md`](PLAY_STORE.md): Play Store preparation checklist.
+
+## 11. Demonstration video
+
+**Video walkthrough:** _Add the unlisted YouTube link here before submitting._
+
+## 12. Team
+
+* **Vukosi Rikhotso** (ST10439408): project lead, Android UI, navigation and Firebase integration.
+* **Theo Golele** (ST10439863): REST API, MongoDB, Azure services and backend integration.
+
+## 13. Credits
+
+* [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans) by Tokotype, used under the SIL Open Font License 1.1. The license is included at `app/src/main/assets/licenses/PlusJakartaSans-OFL.txt`.
+* Icons from Material Icons (Apache License 2.0).

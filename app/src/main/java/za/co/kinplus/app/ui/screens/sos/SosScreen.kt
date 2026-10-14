@@ -26,14 +26,16 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.PersonAddAlt1
+import androidx.compose.material.icons.filled.PhoneCallback
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.VolumeOff
-import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.material.icons.filled.TouchApp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -49,6 +51,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.data.local.EmergencyContactEntity
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.EmergencyContactRepository
@@ -56,7 +59,10 @@ import za.co.kinplus.app.data.repository.SosRepository
 import za.co.kinplus.app.domain.Circle
 import za.co.kinplus.app.location.LocationFix
 import za.co.kinplus.app.location.LocationProvider
+import za.co.kinplus.app.ui.components.FakeCallHost
+import za.co.kinplus.app.ui.components.FakeCallSetupDialog
 import za.co.kinplus.app.ui.components.KinAppTopBar
+import za.co.kinplus.app.ui.components.rememberSirenStrobe
 import za.co.kinplus.app.ui.screens.auth.AuthMuted
 import za.co.kinplus.app.util.Resource
 import javax.inject.Inject
@@ -144,6 +150,12 @@ fun SosScreen(
     var pressing by remember { mutableStateOf(false) }
     var selectedIncident by remember { mutableIntStateOf(0) }
 
+    // Batch 1 safety tools: siren with strobe, and a fake incoming call.
+    val siren = rememberSirenStrobe()
+    var sirenOn by remember { mutableStateOf(false) }
+    var showFakeCallSetup by remember { mutableStateOf(false) }
+    var fakeCall by remember { mutableStateOf<Pair<String, Int>?>(null) }
+
     LaunchedEffect(initialCategory) {
         if (!initialCategory.isNullOrBlank() && state.message.isBlank()) viewModel.onMessage(initialCategory)
     }
@@ -184,11 +196,23 @@ fun SosScreen(
                             .background(MaterialTheme.colorScheme.error.copy(alpha = 0.18f * (1f - pulse)))
                     )
                 }
+                if (pressing) {
+                    CircularProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.size(208.dp),
+                        strokeWidth = 6.dp,
+                        color = MaterialTheme.colorScheme.error,
+                        trackColor = MaterialTheme.colorScheme.errorContainer
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .size(184.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.error.copy(alpha = 0.55f + 0.45f * progress))
+                        .background(
+                            Brush.radialGradient(listOf(Color(0xFFEF4B3E), Color(0xFFD92D20), Color(0xFFB42318))),
+                            alpha = 0.7f + 0.3f * progress
+                        )
                         .pointerInput(Unit) {
                             detectTapGestures(onPress = {
                                 pressing = true
@@ -199,9 +223,9 @@ fun SosScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Filled.WbSunny, contentDescription = null, tint = Color.White, modifier = Modifier.size(30.dp))
-                        Text(stringResource(R.string.sos), fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                        Text(stringResource(R.string.sos_hold_seconds_label, SosViewModel.HOLD_SECONDS), color = Color.White.copy(alpha = 0.85f), fontSize = 12.sp)
+                        Icon(Icons.Filled.TouchApp, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                        Text(stringResource(R.string.sos), fontSize = 40.sp, fontWeight = FontWeight.ExtraBold, color = Color.White, letterSpacing = 1.sp)
+                        Text(stringResource(R.string.sos_hold_seconds_label, SosViewModel.HOLD_SECONDS), color = Color.White.copy(alpha = 0.9f), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                     }
                 }
             }
@@ -209,7 +233,7 @@ fun SosScreen(
         Spacer(Modifier.height(14.dp))
         Text(
             stringResource(R.string.sos_hold_instructions, SosViewModel.HOLD_SECONDS),
-            fontWeight = FontWeight.SemiBold, fontSize = 14.sp,
+            fontWeight = FontWeight.Bold, fontSize = 15.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Text(
@@ -234,7 +258,7 @@ fun SosScreen(
 
         SosSectionHeader(stringResource(R.string.direct_interventions_title), null)
         Column(Modifier.padding(horizontal = 16.dp)) {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                 Column {
                     InterventionRow(
                         icon = Icons.Filled.Call, iconTint = MaterialTheme.colorScheme.error, iconBg = MaterialTheme.colorScheme.errorContainer,
@@ -259,6 +283,30 @@ fun SosScreen(
             }
         }
 
+        SosSectionHeader(stringResource(R.string.safety_tools_title), null)
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            SafetyToolTile(
+                icon = Icons.Filled.Campaign,
+                title = stringResource(R.string.siren_title),
+                subtitle = stringResource(if (sirenOn) R.string.siren_sub_on else R.string.siren_sub_off),
+                active = sirenOn,
+                modifier = Modifier.weight(1f)
+            ) {
+                sirenOn = !sirenOn
+                if (sirenOn) siren.start() else siren.stop()
+            }
+            SafetyToolTile(
+                icon = Icons.Filled.PhoneCallback,
+                title = stringResource(R.string.fake_call_title),
+                subtitle = stringResource(R.string.fake_call_sub),
+                active = fakeCall != null,
+                modifier = Modifier.weight(1f)
+            ) { showFakeCallSetup = true }
+        }
+
         SosSectionHeader(
             stringResource(R.string.designated_responders_title, state.responders.size),
             stringResource(R.string.high_priority_reach)
@@ -275,7 +323,8 @@ fun SosScreen(
         Spacer(Modifier.height(20.dp))
         Surface(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).clip(RoundedCornerShape(14.dp)),
-            color = MaterialTheme.colorScheme.surface
+            color = MaterialTheme.colorScheme.surface, border = kinCardBorder(),
+            shape = RoundedCornerShape(14.dp)
         ) {
             Row(Modifier.padding(14.dp)) {
                 Icon(Icons.Filled.Shield, contentDescription = null, tint = AuthMuted, modifier = Modifier.size(16.dp))
@@ -288,12 +337,66 @@ fun SosScreen(
         }
         Spacer(Modifier.height(24.dp))
     }
+
+    if (showFakeCallSetup) {
+        FakeCallSetupDialog(
+            defaultCaller = state.responders.firstOrNull()?.name ?: stringResource(R.string.fake_call_default_caller),
+            onDismiss = { showFakeCallSetup = false },
+            onSchedule = { caller, delaySeconds ->
+                showFakeCallSetup = false
+                fakeCall = caller to delaySeconds
+                if (delaySeconds > 0) {
+                    android.widget.Toast.makeText(
+                        context, context.getString(R.string.fake_call_scheduled, delaySeconds), android.widget.Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+    }
+    fakeCall?.let { (caller, delaySeconds) ->
+        FakeCallHost(caller = caller, delaySeconds = delaySeconds, onFinished = { fakeCall = null })
+    }
+}
+
+/** A tappable tile in the SOS "Safety tools" row; turns red while its tool is active. */
+@Composable
+private fun SafetyToolTile(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    active: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        color = if (active) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.surface,
+        border = if (active) null else kinCardBorder()
+    ) {
+        Column(Modifier.padding(14.dp)) {
+            Box(
+                Modifier.size(38.dp).clip(RoundedCornerShape(12.dp))
+                    .background(if (active) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.errorContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(icon, contentDescription = null, tint = if (active) Color.White else MaterialTheme.colorScheme.error, modifier = Modifier.size(19.dp))
+            }
+            Spacer(Modifier.height(10.dp))
+            Text(title, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = if (active) Color.White else MaterialTheme.colorScheme.onSurface)
+            Text(
+                subtitle, fontSize = 12.sp, maxLines = 2,
+                color = if (active) Color.White.copy(alpha = 0.85f) else AuthMuted
+            )
+        }
+    }
 }
 
 @Composable
 private fun SignalLockBanner(fix: LocationFix?, modifier: Modifier = Modifier) {
     Surface(
-        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)),
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)),
         color = MaterialTheme.colorScheme.primaryContainer
     ) {
         Column(Modifier.padding(14.dp)) {
@@ -322,8 +425,8 @@ private fun SosSectionHeader(title: String, trailing: String?) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Bottom
     ) {
-        Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        if (trailing != null) Text(trailing, fontSize = 11.sp, color = AuthMuted, fontWeight = FontWeight.SemiBold)
+        Text(title, fontSize = 17.sp, fontWeight = FontWeight.ExtraBold, letterSpacing = (-0.2).sp)
+        if (trailing != null) Text(trailing, fontSize = 12.sp, color = AuthMuted, fontWeight = FontWeight.SemiBold)
     }
 }
 
@@ -346,14 +449,14 @@ private fun IncidentCard(type: IncidentType, isSelected: Boolean, onClick: () ->
     Surface(
         onClick = onClick,
         modifier = modifier,
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.surface,
-        border = if (isSelected) BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary) else null
+        shape = RoundedCornerShape(16.dp),
+        color = if (isSelected) MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.45f) else MaterialTheme.colorScheme.surface,
+        border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.error) else kinCardBorder()
     ) {
         Box(Modifier.fillMaxWidth()) {
             Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    Modifier.size(38.dp).clip(CircleShape).background(MaterialTheme.colorScheme.errorContainer),
+                    Modifier.size(38.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.errorContainer),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(type.icon, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
@@ -366,7 +469,7 @@ private fun IncidentCard(type: IncidentType, isSelected: Boolean, onClick: () ->
             }
             if (isSelected) {
                 Icon(
-                    Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.primary,
+                    Icons.Filled.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.error,
                     modifier = Modifier.align(Alignment.TopEnd).padding(6.dp).size(16.dp)
                 )
             }
@@ -391,7 +494,7 @@ private fun InterventionRow(
         Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(Modifier.size(40.dp).clip(CircleShape).background(iconBg), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(iconBg), contentAlignment = Alignment.Center) {
             Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(19.dp))
         }
         Spacer(Modifier.width(10.dp))
@@ -405,10 +508,10 @@ private fun InterventionRow(
             color = actionContainerColor,
             modifier = Modifier.clip(RoundedCornerShape(50)).clickable(onClick = onAction)
         ) {
-            Row(Modifier.padding(horizontal = 14.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(actionIcon, contentDescription = null, tint = actionContentColor, modifier = Modifier.size(14.dp))
                 Spacer(Modifier.width(5.dp))
-                Text(actionLabel, color = actionContentColor, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                Text(actionLabel, color = actionContentColor, fontSize = 13.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -416,7 +519,7 @@ private fun InterventionRow(
 
 @Composable
 private fun ResponderChip(name: String) {
-    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.surface) {
+    Surface(shape = RoundedCornerShape(50), color = MaterialTheme.colorScheme.surface, border = kinCardBorder()) {
         Row(Modifier.padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(6.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary))
             Spacer(Modifier.width(6.dp))
