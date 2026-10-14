@@ -164,6 +164,7 @@ Run them locally with `./gradlew test`.
 * [Release Notes](Release%20Notes.md): every update since the prototype, including which innovative features were added.
 * [AI Usage](AI%20Usage.md): how AI tools were used and cited.
 * [Play Store](Play%20Store.md): Play Store preparation checklist.
+* [Rubric Map](docs/Rubric%20Map.md): where each rubric criterion is met in the code.
 
 ## 11. Demonstration video
 
@@ -176,5 +177,5 @@ Run them locally with `./gradlew test`.
 
 ## 13. Credits
 
-* [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans) by Tokotype, used under the SIL Open Font License 1.1. The license is included at `app/src/main/assets/licenses/PlusJakartaSans-OFL.txt`.
+* [Plus Jakarta Sans](https://github.com/tokotype/PlusJakartaSans) by Tokotype, used under the SIL Open Font License 1.1. The license is included at `app/src/main/assets/licenses/PlusJakartaSans OFL.txt`.
 * Icons from Material Icons (Apache License 2.0).
