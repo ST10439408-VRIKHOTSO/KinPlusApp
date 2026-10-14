@@ -68,14 +68,14 @@ Full details are in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
 * **Red means emergency.** Red is used only for SOS, danger and destructive actions, so it always stands out when it matters.
 * **One handed use under stress.** Buttons are at least 48 dp tall, main actions are 56 dp, and the SOS button is large and needs a 3 second hold so it is never pressed by accident.
 * **Readable everywhere.** The Plus Jakarta Sans font stays clear at small sizes, and secondary text is dark enough to read on both the background and the cards.
-* **Consistent.** Every colour, font and shape is defined once in `ui/theme`, and shared pieces such as buttons, text fields and top bars live in `ui/components`, so all screens look and behave the same.
+* **Consistent.** Every colour, font and shape is defined once in the XML resources (`res/values/colors.xml`, `themes.xml` and `styles.xml`), and shared pieces such as the top bar, list rows and cards are reusable layouts, so all screens look and behave the same.
 * **Only the data we need (POPIA).** Location is used for circles, Safe Zones and SOS. Emergency information and contacts stay on the device. Users can pause sharing at any time and delete their account.
 
 ## 6. Architecture
 
 ```text
-UI (Jetpack Compose) -> ViewModels (MVVM) -> Repositories -> Retrofit API client / Room cache
-                                                          -> Firebase Auth, FCM, WorkManager
+UI (XML layouts + Fragments) -> ViewModels (MVVM) -> Repositories -> Retrofit API client / Room cache
+                                                                  -> Firebase Auth, FCM, WorkManager
 ```
 
 * **Offline first:** reads come from Room, so cached data shows without a connection. Writes that must not be lost (location, SOS, zone crossings, reports) are queued and sent by WorkManager when the connection returns, with a client action ID so the server ignores duplicates.
@@ -90,11 +90,11 @@ app/src/main/java/za/co/kinplus/app/
 ├── domain/        Domain models
 ├── location/      Location, geofencing, compass
 ├── messaging/     Firebase Cloud Messaging
-├── ui/            Compose screens, navigation, theme, shared components
+├── ui/            Fragments (one per screen), ViewModels, shared view helpers
 └── util/          Connectivity, locale, Resource wrapper
 ```
 
-**Tech stack:** Jetpack Compose and Material 3, Hilt, Retrofit and OkHttp, Room, DataStore, WorkManager, Firebase (Auth, Cloud Messaging, Analytics), Play Services Location, Maps Compose. Minimum SDK 26, target SDK 34, Kotlin and Java 17.
+**Tech stack:** XML layouts with ViewBinding, Fragments and the Navigation component, Material Components (Material 3), RecyclerView, Hilt, Retrofit and OkHttp, Room, DataStore, WorkManager, Firebase (Auth, Cloud Messaging, Analytics), Play Services Location and Maps. Minimum SDK 26, target SDK 34, Kotlin and Java 17.
 
 ## 7. Setup
 

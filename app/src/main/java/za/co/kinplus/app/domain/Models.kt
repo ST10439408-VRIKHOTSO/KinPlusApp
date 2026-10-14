@@ -2,7 +2,7 @@ package za.co.kinplus.app.domain
 
 // ==========================================================================
 // UI-facing domain models. Repositories map remote DTOs and Room entities into
-// these, so Composables and ViewModels never depend on transport details.
+// these, so Fragments and ViewModels never depend on transport details.
 // ==========================================================================
 
 data class UserProfile(
