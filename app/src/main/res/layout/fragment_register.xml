@@ -141,6 +141,7 @@
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/consentCheck"
                 android:fontFamily="@font/plus_jakarta_sans_medium"
+                app:fontFamily="@font/plus_jakarta_sans_medium"
                 android:textColor="@color/kin_ink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
