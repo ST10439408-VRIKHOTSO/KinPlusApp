@@ -19,4 +19,4 @@ The group takes full responsibility for the work submitted in the Portfolio of E
 
 ## Video
 
-For the video we did not use AI for the voice over. We used Microsoft Clipchamp.
+The demo video was recorded by the group on a physical phone. The voice over narration was generated with a text to speech tool, and AI was used to trim the recording and time the narration to each screen.
