@@ -45,7 +45,7 @@
     <string name="privacy_consent">I agree to the Privacy Policy (POPIA)</string>
     <string name="view_privacy_policy">View Privacy Policy (POPIA)</string>
     <string name="privacy_policy_title">Kin+ Privacy Policy</string>
-    <string name="privacy_policy_body">What we collect: your name, email, phone number, your location while sharing is switched on, and any Safety, Safe Zone or Journey details you choose to set up.\n\nWhy: to power the features you use — sharing your location with your Circles, sending an SOS with your location attached, Safe Zone entry/exit alerts and Safe Journey watchers.\n\nWho sees it: only the members of the Circles you join can see your shared location. We never sell your personal information to third parties.\n\nYour Emergency Information (medical details, vehicle, addresses, home security codes) and any profile or circle photo you add are stored only on this device — never sent to our servers.\n\nYour rights under POPIA: you can access, correct or delete your personal information at any time. You can pause location sharing instantly from Location Settings, and permanently delete your account and its data from Profile.\n\nSecurity: all data sent to our servers is encrypted in transit. Passwords are hashed and salted by Firebase Authentication — Kin+ never stores or sees your password.</string>
+    <string name="privacy_policy_body">What we collect: your name, email, phone number, your location while sharing is switched on, and any Safety, Safe Zone or Journey details you choose to set up.\n\nWhy: to power the features you use: sharing your location with your Circles, sending an SOS with your location attached, Safe Zone entry/exit alerts and Safe Journey watchers.\n\nWho sees it: only the members of the Circles you join can see your shared location. We never sell your personal information to third parties.\n\nYour Emergency Information (medical details, vehicle, addresses, home security codes) and any profile or circle photo you add are stored only on this device and never sent to our servers.\n\nYour rights under POPIA: you can access, correct or delete your personal information at any time. You can pause location sharing instantly from Location Settings, and permanently delete your account and its data from Profile.\n\nSecurity: all data sent to our servers is encrypted in transit. Passwords are hashed and salted by Firebase Authentication. Kin+ never stores or sees your password.</string>
     <string name="checking_session">Checking your session…</string>
     <string name="password_hint">Min 8 chars, 1 letter, 1 number</string>
     <string name="reset_email_sent">Password reset email sent.</string>
@@ -105,7 +105,7 @@
     <string name="code_copied">Code copied</string>
     <string name="circle_section">CIRCLE</string>
     <string name="how_circles_work">How Circles Work</string>
-    <string name="how_circles_work_body">A Circle is a private group of people who share their location for safety — family, friends, or housemates. Create one and invite people, or join with a code someone shared with you.</string>
+    <string name="how_circles_work_body">A Circle is a private group of people who share their location for safety, such as family, friends or housemates. Create one and invite people, or join with a code someone shared with you.</string>
     <string name="my_circles_section">MY CIRCLES</string>
     <string name="add_section">ADD</string>
     <string name="create_new_circle">Create a new Circle</string>
@@ -214,7 +214,7 @@
     <string name="share_permissions_section">SHARE &amp; PERMISSIONS</string>
     <string name="invite_friends">Invite Friends</string>
     <string name="invite_friends_sub">Help keep your community safe</string>
-    <string name="invite_friends_message">Join me on Kin+ — stay connected and stay safe.</string>
+    <string name="invite_friends_message">Join me on Kin+ to stay connected and stay safe.</string>
     <string name="app_permissions">App Permissions</string>
     <string name="app_permissions_sub">Manage location, notifications and more</string>
     <string name="support_section">SUPPORT</string>
@@ -341,7 +341,7 @@
     <string name="incident_silent_sub">No noise or phone glow</string>
     <string name="direct_interventions_title">Direct Interventions</string>
     <string name="intervention_emergency_services">Emergency Services</string>
-    <string name="intervention_emergency_services_sub">Automatic routing: 911 / 112 Dispatch</string>
+    <string name="intervention_emergency_services_sub">Dials 112 emergency dispatch</string>
     <string name="intervention_dial">Dial</string>
     <string name="intervention_notify_family">Notify Family Circle</string>
     <string name="intervention_notify_family_sub">Bypasses Do Not Disturb &amp; Silent mode</string>
@@ -459,4 +459,7 @@
     <string name="nearby_clinic">Clinic</string>
     <string name="nearby_pharmacy">Pharmacy</string>
     <string name="member_name_fallback">Kin+ member</string>
+    <string name="vault_blood">Blood: %1$s</string>
+    <string name="vault_allergies">Allergies: %1$s</string>
+    <string name="vault_plate">Plate: %1$s</string>
 </resources>

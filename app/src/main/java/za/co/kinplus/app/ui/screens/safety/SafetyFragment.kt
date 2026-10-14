@@ -203,8 +203,8 @@ class SafetyFragment : Fragment() {
         val allergies = info.medical.allergies.trim()
         bindVaultTile(
             binding.vaultMedical, R.drawable.ic_medical_services, getString(R.string.vault_medical_id),
-            line1 = bloodType.takeIf { it.isNotBlank() }?.let { "Blood: $it" } ?: getString(R.string.vault_not_added),
-            line2 = allergies.takeIf { it.isNotBlank() }?.let { "Allergies: $it" } ?: getString(R.string.vault_tap_to_add)
+            line1 = bloodType.takeIf { it.isNotBlank() }?.let { getString(R.string.vault_blood, it) } ?: getString(R.string.vault_not_added),
+            line2 = allergies.takeIf { it.isNotBlank() }?.let { getString(R.string.vault_allergies, it) } ?: getString(R.string.vault_tap_to_add)
         )
         val vehicleSummary = listOf(info.vehicle.color, info.vehicle.make, info.vehicle.model)
             .filter { it.isNotBlank() }.joinToString(" ").trim()
@@ -212,7 +212,7 @@ class SafetyFragment : Fragment() {
         bindVaultTile(
             binding.vaultVehicle, R.drawable.ic_directions_car, getString(R.string.vault_vehicle),
             line1 = vehicleSummary.takeIf { it.isNotBlank() } ?: getString(R.string.vault_not_added),
-            line2 = plate.takeIf { it.isNotBlank() }?.let { "Plate: $it" } ?: getString(R.string.vault_tap_to_add)
+            line2 = plate.takeIf { it.isNotBlank() }?.let { getString(R.string.vault_plate, it) } ?: getString(R.string.vault_tap_to_add)
         )
     }
 

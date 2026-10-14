@@ -55,7 +55,17 @@ private fun iconForCategory(category: String): Int = when (category.uppercase())
     else -> R.drawable.ic_report_problem
 }
 
-private fun categoryLabel(category: String) = category.lowercase().replaceFirstChar { it.uppercase() }
+/** The category name in the user's language, falling back to the server's text for unknown categories. */
+private fun categoryLabel(context: android.content.Context, category: String): String = when (category.uppercase()) {
+    "CRIME" -> context.getString(R.string.category_crime)
+    "HAZARD" -> context.getString(R.string.category_hazard)
+    "MEDICAL" -> context.getString(R.string.category_medical)
+    "FIRE" -> context.getString(R.string.category_fire)
+    "ACCIDENT" -> context.getString(R.string.category_accident)
+    "DANGER" -> context.getString(R.string.category_danger)
+    "OTHER" -> context.getString(R.string.category_other)
+    else -> category.lowercase().replaceFirstChar { it.uppercase() }
+}
 
 /**
  * Community alerts (screen 15). Nearby reports from other Kin+ users, sorted
@@ -156,7 +166,7 @@ class CommunityAlertsFragment : Fragment() {
         }
         MaterialAlertDialogBuilder(requireContext())
             .setIcon(iconForCategory(alert.category))
-            .setTitle(categoryLabel(alert.category))
+            .setTitle(categoryLabel(requireContext(), alert.category))
             .setMessage(lines.joinToString("\n"))
             .setPositiveButton(R.string.alert_open_in_maps) { _, _ ->
                 Log.d("CommunityAlerts", "Opening alert ${alert.id} in maps")
@@ -209,7 +219,7 @@ private class AlertAdapter(
         val (alert, km) = getItem(position)
         val context = holder.itemView.context
         holder.binding.icon.setImageResource(iconForCategory(alert.category))
-        holder.binding.category.text = categoryLabel(alert.category)
+        holder.binding.category.text = categoryLabel(context, alert.category)
         holder.binding.distance.setTextOrGone(km?.let { context.getString(R.string.km_away, it) })
         holder.binding.confirmCount.text = context.getString(R.string.confirm_count, alert.confirmCount)
         holder.binding.description.text = alert.description
