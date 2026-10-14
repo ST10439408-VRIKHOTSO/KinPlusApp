@@ -9,7 +9,9 @@ This declaration explains how we used AI tools while building the Kin+ Portfolio
 
 We used AI in a similar way to Google Search, YouTube tutorials and official documentation. When we did not know how to do something, such as adding Google Maps, the Credential Manager Google sign in flow, WorkManager with a Hilt worker factory or MongoDB `2dsphere` queries, we asked for explanations and examples, then adapted them to our project and tested them ourselves. We also used AI to understand compiler errors.
 
-<!-- Before submitting: We reviewed every change, built and ran the app on a physical phone, and tested each feature before including it. The isiZulu and Sepedi strings were checked by a fluent speaker.
+## Part 3: moving from Jetpack Compose to XML views
+
+For Part 3 we rebuilt the interface with XML layouts and Fragments. We used AI to help convert the Compose screens into XML layouts and Fragment code, to draft the isiZulu and Sepedi strings that were missing, and to explain build errors from GitHub Actions. We kept our existing ViewModels and data layer, and decided the screen structure and navigation ourselves. We reviewed every change, built and ran the app on a physical phone, and tested each screen and Google sign in before including it.
 
 ## What remained our own work
 
