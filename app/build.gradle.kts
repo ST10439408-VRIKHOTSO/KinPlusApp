@@ -26,8 +26,8 @@ android {
         applicationId = "za.co.kinplus.app"
         minSdk = 26          // NFR-06: Android 8.0 and above
         targetSdk = 34
-        versionCode = 3      // Version 1.1: design refresh and innovative feature additions
-        versionName = "1.1-poe"
+        versionCode = 4      // Version 1.2: XML views, Google sign in and release build
+        versionName = "1.2-poe"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
