@@ -52,15 +52,19 @@ Get the latest installable APK from the [GitHub Releases page](https://github.co
 | Distance filter and report details        | Community Alerts | `ui/screens/alerts/CommunityAlertsScreen.kt`               |
 | Nearby police, hospitals and clinics      | Safety hub       | `ui/screens/safety/SafetyScreen.kt`                        |
 
-Full details are in [`RELEASE_NOTES.md`](RELEASE_NOTES.md).
+Full details are in [Release Notes](Release%20Notes.md).
 
 ## 4. Screenshots
 
-<!-- Add phone screenshots to docs/screenshots and they will show here. -->
+| Sign in | Map | Circles | Safe Zones |
+| ------- | --- | ------- | ---------- |
+| <img src="docs/screenshots/01%20Login.png" width="200"> | <img src="docs/screenshots/03%20Map.png" width="200"> | <img src="docs/screenshots/04%20Circles.png" width="200"> | <img src="docs/screenshots/10%20Safe%20Zones.png" width="200"> |
 
-| Sign in | Map | SOS | Safety |
-| ------- | --- | --- | ------ |
-| ![Sign in](docs/screenshots/login.png) | ![Map](docs/screenshots/home_map.png) | ![SOS](docs/screenshots/sos.png) | ![Safety](docs/screenshots/safety.png) |
+| Emergency SOS | Fake call | Safety hub | isiZulu |
+| ------------- | --------- | ---------- | ------- |
+| <img src="docs/screenshots/06%20Emergency%20SOS.png" width="200"> | <img src="docs/screenshots/09%20Fake%20Call%20Incoming.png" width="200"> | <img src="docs/screenshots/11%20Safety%20Hub.png" width="200"> | <img src="docs/screenshots/14%20Settings%20isiZulu.png" width="200"> |
+
+More screenshots are in [docs/screenshots](docs/screenshots).
 
 ## 5. Design considerations
 
@@ -157,9 +161,9 @@ Run them locally with `./gradlew test`.
 
 ## 10. Release notes, AI use and Play Store
 
-* [`RELEASE_NOTES.md`](RELEASE_NOTES.md): every update since the prototype, including which innovative features were added.
-* [`AI_USAGE.md`](AI_USAGE.md): how AI tools were used and cited.
-* [`PLAY_STORE.md`](PLAY_STORE.md): Play Store preparation checklist.
+* [Release Notes](Release%20Notes.md): every update since the prototype, including which innovative features were added.
+* [AI Usage](AI%20Usage.md): how AI tools were used and cited.
+* [Play Store](Play%20Store.md): Play Store preparation checklist.
 
 ## 11. Demonstration video
 
