@@ -29,16 +29,17 @@ This checklist tracks what is needed to publish Kin+ on the Google Play Store, a
 
 | Item | Status |
 | ---- | ------ |
-| App name, short description (80 characters) and full description | To do |
+| App name, short description (80 characters) and full description | Done, see `docs/STORE_LISTING.md` |
 | High resolution icon, 512 x 512 PNG | To do |
 | Feature graphic, 1024 x 500 | To do |
-| At least 2 phone screenshots from a real device (see `docs/screenshots`) | To do |
-| Privacy policy URL (required because Kin+ uses location) | To do |
-| Data safety form: location, name, email, device ID, push token | To do |
-| Location permissions declaration (background location for Safe Zones) | To do |
-| Content rating questionnaire | To do |
-| Target audience and app category (Lifestyle or Tools) | To do |
-| Upload the AAB to an internal testing track | To do |
-| Screenshot of the Play Console upload for the PoE evidence | To do |
+| At least 2 phone screenshots from a real device (see `docs/screenshots`) | Done |
+| Privacy policy URL (required because Kin+ uses location) | Done, see `docs/privacy-policy.md` |
+| Data safety form: location, name, email, device ID, push token | Answers ready in `docs/STORE_LISTING.md` |
+| Location permissions declaration (background location for Safe Zones) | Text ready in `docs/STORE_LISTING.md` |
+| Content rating questionnaire | Answers ready in `docs/STORE_LISTING.md` |
+| Target audience and app category (Lifestyle or Tools) | Done: Lifestyle, 13 and over |
+| Signed AAB built (`app-release.aab`) | Done |
+| Upload the AAB to an internal testing track | Blocked: needs a paid developer account (USD 25) |
+| Screenshot of the Play Console signup for the PoE evidence | Done, see `docs/screenshots/play-console-signup.png` |
 
 Update the Status column as each item is done.
