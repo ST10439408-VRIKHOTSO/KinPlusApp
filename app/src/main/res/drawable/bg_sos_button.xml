@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The big red SOS button: a radial gradient from bright to deep red. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <gradient
+        android:type="radial"
+        android:gradientRadius="92dp"
+        android:startColor="@color/kin_red_bright"
+        android:centerColor="@color/kin_red"
+        android:endColor="@color/kin_red_dark" />
+</shape>

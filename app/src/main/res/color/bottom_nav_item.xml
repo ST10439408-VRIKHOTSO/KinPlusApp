@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bottom navigation icon and label colour: evergreen when selected, muted otherwise. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/kin_green" android:state_checked="true" />
+    <item android:color="@color/kin_muted" />
+</selector>

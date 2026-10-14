@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Full screen fake incoming call: caller, then decline / accept, then a running call timer. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/kin_forest"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="32dp"
+    android:paddingTop="72dp"
+    android:paddingEnd="32dp"
+    android:paddingBottom="72dp">
+
+    <TextView
+        android:id="@+id/status"
+        style="@style/Kin.Text.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white_70"
+        android:textSize="15sp"
+        tools:text="@string/fake_call_incoming" />
+
+    <TextView
+        android:id="@+id/initial"
+        style="@style/Kin.Text.Bold"
+        android:layout_width="112dp"
+        android:layout_height="112dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/white_12"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="46sp"
+        tools:text="M" />
+
+    <TextView
+        android:id="@+id/caller"
+        style="@style/Kin.Text.ExtraBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        tools:text="Mom" />
+
+    <TextView
+        style="@style/Kin.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fake_call_mobile"
+        android:textColor="@color/white_60"
+        android:textSize="15sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/declineGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/declineButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/kin_red"
+                android:contentDescription="@string/fake_call_decline"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:padding="20dp"
+                android:src="@drawable/ic_call_end"
+                app:tint="@color/white" />
+
+            <TextView
+                android:id="@+id/declineLabel"
+                style="@style/Kin.Text.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/fake_call_decline"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/acceptGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/acceptButton"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="@color/kin_green_bright"
+                android:contentDescription="@string/fake_call_accept"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:padding="20dp"
+                android:src="@drawable/ic_call"
+                app:tint="@color/white" />
+
+            <TextView
+                style="@style/Kin.Text.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/fake_call_accept"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

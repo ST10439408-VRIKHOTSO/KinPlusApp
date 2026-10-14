@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- White pill with a hairline border (responder chips). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/kin_surface" />
+    <stroke android:width="1dp" android:color="@color/kin_outline" />
+    <corners android:radius="999dp" />
+</shape>

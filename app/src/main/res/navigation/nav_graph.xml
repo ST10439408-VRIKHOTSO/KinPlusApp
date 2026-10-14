@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Kin+ navigation graph (Navigation component). Every screen is a Fragment
+  hosted by MainActivity. The five bottom navigation tabs are homeFragment,
+  circlesFragment, sosFragment, alertsFragment and safetyFragment; the rest are
+  pushed screens. Matches the Part 1B navigation model (Figure 4.13).
+-->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <!-- ===== Authentication ===== -->
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="za.co.kinplus.app.ui.screens.auth.SplashFragment"
+        android:label="Splash"
+        tools:layout="@layout/fragment_splash" />
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="za.co.kinplus.app.ui.screens.auth.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" />
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="za.co.kinplus.app.ui.screens.auth.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register" />
+
+    <!-- ===== Bottom navigation tabs ===== -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="za.co.kinplus.app.ui.screens.home.HomeFragment"
+        android:label="@string/nav_map"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/circlesFragment"
+        android:name="za.co.kinplus.app.ui.screens.circles.CirclesFragment"
+        android:label="@string/nav_circles"
+        tools:layout="@layout/fragment_circles" />
+
+    <fragment
+        android:id="@+id/sosFragment"
+        android:name="za.co.kinplus.app.ui.screens.sos.SosFragment"
+        android:label="@string/sos"
+        tools:layout="@layout/fragment_sos">
+        <argument
+            android:name="category"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/alertsFragment"
+        android:name="za.co.kinplus.app.ui.screens.alerts.CommunityAlertsFragment"
+        android:label="@string/nav_alerts"
+        tools:layout="@layout/fragment_community_alerts" />
+
+    <fragment
+        android:id="@+id/safetyFragment"
+        android:name="za.co.kinplus.app.ui.screens.safety.SafetyFragment"
+        android:label="@string/nav_safety"
+        tools:layout="@layout/fragment_safety" />
+
+    <!-- ===== Profile and settings ===== -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="za.co.kinplus.app.ui.screens.profile.ProfileFragment"
+        android:label="@string/profile_title"
+        tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="za.co.kinplus.app.ui.screens.profile.EditProfileFragment"
+        android:label="@string/edit_profile_title"
+        tools:layout="@layout/fragment_edit_profile" />
+
+    <fragment
+        android:id="@+id/emergencyInfoFragment"
+        android:name="za.co.kinplus.app.ui.screens.profile.EmergencyInformationFragment"
+        android:label="@string/emergency_information"
+        tools:layout="@layout/fragment_emergency_information" />
+
+    <fragment
+        android:id="@+id/emergencyInfoFormFragment"
+        android:name="za.co.kinplus.app.ui.screens.profile.EmergencyInfoFormFragment"
+        android:label="@string/emergency_information"
+        tools:layout="@layout/fragment_emergency_info_form">
+        <argument
+            android:name="category"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="za.co.kinplus.app.ui.screens.settings.SettingsFragment"
+        android:label="@string/settings_title"
+        tools:layout="@layout/fragment_settings" />
+
+    <!-- ===== Circles ===== -->
+    <fragment
+        android:id="@+id/circleDetailFragment"
+        android:name="za.co.kinplus.app.ui.screens.circles.CircleDetailFragment"
+        android:label="@string/circles_title"
+        tools:layout="@layout/fragment_circle_detail">
+        <argument
+            android:name="circleId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/createJoinCircleFragment"
+        android:name="za.co.kinplus.app.ui.screens.circles.CreateJoinCircleFragment"
+        android:label="@string/create_or_join_circle"
+        tools:layout="@layout/fragment_create_join_circle" />
+
+    <!-- ===== Safe Zones ===== -->
+    <fragment
+        android:id="@+id/safeZonesFragment"
+        android:name="za.co.kinplus.app.ui.screens.zones.SafeZonesFragment"
+        android:label="@string/safe_zones_title"
+        tools:layout="@layout/fragment_safe_zones" />
+
+    <fragment
+        android:id="@+id/safeZoneEditorFragment"
+        android:name="za.co.kinplus.app.ui.screens.zones.SafeZoneEditorFragment"
+        android:label="@string/create_safe_zone"
+        tools:layout="@layout/fragment_safe_zone_editor">
+        <argument
+            android:name="zoneId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+    <!-- ===== Safe Journey ===== -->
+    <fragment
+        android:id="@+id/journeySetupFragment"
+        android:name="za.co.kinplus.app.ui.screens.journey.JourneySetupFragment"
+        android:label="@string/safe_journey"
+        tools:layout="@layout/fragment_journey_setup" />
+
+    <fragment
+        android:id="@+id/journeyMonitorFragment"
+        android:name="za.co.kinplus.app.ui.screens.journey.JourneyMonitorFragment"
+        android:label="@string/journey_in_progress"
+        tools:layout="@layout/fragment_journey_monitor" />
+
+    <!-- ===== Safety ===== -->
+    <fragment
+        android:id="@+id/incidentHistoryFragment"
+        android:name="za.co.kinplus.app.ui.screens.safety.IncidentHistoryFragment"
+        android:label="@string/incident_history_title"
+        tools:layout="@layout/fragment_incident_history" />
+</navigation>

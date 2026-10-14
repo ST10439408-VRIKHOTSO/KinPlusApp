@@ -3,7 +3,6 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     // Firebase config processing. Safe to keep enabled; requires google-services.json.
@@ -78,16 +77,14 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
-        // Opt in once, project-wide, to the experimental Compose APIs used across
-        // the screens (Material 3 top bars, FlowRow, coroutine flow operators).
+        // Opt in once, project-wide, to the coroutine flow operators used by the ViewModels.
         freeCompilerArgs = freeCompilerArgs + listOf(
-            "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-            "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
             "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
         )
     }
     buildFeatures {
-        compose = true
+        // The UI is built with XML layouts; ViewBinding gives type safe access to their views.
+        viewBinding = true
         buildConfig = true
     }
     packaging {
@@ -104,25 +101,20 @@ dependencies {
     // ----- Core / lifecycle -----
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.activity.ktx)
 
-    // ----- Jetpack Compose (BOM keeps versions aligned) -----
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material.icons.extended)
-    implementation(libs.androidx.navigation.compose)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    // ----- UI: XML layouts, Fragments, Navigation component, Material Components -----
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.recyclerview)
 
     // ----- Dependency injection (Hilt) -----
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.work)
     ksp(libs.hilt.work.compiler)
 
@@ -149,7 +141,6 @@ dependencies {
     // ----- Location + maps -----
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)
-    implementation(libs.maps.compose)
 
     // ----- Coroutines -----
     implementation(libs.coroutines.android)
@@ -164,6 +155,4 @@ dependencies {
     // ----- Instrumented tests -----
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
 }

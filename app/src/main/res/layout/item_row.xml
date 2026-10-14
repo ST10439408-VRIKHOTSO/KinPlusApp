@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Generic tappable list row used across Safety, Profile, Settings and Safe
+  Zones: a leading icon badge, a title and subtitle, an optional trailing value
+  and a chevron. Rows.kt fills it in and hides the parts a row does not need.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/icon"
+        style="@style/Widget.Kin.IconBadge"
+        android:layout_marginEnd="14dp"
+        tools:src="@drawable/ic_history" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Kin.Text.RowTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Incident history" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/Kin.Text.RowSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            tools:text="No incidents yet" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/trailing"
+        style="@style/Kin.Text.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/kin_muted"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/endIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:visibility="gone"
+        tools:src="@drawable/ic_close" />
+
+    <ImageView
+        android:id="@+id/chevron"
+        style="@style/Widget.Kin.Chevron"
+        android:layout_marginStart="4dp" />
+</LinearLayout>

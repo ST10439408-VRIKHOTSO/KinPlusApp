@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Material icon "wb_sunny" (filled), Apache License 2.0, Google. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@android:color/black"
+        android:pathData="m6.76 4.84 -1.8 -1.79 -1.41 1.41 1.79 1.79 1.42 -1.41 zM4 10.5 H1 v2 h3 v-2 zm9 -9.95 h-2 V3.5 h2 V.55 zm7.45 3.91 -1.41 -1.41 -1.79 1.79 1.41 1.41 1.79 -1.79 zm-3.21 13.7 1.79 1.8 1.41 -1.41 -1.8 -1.79 -1.4 1.4 zM20 10.5 v2 h3 v-2 h-3 zm-8 -5 c-3.31 0 -6 2.69 -6 6 s2.69 6 6 6 6 -2.69 6 -6 -2.69 -6 -6 -6 zm-1 16.95 h2 V19.5 h-2 v2.95 zm-7.45 -3.91 1.41 1.41 1.79 -1.8 -1.41 -1.41 -1.79 1.8 z" />
+</vector>
