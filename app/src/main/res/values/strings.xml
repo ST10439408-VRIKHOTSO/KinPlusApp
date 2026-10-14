@@ -191,7 +191,7 @@
     <string name="recent_activity">RECENT ACTIVITY</string>
     <string name="incident_history_title">Incident History</string>
     <string name="incident_history_sub">View your past incidents and activity</string>
-    <string name="incident_count">%1$d incidents logged</string>
+    <string name="incident_count">Incidents logged: %1$d</string>
     <string name="no_incidents_yet">No incidents yet. Your SOS history will appear here.</string>
     <string name="incident_status_sent">SOS sent</string>
     <string name="incident_status_queued">SOS queued (sent when back online)</string>
@@ -200,7 +200,7 @@
     <string name="select_a_number">Select a number to call</string>
     <string name="num_police">Police</string>
     <string name="num_ambulance">Ambulance</string>
-    <string name="num_112">112</string>
+    <string name="num_112">Emergency (any network)</string>
     <string name="num_flying_squad">Flying Squad</string>
 
     <!-- Profile hub -->
@@ -307,7 +307,7 @@
     <!-- Circles hub -->
     <string name="circles_segment_safe_zones">Safe Zones (%1$d)</string>
     <string name="badge_admin">ADMIN</string>
-    <string name="circle_status_members">%1$d Members</string>
+    <string name="circle_status_members">Members: %1$d</string>
     <string name="action_join_code_hint">Tap to copy</string>
     <string name="action_add_member">Add Member</string>
     <string name="action_add_member_sub">Instant link</string>
@@ -315,7 +315,7 @@
     <string name="action_manage_permissions_sub">Permissions</string>
     <string name="section_live_member_status">LIVE MEMBER STATUS</string>
     <string name="label_mesh_live">Mesh Live</string>
-    <string name="you_suffix"> (You)</string>
+    <string name="you_suffix">\u0020(You)</string>
     <string name="status_sharing">Sharing</string>
     <string name="section_other_connected_circles">OTHER CONNECTED CIRCLES</string>
     <string name="create_new_circle_cta">Create New Circle</string>
@@ -349,7 +349,7 @@
     <string name="designated_responders_title">DESIGNATED RESPONDERS (%1$d)</string>
     <string name="high_priority_reach">High Priority Reach</string>
     <string name="emergency_protocol_title">Kin+ Emergency Protocol:</string>
-    <string name="emergency_protocol_body">Encrypted peer-to-peer telemetry with zero commercial monetization. Location packets, biometrics, and media streams are stored strictly in transit during verified active distress states.</string>
+    <string name="emergency_protocol_body">When you send an SOS, your location and the type of incident go only to your circles. Kin+ never sells your data or shows ads.</string>
 
     <!-- Safety Hub -->
     <string name="safety_hub_title">Safety Hub</string>
@@ -367,10 +367,10 @@
     <string name="emergency_contacts_count">%1$d Configured</string>
     <string name="priority_badge">Priority %1$d</string>
     <string name="add_trusted_contact">Add Trusted Contact</string>
-    <string name="local_device_vault_title">Local Device Vault</string>
-    <string name="encrypted_label">Encrypted</string>
-    <string name="vault_card_title">On-Device Cryptographic Vault</string>
-    <string name="vault_card_body">Protected by Secure Enclave. Zero cloud analytics, accessible strictly by emergency first-responders.</string>
+    <string name="local_device_vault_title">On-Device Vault</string>
+    <string name="encrypted_label">Private</string>
+    <string name="vault_card_title">Stored on this phone only</string>
+    <string name="vault_card_body">Your medical and vehicle details never leave this phone. Show them to first responders in an emergency.</string>
     <string name="vault_medical_id">Medical ID</string>
     <string name="vault_vehicle">Vehicle</string>
     <string name="vault_not_added">Not added yet</string>

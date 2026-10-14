@@ -287,7 +287,7 @@
     <string name="select_a_number">Khetha inombolo ozoyishayela</string>
     <string name="num_police">Amaphoyisa</string>
     <string name="num_ambulance">I-ambulensi</string>
-    <string name="num_112">112</string>
+    <string name="num_112">Ezimo eziphuthumayo (noma iyiphi inethiwekhi)</string>
     <string name="num_flying_squad">I-Flying Squad</string>
     <string name="profile_title">Iphrofayela</string>
     <string name="account_section">I-AKHAWUNTI</string>
@@ -352,7 +352,7 @@
     <string name="action_manage_permissions_sub">Izimvume</string>
     <string name="section_live_member_status">ISIMO SAMALUNGU SAMANJE</string>
     <string name="label_mesh_live">Kuyasebenza manje</string>
-    <string name="you_suffix"> (Wena)</string>
+    <string name="you_suffix">\u0020(Wena)</string>
     <string name="status_sharing">Kwabelana</string>
     <string name="section_other_connected_circles">EZINYE IZIYINGI OXHUMENE NAZO</string>
     <string name="create_new_circle_cta">Dala Isiyingi Esisha</string>
@@ -384,7 +384,7 @@
     <string name="designated_responders_title">ABASIZI ABAKHETHIWE (%1$d)</string>
     <string name="high_priority_reach">Bafinyelelwa kuqala</string>
     <string name="emergency_protocol_title">Inqubo Yezimo Eziphuthumayo ye-Kin+:</string>
-    <string name="emergency_protocol_body">Idatha ibethelwa ngesikhathi ithunyelwa futhi asiyisebenzisi ukwenza imali. Indawo nemininingwane yesimo kwabelwana ngakho kuphela ngesikhathi sesimo esiphuthumayo esiqinisekisiwe.</string>
+    <string name="emergency_protocol_body">Uma uthumela i-SOS, indawo yakho nohlobo lwesehlakalo kuya eziyingini zakho kuphela. I-Kin+ ayiyithengisi idatha yakho futhi ayikhombisi izikhangiso.</string>
     <string name="safety_hub_title">Isikhungo Sokuphepha</string>
     <string name="security_score_label">Amaphuzu Okuphepha</string>
     <string name="safety_setup_complete">%1$d%% Kuqediwe</string>
@@ -400,10 +400,10 @@
     <string name="emergency_contacts_count">Abangu-%1$d Basethiwe</string>
     <string name="priority_badge">Okubalulekile %1$d</string>
     <string name="add_trusted_contact">Engeza Othembekile</string>
-    <string name="local_device_vault_title">Isitoreji Esiphephile Sefoni</string>
-    <string name="encrypted_label">Kubethelwe</string>
-    <string name="vault_card_title">Isitoreji Esibethelwe Kule Foni</string>
-    <string name="vault_card_body">Kuvikelwe kule foni. Akuthunyelwa efwini, futhi kubonwa kuphela ngabasizi bokuqala ezimweni eziphuthumayo.</string>
+    <string name="local_device_vault_title">Isitoreji Sefoni</string>
+    <string name="encrypted_label">Okuyimfihlo</string>
+    <string name="vault_card_title">Kugcinwe kule foni kuphela</string>
+    <string name="vault_card_body">Imininingwane yakho yezempilo neyemoto ayiphumi kule foni. Yibonise abasizi bokuqala uma kunesimo esiphuthumayo.</string>
     <string name="vault_medical_id">Ulwazi Lwezempilo</string>
     <string name="vault_vehicle">Imoto</string>
     <string name="vault_not_added">Akukangezwa</string>
