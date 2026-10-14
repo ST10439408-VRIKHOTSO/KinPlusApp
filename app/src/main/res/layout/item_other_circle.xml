@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Another circle the user belongs to, with a delete action. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        style="@style/Widget.Kin.IconBadge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="14dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_groups" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/Kin.Text.RowTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Varsity friends" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/Kin.Text.RowSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="3 members" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/deleteButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/delete_circle"
+        android:padding="7dp"
+        android:src="@drawable/ic_delete_outline"
+        app:tint="@color/kin_muted" />
+
+    <ImageView
+        style="@style/Widget.Kin.Chevron"
+        android:layout_marginStart="4dp" />
+</LinearLayout>

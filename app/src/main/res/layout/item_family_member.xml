@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- One family member on the Home panel: initials avatar with a live dot, name, battery. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row">
+
+    <FrameLayout
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="14dp">
+
+        <TextView
+            android:id="@+id/initials"
+            style="@style/Kin.Text.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/kin_green_container"
+            android:gravity="center"
+            android:textColor="@color/kin_green_on_container"
+            tools:text="SM" />
+
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="bottom|end"
+            android:background="@drawable/bg_live_dot" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/Kin.Text.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            tools:text="Sarah Miller" />
+
+        <TextView
+            style="@style/Kin.Text.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/location_sharing_active" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/battery"
+        style="@style/Kin.Text.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/kin_muted"
+        android:textSize="13sp"
+        tools:text="82%" />
+
+    <ImageView
+        style="@style/Widget.Kin.Chevron"
+        android:layout_marginStart="4dp" />
+</LinearLayout>

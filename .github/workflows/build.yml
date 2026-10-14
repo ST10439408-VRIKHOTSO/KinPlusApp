@@ -49,7 +49,7 @@ jobs:
         if: failure()
         shell: bash
         run: |
-          msg=$(cat build-*.log 2>/dev/null | grep -E "^e: |error:|ERROR|What went wrong|FAILED|> " | head -200 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+          msg=$(cat build-*.log 2>/dev/null | grep -E "^e: |error:|ERROR:|What went wrong|FAILED|^   > " | head -200 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
           echo "::error title=Build errors::${msg}"
 
       - name: Upload test results

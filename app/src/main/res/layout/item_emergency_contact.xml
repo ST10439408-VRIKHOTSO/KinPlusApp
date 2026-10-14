@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A trusted emergency contact with priority badge, call and remove actions. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/kin_green_container"
+        android:importantForAccessibility="no"
+        android:padding="10dp"
+        android:src="@drawable/ic_person"
+        app:tint="@color/kin_green_on_container" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/Kin.Text.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Mom" />
+
+            <TextView
+                android:id="@+id/priority"
+                style="@style/Kin.Text.Badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textSize="9sp"
+                tools:text="P1" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/relationship"
+            style="@style/Kin.Text.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tools:text="Mother" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/callButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/call"
+        android:padding="8dp"
+        android:src="@drawable/ic_call"
+        app:tint="@color/kin_green" />
+
+    <ImageView
+        android:id="@+id/removeButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/remove"
+        android:padding="8dp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/kin_muted" />
+</LinearLayout>
