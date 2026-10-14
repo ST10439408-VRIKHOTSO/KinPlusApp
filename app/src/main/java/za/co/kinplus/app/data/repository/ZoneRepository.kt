@@ -52,12 +52,15 @@ class ZoneRepository @Inject constructor(
         Resource.Error("Could not save the Safe Zone. You may be offline.", e)
     }
 
-    suspend fun deleteZone(id: String): Resource<Unit> = try {
-        api.deleteZone(id)
-        zoneDao.deleteById(id)
-        Resource.Success(Unit)
-    } catch (e: Exception) {
-        Resource.Error("Could not delete the Safe Zone.", e)
+    suspend fun deleteZone(id: String): Resource<Unit> {
+        return try {
+            // Only remove the cached zone once the server has really deleted it.
+            if (!api.deleteZone(id).isSuccessful) return Resource.Error("Could not delete the Safe Zone.")
+            zoneDao.deleteById(id)
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Error("Could not delete the Safe Zone.", e)
+        }
     }
 
     /** Called by the geofence receiver on ENTER/EXIT; queues when offline. */

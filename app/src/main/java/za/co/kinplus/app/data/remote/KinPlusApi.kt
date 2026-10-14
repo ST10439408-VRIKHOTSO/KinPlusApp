@@ -40,6 +40,9 @@ interface KinPlusApi {
     @PATCH("api/v1/circles/{id}/sharing")
     suspend fun setCircleSharing(@Path("id") id: String, @Body body: SharingRequest): Response<Unit>
 
+    @DELETE("api/v1/circles/{id}")
+    suspend fun deleteCircle(@Path("id") id: String): Response<Unit>
+
     @DELETE("api/v1/circles/{id}/members/{memberUid}")
     suspend fun removeMember(@Path("id") id: String, @Path("memberUid") memberUid: String): Response<Unit>
 

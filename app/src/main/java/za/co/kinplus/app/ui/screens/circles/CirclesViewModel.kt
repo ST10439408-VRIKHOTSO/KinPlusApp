@@ -58,10 +58,13 @@ class CirclesViewModel @Inject constructor(
         state.value.circles.firstOrNull()?.let { circleRepository.refreshCircleLocations(it.id) }
     }
 
-    /** Removes the current user from a circle — for the sole owner this is effectively deleting it. */
+    /** The owner deletes the circle for everyone; any other member leaves it. */
     fun deleteCircle(circleId: String) = viewModelScope.launch {
         deleteState.value = circleId to null
-        when (val res = circleRepository.leaveOrRemove(circleId, authManager.currentUid)) {
+        val myUid = authManager.currentUid
+        val isOwner = state.value.circles.firstOrNull { it.id == circleId }?.ownerUid == myUid
+        val res = if (isOwner) circleRepository.deleteCircle(circleId) else circleRepository.leaveOrRemove(circleId, myUid)
+        when (res) {
             is Resource.Success -> {
                 deleteState.value = null to null
                 circleRepository.refreshCircles()
