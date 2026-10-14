@@ -34,6 +34,11 @@
     <string name="error_password_mismatch">Diphasewete ga di swane.</string>
     <string name="error_name_required">Hle tsenya leina la pontšho.</string>
     <string name="error_consent_required">O swanetše go amogela Pholisi ya Sephiri go tšwela pele.</string>
+    <string name="or_continue_with">GOBA TŠWELA PELE KA</string>
+    <string name="continue_with_google">Tšwela pele ka Google</string>
+    <string name="error_google_not_configured">Go tsena ka Google ga go a beakanywa mo kgatišong ye. Šomiša imeile le phasewete ya gago.</string>
+    <string name="error_google_no_account">Ga go na akhaonto ya Google mo mogaleng wo. E tsenye ka dipeakanyong tša mogala gomme o leke gape.</string>
+    <string name="error_google_failed">Go tsena ka Google go paletšwe. Hle leka gape.</string>
     <string name="error_auth_failed">Go tsena go paletšwe. Hlahloba dintlha tša gago o leke gape.</string>
     <string name="error_generic">Go na le se se sego sa sepela gabotse. Hle leka gape.</string>
     <string name="error_offline_banner">Ga o kgokagane. Re bontšha tshedimošo ye e bolokilwego.</string>

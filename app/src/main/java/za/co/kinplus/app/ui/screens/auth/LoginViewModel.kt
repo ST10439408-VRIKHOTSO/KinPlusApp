@@ -50,6 +50,20 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    /** Single sign on with Google (FR-05). Cancelling the picker is not shown as an error. */
+    fun googleSignIn(activityContext: Context, onSuccess: () -> Unit) {
+        _state.update { it.copy(loading = true, error = null, info = null) }
+        viewModelScope.launch {
+            when (val result = authManager.signInWithGoogle(activityContext)) {
+                is Resource.Success -> syncThen(activityContext.applicationContext, onSuccess)
+                is Resource.Error -> _state.update {
+                    it.copy(loading = false, error = result.message.takeUnless { m -> m == AuthManager.GOOGLE_CANCELLED })
+                }
+                Resource.Loading -> Unit
+            }
+        }
+    }
+
     fun forgotPassword() {
         val email = _state.value.email
         if (!AuthManager.isValidEmail(email)) {

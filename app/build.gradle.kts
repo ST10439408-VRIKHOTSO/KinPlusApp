@@ -138,6 +138,11 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
 
+    // ----- Google single sign on (Credential Manager) -----
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services)
+    implementation(libs.googleid)
+
     // ----- Location + maps -----
     implementation(libs.play.services.location)
     implementation(libs.play.services.maps)

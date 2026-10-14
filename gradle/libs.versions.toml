@@ -35,6 +35,8 @@ securityCrypto = "1.1.0-alpha06"
 firebaseBom = "33.4.0"
 playServicesLocation = "21.3.0"
 playServicesMaps = "20.0.0"
+credentials = "1.3.0"
+googleid = "1.1.1"
 
 # Coroutines
 coroutines = "1.8.1"
@@ -92,6 +94,11 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 # Location + maps
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+
+# Google single sign on (Credential Manager)
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play-services = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 # Coroutines
 coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
