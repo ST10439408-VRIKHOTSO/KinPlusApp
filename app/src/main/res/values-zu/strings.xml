@@ -34,6 +34,11 @@
     <string name="error_password_mismatch">Amaphasiwedi awafani.</string>
     <string name="error_name_required">Sicela ufake igama lokubonakala.</string>
     <string name="error_consent_required">Kumele wamukele Inqubomgomo Yobumfihlo ukuze uqhubeke.</string>
+    <string name="or_continue_with">NOMA QHUBEKA NGE</string>
+    <string name="continue_with_google">Qhubeka nge-Google</string>
+    <string name="error_google_not_configured">Ukungena nge-Google akulungiselelwe kule nguqulo. Sebenzisa i-imeyili nephasiwedi yakho.</string>
+    <string name="error_google_no_account">Ayikho i-akhawunti ye-Google etholakele kule foni. Yengeze kuzilungiselelo zefoni bese uzama futhi.</string>
+    <string name="error_google_failed">Ukungena nge-Google akuphumelelanga. Sicela uzame futhi.</string>
     <string name="error_auth_failed">Ukungena kwehlulekile. Hlola imininingwane yakho uzame futhi.</string>
     <string name="error_generic">Kukhona okungahambanga kahle. Sicela uzame futhi.</string>
     <string name="error_offline_banner">Awuxhumekile. Sikhombisa ulwazi olulondoloziwe.</string>

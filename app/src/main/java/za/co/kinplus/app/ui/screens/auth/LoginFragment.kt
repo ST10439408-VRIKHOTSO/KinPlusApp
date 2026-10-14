@@ -19,8 +19,8 @@ import za.co.kinplus.app.ui.common.setTextOrGone
 
 /**
  * Login (screen 2). Email and password sign in through Firebase Auth (FR-02),
- * with a password reset link (FR-05). The form state lives in [LoginViewModel]
- * so it survives rotation.
+ * a password reset link, and single sign on with Google (FR-05). The form
+ * state lives in [LoginViewModel] so it survives rotation.
  */
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -55,12 +55,24 @@ class LoginFragment : Fragment() {
             }
         }
 
+        // Single sign on (FR-05). The Google "G" keeps its own colours, so the button tint is cleared.
+        binding.googleButton.iconTint = null
+        binding.googleButton.setOnClickListener {
+            viewModel.googleSignIn(requireActivity()) {
+                navigateSafely(
+                    R.id.homeFragment, null,
+                    NavOptions.Builder().setPopUpTo(R.id.loginFragment, true).build()
+                )
+            }
+        }
+
         collectWhileStarted(viewModel.state) { state ->
             binding.emailInput.setTextIfDifferent(state.email)
             binding.passwordInput.setTextIfDifferent(state.password)
             binding.errorText.setTextOrGone(state.error?.let { mapAuthMessage(requireContext(), it) })
             binding.infoText.isVisible = state.info == "RESET_SENT"
             binding.loginButton.isEnabled = !state.loading
+            binding.googleButton.isEnabled = !state.loading
             binding.loginButton.text = if (state.loading) "" else getString(R.string.log_in)
             binding.loginProgress.isVisible = state.loading
         }

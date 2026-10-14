@@ -1,10 +1,21 @@
 package za.co.kinplus.app.auth
 
+import android.content.Context
 import android.util.Log
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 import za.co.kinplus.app.util.Resource
+import java.security.MessageDigest
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +26,15 @@ import javax.inject.Singleton
  * Firebase Authentication hashes and salts credentials on Google's servers
  * (scrypt), and all traffic is TLS. This is what satisfies the PoE requirement
  * to "encrypt the password" (FR-03).
+ *
+ * Single sign on (FR-05, PoE): "Continue with Google" uses the Android
+ * Credential Manager to get a Google ID token, which is exchanged for a
+ * Firebase credential, so a Google account signs in to the same Firebase
+ * project as email and password users.
+ *
+ * Reference: Android Developers (2024) Authenticate users with Sign in with
+ * Google. Available at: https://developer.android.com/identity/sign-in/credential-manager-siwg
+ * [Accessed 14 October 2026].
  */
 @Singleton
 class AuthManager @Inject constructor(
@@ -60,6 +80,64 @@ class AuthManager @Inject constructor(
         Resource.Error(mapError(e), e)
     }
 
+    // ----- Google single sign on -----
+
+    /**
+     * Shows the Google account picker and signs the chosen account in to
+     * Firebase. [activityContext] must be an Activity so the picker can be
+     * shown. The OAuth web client id is read from the default_web_client_id
+     * string that the Google Services plugin generates from
+     * google-services.json; builds without a real Firebase config return
+     * GOOGLE_NOT_CONFIGURED instead of crashing.
+     */
+    suspend fun signInWithGoogle(activityContext: Context): Resource<Unit> {
+        val webClientId = webClientId(activityContext)
+            ?: return Resource.Error(GOOGLE_NOT_CONFIGURED).also { Log.w(TAG, "No default_web_client_id in this build") }
+
+        return try {
+            // A random nonce in the request mitigates ID token replay.
+            val nonce = MessageDigest.getInstance("SHA-256")
+                .digest(UUID.randomUUID().toString().toByteArray())
+                .joinToString("") { "%02x".format(it) }
+
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(webClientId)
+                .setNonce(nonce)
+                .build()
+            val request = GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
+            val response = CredentialManager.create(activityContext).getCredential(activityContext, request)
+
+            val credential = response.credential
+            if (credential is CustomCredential &&
+                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+            ) {
+                val idToken = GoogleIdTokenCredential.createFrom(credential.data).idToken
+                firebaseAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null)).await()
+                Log.i(TAG, "Google sign-in succeeded for ${firebaseAuth.currentUser?.uid}")
+                Resource.Success(Unit)
+            } else {
+                Log.w(TAG, "Unexpected credential type: ${credential.type}")
+                Resource.Error(GOOGLE_FAILED)
+            }
+        } catch (e: GetCredentialCancellationException) {
+            Log.i(TAG, "Google sign-in cancelled by the user")
+            Resource.Error(GOOGLE_CANCELLED, e)
+        } catch (e: NoCredentialException) {
+            Log.w(TAG, "No Google account available on this device", e)
+            Resource.Error(GOOGLE_NO_ACCOUNT, e)
+        } catch (e: Exception) {
+            Log.e(TAG, "Google sign-in failed", e)
+            Resource.Error(GOOGLE_FAILED, e)
+        }
+    }
+
+    /** The OAuth web client id generated from google-services.json, or null when absent. */
+    private fun webClientId(context: Context): String? {
+        val id = context.resources.getIdentifier("default_web_client_id", "string", context.packageName)
+        return if (id != 0) context.getString(id).takeIf { it.isNotBlank() } else null
+    }
+
     fun signOut() {
         firebaseAuth.signOut()
         Log.i(TAG, "User signed out")
@@ -89,6 +167,12 @@ class AuthManager @Inject constructor(
 
     companion object {
         private const val TAG = "AuthManager"
+
+        // Google sign in result codes, mapped to friendly text in the UI.
+        const val GOOGLE_NOT_CONFIGURED = "GOOGLE_NOT_CONFIGURED"
+        const val GOOGLE_CANCELLED = "GOOGLE_CANCELLED"
+        const val GOOGLE_NO_ACCOUNT = "GOOGLE_NO_ACCOUNT"
+        const val GOOGLE_FAILED = "GOOGLE_FAILED"
 
         /** FR-02: a syntactically valid email. */
         fun isValidEmail(email: String): Boolean =

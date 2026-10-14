@@ -58,6 +58,11 @@
     <string name="error_name_required">Please enter your first and last name.</string>
     <string name="error_invalid_phone">Please enter a valid cellphone number.</string>
     <string name="error_consent_required">You must accept the Privacy Policy to continue.</string>
+    <string name="or_continue_with">OR CONTINUE WITH</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="error_google_not_configured">Google sign in is not set up in this build. Use your email and password instead.</string>
+    <string name="error_google_no_account">No Google account was found on this phone. Add one in your phone settings and try again.</string>
+    <string name="error_google_failed">Google sign in did not work. Please try again.</string>
     <string name="error_auth_failed">Sign in failed. Check your details and try again.</string>
     <string name="error_generic">Something went wrong. Please try again.</string>
     <string name="error_offline_banner">You are offline. Showing saved information.</string>
