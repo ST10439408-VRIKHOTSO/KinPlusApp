@@ -362,8 +362,13 @@ class SosFragment : Fragment() {
         }
     }
 
-    private fun formatCoords(fix: LocationFix?): String =
-        if (fix != null) "%.4f° N, %.4f° W".format(fix.lat, fix.lng) else "…"
+    /** Coordinates with the correct hemisphere, e.g. "25.7545° S, 28.2314° E" in Pretoria. */
+    private fun formatCoords(fix: LocationFix?): String {
+        if (fix == null) return "…"
+        val ns = if (fix.lat < 0) "S" else "N"
+        val ew = if (fix.lng < 0) "W" else "E"
+        return "%.4f° %s, %.4f° %s".format(kotlin.math.abs(fix.lat), ns, kotlin.math.abs(fix.lng), ew)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
