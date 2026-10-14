@@ -168,7 +168,7 @@ Run them locally with `./gradlew test`.
 
 ## 11. Demonstration video
 
-**Video walkthrough:** _Add the unlisted YouTube link here before submitting._
+**Video walkthrough:** [KinPlus Demo Part 3](docs/video/KinPlus%20Demo%20Part%203.mp4) (about 5 minutes, recorded on a Samsung Galaxy A71). Open the link and click **View raw** to download or play it.
 
 ## 12. Team
 
