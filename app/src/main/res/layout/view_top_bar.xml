@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The app's top bar, included at the top of every screen: the Kin+ brand mark
+  (or a round back button on pushed screens), a large left aligned title, and
+  optional filter, profile and text actions on the end edge. TopBar.kt shows
+  only the pieces a screen asks for.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="12dp">
+
+    <ImageView
+        android:id="@+id/btnBack"
+        style="@style/Widget.Kin.RoundIconButton"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@string/cancel"
+        android:src="@drawable/ic_arrow_back"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:id="@+id/brandMark"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_brand_mark">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher_foreground" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Kin.Text.ScreenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="Safety Hub" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAction"
+        style="@style/Widget.Kin.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        tools:text="@string/save"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/btnFilter"
+        style="@style/Widget.Kin.RoundIconButton"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_tune"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/btnProfile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="@color/kin_green"
+        android:contentDescription="@string/profile_title"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="10dp"
+        android:src="@drawable/ic_person_outline"
+        android:visibility="gone"
+        app:tint="@color/white" />
+</LinearLayout>

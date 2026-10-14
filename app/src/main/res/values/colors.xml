@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Kin+ brand palette: monochrome (black / white / grey), red kept only
-         for emergency/SOS accents. Matches ui/theme/Color.kt. -->
-    <color name="kin_ink">#0D0D0D</color>
-    <color name="kin_surface">#F5F5F5</color>
-    <color name="kin_divider">#E0E0E0</color>
-    <color name="kin_muted">#9E9E9E</color>
-    <color name="kin_sos_red">#E53935</color>
+    <!--
+      Kin+ palette, "calm guardian" design: a warm stone page, white cards with
+      hairline borders, one deep evergreen tint for everything interactive, and
+      red kept strictly for emergency and danger. Deep forest is the hero tone
+      used on the splash and sign in screens.
+    -->
+
+    <!-- Evergreen brand tint: buttons, links, switches, progress, active states. -->
+    <color name="kin_green">#0E6B4E</color>
+    <color name="kin_green_bright">#3FB68B</color>
+    <color name="kin_green_container">#E3F1EA</color>
+    <color name="kin_green_on_container">#0A5039</color>
+
+    <!-- Deep forest hero tone and its lighter glow. -->
+    <color name="kin_forest">#0F2A21</color>
+    <color name="kin_forest_glow">#1F5A45</color>
+    <color name="kin_forest_body_top">#214A3B</color>
+    <color name="kin_forest_body_bottom">#132E25</color>
+
+    <!-- Red: danger, emergency and destructive actions only. -->
+    <color name="kin_red">#D92D20</color>
+    <color name="kin_red_dark">#B42318</color>
+    <color name="kin_red_bright">#EF4B3E</color>
+    <color name="kin_red_container">#FDECEA</color>
+
+    <!-- Surfaces and text. -->
+    <color name="kin_page">#F4F2EE</color>
+    <color name="kin_stone_inset">#EFECE6</color>
+    <color name="kin_surface">#FFFFFF</color>
+    <color name="kin_outline">#E7E3DC</color>
+    <color name="kin_ink">#14201B</color>
+    <color name="kin_muted">#66706B</color>
+    <color name="kin_placeholder">#A3A9A5</color>
+
+    <!-- Translucent whites used on the dark hero and the fake call screen. -->
+    <color name="white_10">#1AFFFFFF</color>
+    <color name="white_12">#1FFFFFFF</color>
+    <color name="white_18">#2EFFFFFF</color>
+    <color name="white_24">#3DFFFFFF</color>
+    <color name="white_38">#61FFFFFF</color>
+    <color name="white_55">#8CFFFFFF</color>
+    <color name="white_60">#99FFFFFF</color>
+    <color name="white_70">#B3FFFFFF</color>
+    <color name="white_74">#BDFFFFFF</color>
+    <color name="white_85">#D9FFFFFF</color>
+    <color name="white_90">#E6FFFFFF</color>
+    <color name="forest_88">#E00F2A21</color>
+    <color name="red_12">#1FD92D20</color>
+    <color name="red_18">#2ED92D20</color>
+    <color name="red_container_45">#73FDECEA</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
 
     <!-- Adaptive launcher icon background. -->
     <color name="ic_launcher_background">#0D0D0D</color>

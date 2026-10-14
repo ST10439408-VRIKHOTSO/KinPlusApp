@@ -8,10 +8,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.util.Log
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -130,13 +126,4 @@ class SirenStrobeController(private val context: Context) {
         const val TAG = "SirenStrobe"
         const val STROBE_INTERVAL_MS = 180L
     }
-}
-
-/** Remembers one controller for the screen and always stops it when the screen leaves. */
-@Composable
-fun rememberSirenStrobe(): SirenStrobeController {
-    val context = LocalContext.current.applicationContext
-    val controller = remember { SirenStrobeController(context) }
-    DisposableEffect(controller) { onDispose { controller.stop() } }
-    return controller
 }

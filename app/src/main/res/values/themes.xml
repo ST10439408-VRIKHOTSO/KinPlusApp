@@ -1,12 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--
-      Base application theme. The UI is built with Jetpack Compose, so this
-      XML theme only needs to provide a splash background and remove the
-      ActionBar. The real colour scheme lives in ui/theme/Theme.kt.
+      Kin+ app theme, built on Material Components (Material 3) for XML views.
+      Light mode only by design. Every screen inherits the brand colours, the
+      Plus Jakarta Sans font and the rounded component shapes from here, so the
+      layouts stay consistent in layout, fonts and colours.
     -->
-    <style name="Theme.KinPlus" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/kin_ink</item>
-        <item name="android:windowBackground">@color/kin_ink</item>
+    <style name="Theme.KinPlus" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Brand colours. -->
+        <item name="colorPrimary">@color/kin_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/kin_green_container</item>
+        <item name="colorOnPrimaryContainer">@color/kin_green_on_container</item>
+        <item name="colorSecondary">@color/kin_green</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/kin_green_container</item>
+        <item name="colorOnSecondaryContainer">@color/kin_green</item>
+        <item name="colorTertiary">@color/kin_green</item>
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorError">@color/kin_red</item>
+        <item name="colorOnError">@color/white</item>
+        <item name="colorErrorContainer">@color/kin_red_container</item>
+        <item name="colorOnErrorContainer">@color/kin_red</item>
+
+        <!-- Warm stone page with white cards floating above it. -->
+        <item name="android:colorBackground">@color/kin_page</item>
+        <item name="colorOnBackground">@color/kin_ink</item>
+        <item name="colorSurface">@color/kin_surface</item>
+        <item name="colorOnSurface">@color/kin_ink</item>
+        <item name="colorSurfaceVariant">@color/kin_surface</item>
+        <item name="colorOnSurfaceVariant">@color/kin_muted</item>
+        <item name="colorSurfaceContainer">@color/kin_stone_inset</item>
+        <item name="colorSurfaceContainerLow">@color/kin_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/kin_stone_inset</item>
+        <item name="colorSurfaceContainerHighest">@color/kin_stone_inset</item>
+        <item name="colorOutline">@color/kin_outline</item>
+        <item name="colorOutlineVariant">@color/kin_outline</item>
+
+        <!-- Window and system bars. -->
+        <item name="android:windowBackground">@color/kin_page</item>
+        <item name="android:statusBarColor">@color/kin_page</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/kin_surface</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <!-- Brand font everywhere. -->
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="fontFamily">@font/plus_jakarta_sans</item>
+        <item name="android:textColorPrimary">@color/kin_ink</item>
+        <item name="android:textColorSecondary">@color/kin_muted</item>
+
+        <!-- Soft, generous corners: 12 small, 16 medium, 28 for sheets and dialogs. -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Kin.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Kin.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Kin.Large</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Kin.Large</item>
+
+        <!-- Default component styles. -->
+        <item name="materialButtonStyle">@style/Widget.Kin.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Kin.Button.Outlined</item>
+        <item name="textInputStyle">@style/Widget.Kin.TextField</item>
+        <item name="materialSwitchStyle">@style/Widget.Kin.Switch</item>
+        <item name="chipStyle">@style/Widget.Kin.Chip</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Kin.Dialog</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Kin.BottomSheet</item>
+    </style>
+
+    <!-- Dialogs and bottom sheets keep the brand font. -->
+    <style name="ThemeOverlay.Kin.Dialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="fontFamily">@font/plus_jakarta_sans</item>
+    </style>
+
+    <style name="ThemeOverlay.Kin.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="fontFamily">@font/plus_jakarta_sans</item>
+    </style>
+
+    <!-- Full screen theme for the fake incoming call. -->
+    <style name="Theme.KinPlus.FakeCall" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowBackground">@color/kin_forest</item>
+        <item name="android:statusBarColor">@color/kin_forest</item>
+        <item name="android:navigationBarColor">@color/kin_forest</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:fontFamily">@font/plus_jakarta_sans</item>
+        <item name="fontFamily">@font/plus_jakarta_sans</item>
     </style>
 </resources>

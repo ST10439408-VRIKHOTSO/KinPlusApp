@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Stone sheet with rounded top corners that slides over the forest hero. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/kin_page" />
+    <corners android:topLeftRadius="28dp" android:topRightRadius="28dp" />
+</shape>

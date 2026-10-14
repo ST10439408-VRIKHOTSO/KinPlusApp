@@ -2,7 +2,7 @@ name: Build & test
 
 on:
   push:
-    branches: [master, main]
+    branches: ['**']
   pull_request:
     branches: [master, main]
 
@@ -32,10 +32,25 @@ jobs:
         run: chmod +x gradlew
 
       - name: Unit tests
-        run: ./gradlew testDebugUnitTest --console=plain
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew testDebugUnitTest --console=plain 2>&1 | tee build-tests.log
 
       - name: Assemble debug APK
-        run: ./gradlew assembleDebug --console=plain
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew assembleDebug --console=plain 2>&1 | tee build-apk.log
+
+      # Surfaces compiler and resource errors as a single annotation on the run,
+      # so the cause of a failed build is visible without downloading the logs.
+      - name: Report build errors
+        if: failure()
+        shell: bash
+        run: |
+          msg=$(cat build-*.log 2>/dev/null | grep -E "^e: |error:|ERROR|What went wrong|FAILED|> " | head -200 | sed 's/%/%25/g' | awk '{printf "%s%%0A", $0}')
+          echo "::error title=Build errors::${msg}"
 
       - name: Upload test results
         if: always()

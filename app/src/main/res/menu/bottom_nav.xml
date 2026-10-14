@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Bottom navigation: five primary destinations from the design with SOS in the
+  centre. Item ids match the destination ids in navigation/nav_graph.xml.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_map"
+        android:title="@string/nav_map" />
+    <item
+        android:id="@+id/circlesFragment"
+        android:icon="@drawable/ic_group"
+        android:title="@string/nav_circles" />
+    <item
+        android:id="@+id/sosFragment"
+        android:icon="@drawable/ic_sos_tab"
+        android:title="@string/sos" />
+    <item
+        android:id="@+id/alertsFragment"
+        android:icon="@drawable/ic_notifications_active"
+        android:title="@string/nav_alerts" />
+    <item
+        android:id="@+id/safetyFragment"
+        android:icon="@drawable/ic_shield"
+        android:title="@string/nav_safety" />
+</menu>

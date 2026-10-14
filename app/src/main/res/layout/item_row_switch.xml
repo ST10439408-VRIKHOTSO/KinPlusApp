@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- List row with a title, subtitle and a switch on the end edge. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Kin.Row">
+
+    <ImageView
+        android:id="@+id/icon"
+        style="@style/Widget.Kin.IconBadge"
+        android:layout_marginEnd="14dp"
+        android:visibility="gone"
+        tools:src="@drawable/ic_notifications"
+        tools:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/Kin.Text.RowTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Notifications" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/Kin.Text.RowSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:visibility="gone"
+            tools:text="Safety alerts and updates"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp" />
+</LinearLayout>
