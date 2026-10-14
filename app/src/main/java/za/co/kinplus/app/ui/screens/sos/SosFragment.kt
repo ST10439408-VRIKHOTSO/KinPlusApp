@@ -216,7 +216,7 @@ class SosFragment : Fragment() {
         incidentTypes.chunked(2).forEachIndexed { rowIndex, rowTypes ->
             val row = LinearLayout(requireContext()).apply {
                 orientation = LinearLayout.HORIZONTAL
-                baselineAligned = false
+                isBaselineAligned = false
             }
             val rowParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             if (rowIndex > 0) rowParams.topMargin = (10 * resources.displayMetrics.density).toInt()
