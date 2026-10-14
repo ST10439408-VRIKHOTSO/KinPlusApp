@@ -30,8 +30,8 @@ This checklist tracks what is needed to publish Kin+ on the Google Play Store, a
 | Item | Status |
 | ---- | ------ |
 | App name, short description (80 characters) and full description | Done, see `docs/STORE_LISTING.md` |
-| High resolution icon, 512 x 512 PNG | To do |
-| Feature graphic, 1024 x 500 | To do |
+| High resolution icon, 512 x 512 PNG | Done, `docs/store/icon-512.png` |
+| Feature graphic, 1024 x 500 | Done, `docs/store/feature-graphic-1024x500.png` |
 | At least 2 phone screenshots from a real device (see `docs/screenshots`) | Done |
 | Privacy policy URL (required because Kin+ uses location) | Done, see `docs/privacy-policy.md` |
 | Data safety form: location, name, email, device ID, push token | Answers ready in `docs/STORE_LISTING.md` |

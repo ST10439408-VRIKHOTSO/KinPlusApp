@@ -55,8 +55,8 @@ Kin+ does not replace emergency services. In an emergency, call 10111 (police) o
 
 | Asset | Size | Status |
 | ----- | ---- | ------ |
-| App icon | 512 x 512 PNG | To do |
-| Feature graphic | 1024 x 500 PNG or JPG | To do |
+| App icon | 512 x 512 PNG | Done, `docs/store/icon-512.png` |
+| Feature graphic | 1024 x 500 PNG or JPG | Done, `docs/store/feature-graphic-1024x500.png` |
 | Phone screenshots | 2 to 8, in `docs/screenshots` | Done |
 
 ## Data safety answers
