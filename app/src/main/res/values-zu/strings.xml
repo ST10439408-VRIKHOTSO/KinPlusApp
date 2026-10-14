@@ -157,4 +157,55 @@
 
     <string name="channel_safety_name">Izexwayiso zokuphepha</string>
     <string name="channel_safety_desc">Izaziso ze-SOS, zendawo ephephile nezohambo</string>
+
+    <!-- Batch 1 features -->
+    <string name="safety_tools_title">Amathuluzi okuphepha</string>
+    <string name="siren_title">Isayreni nesibani</string>
+    <string name="siren_sub_off">I-alamu enomsindo nokukhanya okucwayizayo</string>
+    <string name="siren_sub_on">Iyakhala. Thepha ukuze uyimise</string>
+    <string name="fake_call_title">Ucingo mbumbulu</string>
+    <string name="fake_call_sub">Thola ucingo ukuze ukwazi ukuhamba</string>
+    <string name="fake_call_setup_title">Hlela ucingo mbumbulu</string>
+    <string name="fake_call_caller_label">Igama lofonayo</string>
+    <string name="fake_call_default_caller">Mama</string>
+    <string name="fake_call_delay_label">Lukhale ngemuva kwesikhathi</string>
+    <string name="fake_call_now">Manje</string>
+    <string name="fake_call_10s">10 sec</string>
+    <string name="fake_call_30s">30 sec</string>
+    <string name="fake_call_60s">1 min</string>
+    <string name="fake_call_schedule">Hlela ucingo</string>
+    <string name="fake_call_scheduled">Ifoni yakho izokhala ngemuva kwemizuzwana engu %1$d. Shiya i-Kin+ ivuliwe.</string>
+    <string name="fake_call_incoming">Ucingo olungenayo</string>
+    <string name="fake_call_mobile">Iselula</string>
+    <string name="fake_call_accept">Yamukela</string>
+    <string name="fake_call_decline">Yenqaba</string>
+    <string name="fake_call_end">Qeda ucingo</string>
+    <string name="alerts_distance_any">Noma yibaphi ibanga</string>
+    <string name="alerts_distance_km">Ngaphakathi kwe %1$d km</string>
+    <string name="alert_no_description">Ayikho incazelo engeziwe.</string>
+    <string name="alert_open_in_maps">Vula kumamephu</string>
+    <string name="alert_close">Vala</string>
+    <string name="checkin_section">Ukuzibika ukuthi uphephile</string>
+    <string name="checkin_title">Ukuzibika: Ngiphephile</string>
+    <string name="checkin_sub">Uma ungaqinisekisi ngesikhathi, i-Kin+ ithumela i-SOS kumaqembu akho.</string>
+    <string name="checkin_every">Ngibuze ngemuva kwe</string>
+    <string name="checkin_minutes">%1$d imiz</string>
+    <string name="checkin_start">Qala ukuzibika</string>
+    <string name="checkin_stop">Misa</string>
+    <string name="checkin_active">Ukuzibika okulandelayo ngo %1$s</string>
+    <string name="checkin_notif_title">Uphephile?</string>
+    <string name="checkin_notif_body">Thepha ethi Ngiphephile kungakapheli imizuzu engu %1$d, noma i-Kin+ izoxwayisa amaqembu akho.</string>
+    <string name="checkin_im_ok">Ngiphephile</string>
+    <string name="checkin_escalated_title">Ukuzibika kuphuthelwe</string>
+    <string name="checkin_escalated_body">I-Kin+ ithumele i-SOS kumaqembu akho ngoba awuzange uzibike.</string>
+    <string name="checkin_sos_message">Ukuzibika kuphuthelwe</string>
+    <string name="checkin_confirmed">Ukuzibika kuqinisekisiwe. Hlala uphephile.</string>
+    <string name="nearby_help_title">Usizo oluseduze</string>
+    <string name="nearby_help_sub">Ivula uhlelo lwamamephu</string>
+    <string name="nearby_help_row_sub">Okuseduze nalapho ukhona manje</string>
+    <string name="nearby_police">Isiteshi samaphoyisa</string>
+    <string name="nearby_hospital">Isibhedlela</string>
+    <string name="nearby_clinic">Umtholampilo</string>
+    <string name="nearby_pharmacy">Ikhemisi</string>
+    <string name="member_name_fallback">Ilungu le-Kin+</string>
 </resources>

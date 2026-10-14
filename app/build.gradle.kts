@@ -27,8 +27,8 @@ android {
         applicationId = "za.co.kinplus.app"
         minSdk = 26          // NFR-06: Android 8.0 and above
         targetSdk = 34
-        versionCode = 2      // Part 2 build (PoE feature set); bumped from Part 1 planning
-        versionName = "1.0-poe"
+        versionCode = 3      // Version 1.1: design refresh and innovative feature additions
+        versionName = "1.1-poe"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

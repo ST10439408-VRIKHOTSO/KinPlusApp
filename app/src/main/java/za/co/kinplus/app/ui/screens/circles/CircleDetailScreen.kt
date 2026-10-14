@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.LocalPhotoRepository
@@ -184,7 +185,7 @@ fun CircleDetailScreen(
 
                         CircleDetailSectionLabel(stringResource(R.string.members) + " · " + detail.members.size)
                         Column(Modifier.padding(horizontal = 16.dp)) {
-                            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+                            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                                 Column {
                                     detail.members.forEachIndexed { index, member ->
                                         MemberRow(member, isMe = member.uid == state.myUid) {
@@ -198,7 +199,7 @@ fun CircleDetailScreen(
 
                         CircleDetailSectionLabel(stringResource(R.string.circle_section))
                         Column(Modifier.padding(horizontal = 16.dp)) {
-                            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+                            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                                 ListItem(
                                     headlineContent = {
                                         Text(stringResource(R.string.leave_circle), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Medium)

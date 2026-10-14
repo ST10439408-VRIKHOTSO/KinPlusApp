@@ -120,7 +120,7 @@ fun RegisterScreen(
     val context = LocalContext.current
     var showPrivacyPolicy by remember { mutableStateOf(false) }
 
-    Box(Modifier.fillMaxSize().background(Color.White)) {
+    Box(Modifier.fillMaxSize().background(AuthHeroBg)) {
         Column(Modifier.fillMaxSize()) {
             AuthHero(
                 headline = stringResource(R.string.register_headline),
@@ -130,9 +130,9 @@ fun RegisterScreen(
 
             Surface(
                 modifier = Modifier.fillMaxWidth().weight(1f).imePadding(),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.background,
                 shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
-                shadowElevation = 6.dp
+                shadowElevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
@@ -204,14 +204,14 @@ fun RegisterScreen(
                             checked = state.consent,
                             onCheckedChange = viewModel::onConsent,
                             colors = CheckboxDefaults.colors(
-                                checkedColor = Color.Black,
+                                checkedColor = MaterialTheme.colorScheme.primary,
                                 checkmarkColor = Color.White,
                                 uncheckedColor = AuthPlaceholder
                             )
                         )
                         Text(
                             stringResource(R.string.privacy_consent),
-                            color = Color(0xFF424242),
+                            color = AuthBody,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Medium
                         )
@@ -226,19 +226,19 @@ fun RegisterScreen(
                     Button(
                         onClick = { viewModel.register(context, onRegistered) },
                         enabled = !state.loading,
-                        modifier = Modifier.fillMaxWidth().height(54.dp),
-                        shape = RoundedCornerShape(14.dp)
+                        modifier = Modifier.fillMaxWidth().height(56.dp),
+                        shape = RoundedCornerShape(50)
                     ) {
                         if (state.loading) {
                             CircularProgressIndicator(Modifier.size(22.dp), strokeWidth = 2.dp, color = Color.White)
                         } else {
-                            Text(stringResource(R.string.create_account), fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                            Text(stringResource(R.string.create_account), fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
                     Spacer(Modifier.height(20.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Text(stringResource(R.string.already_have_account_prompt), color = Color(0xFF757575), fontSize = 13.sp)
+                        Text(stringResource(R.string.already_have_account_prompt), color = AuthMuted, fontSize = 13.sp)
                         Text(
                             stringResource(R.string.log_in),
                             color = MaterialTheme.colorScheme.primary,

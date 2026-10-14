@@ -39,6 +39,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.LocalPhotoRepository
@@ -174,7 +175,7 @@ fun CirclesScreen(
                 }
             }
             Column(Modifier.padding(horizontal = 16.dp)) {
-                Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+                Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                     Column {
                         if (state.primaryMembers.isEmpty()) {
                             Text(
@@ -212,7 +213,7 @@ fun CirclesScreen(
         if (otherCircles.isNotEmpty()) {
             CirclesSectionLabel(stringResource(R.string.section_other_connected_circles))
             Column(Modifier.padding(horizontal = 16.dp)) {
-                Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+                Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                     Column {
                         otherCircles.forEachIndexed { index, circle ->
                             OtherCircleRow(circle, onClick = { onOpenCircle(circle.id) }, onDelete = { deleteTarget = circle })
@@ -259,19 +260,19 @@ private fun CirclesSegmentedControl(selected: Int, onSelectSafeZones: () -> Unit
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = MaterialTheme.colorScheme.surfaceContainer,
-        shape = RoundedCornerShape(14.dp)
+        shape = RoundedCornerShape(50)
     ) {
         Row(Modifier.padding(4.dp)) {
             labels.forEachIndexed { index, label ->
                 val isSelected = index == selected
                 Surface(
-                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(11.dp)).clickable { if (index == 1) onSelectSafeZones() },
+                    modifier = Modifier.weight(1f).clip(RoundedCornerShape(50)).clickable { if (index == 1) onSelectSafeZones() },
                     color = if (isSelected) MaterialTheme.colorScheme.surface else Color.Transparent
                 ) {
                     Text(
                         label,
                         textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.SemiBold,
                         color = if (isSelected) MaterialTheme.colorScheme.onSurface else AuthMuted,
                         fontSize = 14.sp,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
@@ -296,7 +297,8 @@ private fun PrimaryCircleCard(
     var showMenu by remember { mutableStateOf(false) }
     Surface(
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).clickable(onClick = onClick),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface, border = kinCardBorder(),
+        shape = RoundedCornerShape(20.dp)
     ) {
         Column(Modifier.padding(18.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -415,10 +417,10 @@ private fun OtherCircleRow(circle: Circle, onClick: () -> Unit, onDelete: () -> 
     ListItem(
         leadingContent = {
             Box(
-                Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainer),
+                Modifier.size(40.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Filled.Groups, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(20.dp))
+                Icon(Icons.Filled.Groups, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
             }
         },
         headlineContent = { Text(circle.name, fontWeight = FontWeight.Medium) },

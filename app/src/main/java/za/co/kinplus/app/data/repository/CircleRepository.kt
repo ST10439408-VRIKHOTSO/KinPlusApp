@@ -1,6 +1,10 @@
 package za.co.kinplus.app.data.repository
 
+import android.content.Context
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
+import za.co.kinplus.app.R
+import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.local.CircleDao
 import za.co.kinplus.app.data.local.CircleEntity
 import za.co.kinplus.app.data.local.LocationDao
@@ -26,8 +30,29 @@ import javax.inject.Singleton
 class CircleRepository @Inject constructor(
     private val api: KinPlusApi,
     private val circleDao: CircleDao,
-    private val locationDao: LocationDao
+    private val locationDao: LocationDao,
+    private val authManager: AuthManager,
+    @ApplicationContext private val context: Context
 ) {
+    /**
+     * The API stores each member's name inside the circle when they create or
+     * join it. Accounts that had no name at that moment come back blank, which
+     * showed as a "?" avatar and an empty row. This fills the gap: the signed
+     * in user gets their own Firebase name (or email prefix), anyone else gets
+     * a neutral "Kin+ member" label.
+     */
+    private fun nameFor(uid: String, name: String?): String {
+        if (!name.isNullOrBlank()) return name
+        if (uid == authManager.currentUid) {
+            myName()?.let { return it }
+        }
+        return context.getString(R.string.member_name_fallback)
+    }
+
+    /** The signed in user's best available name, or null when Firebase has neither name nor email. */
+    private fun myName(): String? =
+        authManager.currentDisplayName.trim().ifBlank { authManager.currentEmail.substringBefore('@').trim() }.ifBlank { null }
+
     /** Live list of cached circles for the Circles screen. */
     val circles: Flow<List<Circle>> = circleDao.observeAll().map { list -> list.map { it.toDomain() } }
 
@@ -64,7 +89,8 @@ class CircleRepository @Inject constructor(
 
     suspend fun getCircleDetail(id: String): Resource<CircleDetail> = try {
         val dto = api.getCircle(id)
-        Resource.Success(dto.toDomain())
+        repairMyStoredName(dto.members.firstOrNull { it.uid == authManager.currentUid }?.displayName)
+        Resource.Success(dto.toDomain(::nameFor))
     } catch (e: Exception) {
         Resource.Error("Could not load circle details.", e)
     }
@@ -93,14 +119,33 @@ class CircleRepository @Inject constructor(
         Resource.Error("Could not leave this circle. Check your connection and try again.", e)
     }
 
+    /**
+     * If the server holds a blank name for the signed in user, send their real
+     * name once so the profile (and, with the API fix, every circle they are
+     * in) is corrected for the other members too. Failures are only logged.
+     */
+    private suspend fun repairMyStoredName(storedName: String?) {
+        if (!storedName.isNullOrBlank() || nameRepairSent) return
+        val name = myName() ?: return
+        nameRepairSent = true
+        try {
+            api.patchMe(UserPatchRequest(displayName = name))
+            Log.i(TAG, "Sent missing display name to the API")
+        } catch (e: Exception) {
+            Log.w(TAG, "Could not repair display name", e)
+        }
+    }
+
+    @Volatile private var nameRepairSent = false
+
     /** Live member locations for the map, cached per circle (FR-14, FR-28). */
     fun observeCircleLocations(circleId: String): Flow<List<MemberLocation>> =
-        locationDao.observeForCircle(circleId).map { list -> list.map { it.toDomain() } }
+        locationDao.observeForCircle(circleId).map { list -> list.map { it.toDomain(::nameFor) } }
 
     suspend fun refreshCircleLocations(circleId: String): Resource<List<MemberLocation>> = try {
         val remote = api.getCircleLocations(circleId)
         locationDao.replaceForCircle(circleId, remote.map { it.toEntity(circleId) })
-        Resource.Success(remote.map { it.toDomain() })
+        Resource.Success(remote.map { it.toDomain(::nameFor) })
     } catch (e: Exception) {
         Log.w(TAG, "Location refresh failed, serving cache", e)
         Resource.Error("Showing last known locations.", e)
@@ -115,11 +160,13 @@ class CircleRepository @Inject constructor(
 private fun CircleDto.toEntity() = CircleEntity(id, name, description, ownerUid, joinCode, memberCount)
 private fun CircleDto.toDomain() = Circle(id, name, description, ownerUid, joinCode, memberCount)
 private fun CircleEntity.toDomain() = Circle(id, name, description, ownerUid, joinCode, memberCount)
-private fun CircleDetailDto.toDomain() = CircleDetail(
+private fun CircleDetailDto.toDomain(nameFor: (String, String?) -> String) = CircleDetail(
     id, name, description, ownerUid, joinCode,
-    members.map { CircleMember(it.uid, it.displayName, it.role, it.sharingEnabled) }
+    members.map { CircleMember(it.uid, nameFor(it.uid, it.displayName), it.role, it.sharingEnabled) }
 )
 private fun MemberLocationDto.toEntity(circleId: String) =
     MemberLocationEntity(uid, circleId, displayName, lat, lng, batteryPct, capturedAt)
-private fun MemberLocationDto.toDomain() = MemberLocation(uid, displayName, lat, lng, batteryPct, capturedAt)
-private fun MemberLocationEntity.toDomain() = MemberLocation(uid, displayName, lat, lng, batteryPct, capturedAt)
+private fun MemberLocationDto.toDomain(nameFor: (String, String?) -> String) =
+    MemberLocation(uid, nameFor(uid, displayName), lat, lng, batteryPct, capturedAt)
+private fun MemberLocationEntity.toDomain(nameFor: (String, String?) -> String) =
+    MemberLocation(uid, nameFor(uid, displayName), lat, lng, batteryPct, capturedAt)

@@ -26,6 +26,7 @@ object Routes {
     const val ALERTS = "alerts"
     const val INCIDENT_HISTORY = "incident_history"
     const val EDIT_PROFILE = "edit_profile"
+    const val SETTINGS = "settings"
     const val EMERGENCY_INFO = "emergency_info"
     const val EMERGENCY_INFO_FORM = "emergency_info_form/{category}"
 

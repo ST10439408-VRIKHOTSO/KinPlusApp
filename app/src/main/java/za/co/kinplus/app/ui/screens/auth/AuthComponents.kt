@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,17 +43,21 @@ import androidx.compose.ui.unit.sp
 import za.co.kinplus.app.R
 
 /**
- * Shared building blocks for the dark-hero / white-sheet auth layout used by
- * both LoginScreen and RegisterScreen. The palette here is intentionally
- * monochrome, distinct from the app's green brand scheme used elsewhere.
+ * Shared building blocks for the forest hero and stone sheet auth layout used
+ * by both LoginScreen and RegisterScreen. These values follow the "calm
+ * guardian" design refresh and match ui/theme/Color.kt. AuthMuted is also
+ * used app wide for secondary text.
  */
 
-val AuthHeroBg = Color(0xFF0D0D0D)
-val AuthInputFill = Color(0xFFF5F5F5)
-val AuthDivider = Color(0xFFE0E0E0)
-val AuthMuted = Color(0xFF9E9E9E)
-val AuthBody = Color(0xFF212121)
-val AuthPlaceholder = Color(0xFFBDBDBD)
+val AuthHeroBg = Color(0xFF0F2A21)
+val AuthHeroGlow = Color(0xFF1F5A45)
+val AuthInputFill = Color(0xFFFFFFFF)
+val AuthDivider = Color(0xFFE7E3DC)
+val AuthMuted = Color(0xFF66706B)
+val AuthBody = Color(0xFF14201B)
+val AuthPlaceholder = Color(0xFFA3A9A5)
+val AuthTrack = Color(0xFFEFECE6)
+val AuthBrand = Color(0xFF0E6B4E)
 
 enum class AuthTabKind { SIGN_IN, SIGN_UP }
 
@@ -66,7 +72,7 @@ fun AuthFamilyGraphic(modifier: Modifier = Modifier) {
 
         drawCircle(
             brush = Brush.radialGradient(
-                colors = listOf(Color(0x552E2E2E), Color.Transparent),
+                colors = listOf(AuthHeroGlow.copy(alpha = 0.55f), Color.Transparent),
                 center = Offset(fx(200f), fy(150f)),
                 radius = fx(230f)
             ),
@@ -74,7 +80,7 @@ fun AuthFamilyGraphic(modifier: Modifier = Modifier) {
             center = Offset(fx(200f), fy(150f))
         )
 
-        val bodyBrush = Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF161616)))
+        val bodyBrush = Brush.verticalGradient(listOf(Color(0xFF214A3B), Color(0xFF132E25)))
 
         fun person(headCx: Float, headCy: Float, headR: Float, shoulderY: Float, shoulderW: Float, hemY: Float, hemW: Float) {
             drawCircle(bodyBrush, radius = fx(headR), center = Offset(fx(headCx), fy(headCy)))
@@ -105,7 +111,11 @@ fun AuthHero(headline: String, subtitle: String, modifier: Modifier = Modifier) 
         Column(Modifier.fillMaxSize().padding(start = 24.dp, top = 24.dp, end = 24.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    Modifier.size(32.dp).border(1.5.dp, Color.White.copy(alpha = 0.38f), CircleShape),
+                    Modifier
+                        .size(36.dp)
+                        .clip(RoundedCornerShape(11.dp))
+                        .background(Color.White.copy(alpha = 0.10f))
+                        .border(1.dp, Color.White.copy(alpha = 0.24f), RoundedCornerShape(11.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
@@ -115,7 +125,7 @@ fun AuthHero(headline: String, subtitle: String, modifier: Modifier = Modifier) 
                     )
                 }
                 Spacer(Modifier.width(9.dp))
-                Text(stringResource(R.string.app_name), color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(R.string.app_name), color = Color.White, fontSize = 17.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(Modifier.weight(1f))
@@ -123,17 +133,18 @@ fun AuthHero(headline: String, subtitle: String, modifier: Modifier = Modifier) 
             Text(
                 headline,
                 color = Color.White,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.SemiBold,
-                lineHeight = 32.sp
+                fontSize = 30.sp,
+                fontWeight = FontWeight.ExtraBold,
+                lineHeight = 34.sp,
+                letterSpacing = (-0.5).sp
             )
             Spacer(Modifier.height(8.dp))
             Text(
                 subtitle,
-                color = Color.White.copy(alpha = 0.7f),
+                color = Color.White.copy(alpha = 0.74f),
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                modifier = Modifier.padding(bottom = 28.dp)
+                modifier = Modifier.padding(bottom = 40.dp)
             )
         }
     }
@@ -145,9 +156,9 @@ fun AuthTabRow(active: AuthTabKind, onSignIn: () -> Unit, onSignUp: () -> Unit) 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(46.dp)
-            .clip(RoundedCornerShape(14.dp))
-            .background(Color(0xFFF0F0F0))
+            .height(50.dp)
+            .clip(RoundedCornerShape(50))
+            .background(AuthTrack)
             .padding(4.dp)
     ) {
         AuthTab(
@@ -170,16 +181,16 @@ private fun AuthTab(text: String, selected: Boolean, modifier: Modifier = Modifi
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .clip(RoundedCornerShape(10.dp))
-            .background(if (selected) Color.Black else Color.Transparent)
+            .clip(RoundedCornerShape(50))
+            .background(if (selected) Color.White else Color.Transparent)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Text(text, color = if (selected) Color.White else AuthMuted, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+        Text(text, color = if (selected) AuthBody else AuthMuted, fontSize = 14.sp, fontWeight = FontWeight.Bold)
     }
 }
 
-/** Filled, rounded text field matching the sign-in design (grey fill, icon, no visible border). */
+/** Rounded white text field for the sign in sheet: hairline border, evergreen focus ring and icon. */
 @Composable
 fun AuthTextField(
     value: String,
@@ -192,13 +203,23 @@ fun AuthTextField(
     supportingText: String? = null
 ) {
     var visible by remember { mutableStateOf(false) }
+    val interaction = remember { MutableInteractionSource() }
+    val focused by interaction.collectIsFocusedAsState()
     Column(modifier.fillMaxWidth()) {
         TextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 56.dp)
+                .border(
+                    if (focused) 2.dp else 1.dp,
+                    if (focused) AuthBrand else AuthDivider,
+                    RoundedCornerShape(14.dp)
+                ),
+            interactionSource = interaction,
             placeholder = { Text(placeholder, color = AuthPlaceholder) },
-            leadingIcon = { Icon(leadingIcon, contentDescription = null, tint = AuthMuted) },
+            leadingIcon = { Icon(leadingIcon, contentDescription = null, tint = if (value.isNotEmpty()) AuthBrand else AuthMuted) },
             trailingIcon = if (isPassword) {
                 {
                     IconButton(onClick = { visible = !visible }) {
@@ -212,16 +233,16 @@ fun AuthTextField(
             } else null,
             visualTransformation = if (isPassword && !visible) PasswordVisualTransformation() else VisualTransformation.None,
             singleLine = true,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(14.dp),
             keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else keyboardType),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = AuthInputFill,
                 unfocusedContainerColor = AuthInputFill,
                 disabledContainerColor = AuthInputFill,
-                focusedIndicatorColor = Color.Black,
+                focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                cursorColor = Color.Black,
+                cursorColor = AuthBrand,
                 focusedTextColor = AuthBody,
                 unfocusedTextColor = AuthBody
             )

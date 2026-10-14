@@ -2,10 +2,13 @@ package za.co.kinplus.app
 
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import za.co.kinplus.app.auth.AuthManager
+import za.co.kinplus.app.data.local.SosHistoryDao
 import za.co.kinplus.app.data.remote.KinPlusApi
 import za.co.kinplus.app.data.sync.ActionType
 import za.co.kinplus.app.data.sync.OfflineQueue
@@ -25,11 +28,14 @@ class SosRepositoryTest {
         val api = mockk<KinPlusApi>(relaxed = true)
         val offlineQueue = mockk<OfflineQueue>(relaxed = true)
         val connectivity = mockk<ConnectivityObserver>()
+        val sosHistoryDao = mockk<SosHistoryDao>(relaxed = true)
+        val authManager = mockk<AuthManager>(relaxed = true)
 
         // Simulate no connectivity.
         coEvery { connectivity.isOnlineNow() } returns false
+        every { authManager.currentUid } returns "u1"
 
-        val repository = SosRepository(api, offlineQueue, connectivity)
+        val repository = SosRepository(api, offlineQueue, connectivity, sosHistoryDao, authManager)
         val result = repository.raiseSos(lat = -25.75, lng = 28.23, message = "Help", circleIds = listOf("c1"))
 
         // The alert must be queued, and the UI is told it is pending (data == null).
@@ -42,12 +48,15 @@ class SosRepositoryTest {
         val api = mockk<KinPlusApi>(relaxed = true)
         val offlineQueue = mockk<OfflineQueue>(relaxed = true)
         val connectivity = mockk<ConnectivityObserver>()
+        val sosHistoryDao = mockk<SosHistoryDao>(relaxed = true)
+        val authManager = mockk<AuthManager>(relaxed = true)
 
         coEvery { connectivity.isOnlineNow() } returns true
+        every { authManager.currentUid } returns "u1"
         coEvery { api.raiseSos(any()) } returns
             za.co.kinplus.app.data.remote.dto.SosDto("s1", "u1", "Vukosi", "ACTIVE", -25.75, 28.23, "Help", "2026-09-20T20:00:00Z")
 
-        val repository = SosRepository(api, offlineQueue, connectivity)
+        val repository = SosRepository(api, offlineQueue, connectivity, sosHistoryDao, authManager)
         val result = repository.raiseSos(lat = -25.75, lng = 28.23, message = "Help", circleIds = listOf("c1"))
 
         coVerify(exactly = 1) { api.raiseSos(any()) }

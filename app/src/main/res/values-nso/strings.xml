@@ -157,4 +157,55 @@
 
     <string name="channel_safety_name">Ditemošo tša polokego</string>
     <string name="channel_safety_desc">Ditsebišo tša SOS, tša lefelo le bolokegilego le tša maeto</string>
+
+    <!-- Batch 1 features -->
+    <string name="safety_tools_title">Didirišwa tša polokego</string>
+    <string name="siren_title">Seirene le lebone</string>
+    <string name="siren_sub_off">Alamo ye e lladišago le lebone le le benyago</string>
+    <string name="siren_sub_on">E a lla. Kgotla go e emiša</string>
+    <string name="fake_call_title">Mogala wa maaka</string>
+    <string name="fake_call_sub">Hwetša mogala gore o kgone go tloga</string>
+    <string name="fake_call_setup_title">Beakanya mogala wa maaka</string>
+    <string name="fake_call_caller_label">Leina la moletši</string>
+    <string name="fake_call_default_caller">Mma</string>
+    <string name="fake_call_delay_label">O lle ka morago ga</string>
+    <string name="fake_call_now">Bjale</string>
+    <string name="fake_call_10s">10 sec</string>
+    <string name="fake_call_30s">30 sec</string>
+    <string name="fake_call_60s">1 min</string>
+    <string name="fake_call_schedule">Beakanya mogala</string>
+    <string name="fake_call_scheduled">Founo ya gago e tla lla ka morago ga metsotswana ye %1$d. Tlogela Kin+ e butšwe.</string>
+    <string name="fake_call_incoming">Mogala wo o tsenago</string>
+    <string name="fake_call_mobile">Selula</string>
+    <string name="fake_call_accept">Amogela</string>
+    <string name="fake_call_decline">Gana</string>
+    <string name="fake_call_end">Fetša mogala</string>
+    <string name="alerts_distance_any">Sebaka sefe goba sefe</string>
+    <string name="alerts_distance_km">Ka gare ga %1$d km</string>
+    <string name="alert_no_description">Ga go tlhalošo ye e oketšweng.</string>
+    <string name="alert_open_in_maps">Bula go mmapa</string>
+    <string name="alert_close">Tswalela</string>
+    <string name="checkin_section">Go itsebiša gore o bolokegile</string>
+    <string name="checkin_title">Go itsebiša: Ke bolokegile</string>
+    <string name="checkin_sub">Ge o sa netefatše ka nako, Kin+ e romela SOS go dihlopha tša gago.</string>
+    <string name="checkin_every">Mpotšiša ka morago ga</string>
+    <string name="checkin_minutes">%1$d mets</string>
+    <string name="checkin_start">Thoma go itsebiša</string>
+    <string name="checkin_stop">Emiša</string>
+    <string name="checkin_active">Go itsebiša mo go latelago ka %1$s</string>
+    <string name="checkin_notif_title">O bolokegile?</string>
+    <string name="checkin_notif_body">Kgotla Ke bolokegile ka gare ga metsotso ye %1$d, goba Kin+ e tla tsebiša dihlopha tša gago.</string>
+    <string name="checkin_im_ok">Ke bolokegile</string>
+    <string name="checkin_escalated_title">Go itsebiša go fetilwe</string>
+    <string name="checkin_escalated_body">Kin+ e rometše SOS go dihlopha tša gago ka gobane o se wa itsebiša.</string>
+    <string name="checkin_sos_message">Go itsebiša go fetilwe</string>
+    <string name="checkin_confirmed">Go itsebiša go netefaditšwe. Dula o bolokegile.</string>
+    <string name="nearby_help_title">Thušo ya kgauswi</string>
+    <string name="nearby_help_sub">E bula app ya mmapa</string>
+    <string name="nearby_help_row_sub">Kgauswi le mo o lego gona bjale</string>
+    <string name="nearby_police">Seteišene sa maphodisa</string>
+    <string name="nearby_hospital">Bookelo</string>
+    <string name="nearby_clinic">Kliniki</string>
+    <string name="nearby_pharmacy">Khemisi</string>
+    <string name="member_name_fallback">Leloko la Kin+</string>
 </resources>

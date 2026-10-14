@@ -403,4 +403,55 @@
     <!-- Notification channel -->
     <string name="channel_safety_name">Safety alerts</string>
     <string name="channel_safety_desc">SOS, Safe Zone and Safe Journey notifications</string>
+
+    <!-- Batch 1 features: safety tools, fake call, alert filters, check in, nearby help -->
+    <string name="safety_tools_title">Safety tools</string>
+    <string name="siren_title">Siren and strobe</string>
+    <string name="siren_sub_off">Loud alarm and flashing light</string>
+    <string name="siren_sub_on">Sounding. Tap to stop</string>
+    <string name="fake_call_title">Fake call</string>
+    <string name="fake_call_sub">Get a call so you can leave</string>
+    <string name="fake_call_setup_title">Schedule a fake call</string>
+    <string name="fake_call_caller_label">Caller name</string>
+    <string name="fake_call_default_caller">Mom</string>
+    <string name="fake_call_delay_label">Ring in</string>
+    <string name="fake_call_now">Now</string>
+    <string name="fake_call_10s">10 sec</string>
+    <string name="fake_call_30s">30 sec</string>
+    <string name="fake_call_60s">1 min</string>
+    <string name="fake_call_schedule">Schedule call</string>
+    <string name="fake_call_scheduled">Your phone will ring in %1$d seconds. Keep Kin+ open.</string>
+    <string name="fake_call_incoming">Incoming call</string>
+    <string name="fake_call_mobile">Mobile</string>
+    <string name="fake_call_accept">Accept</string>
+    <string name="fake_call_decline">Decline</string>
+    <string name="fake_call_end">End call</string>
+    <string name="alerts_distance_any">Any distance</string>
+    <string name="alerts_distance_km">Within %1$d km</string>
+    <string name="alert_no_description">No description was added.</string>
+    <string name="alert_open_in_maps">Open in Maps</string>
+    <string name="alert_close">Close</string>
+    <string name="checkin_section">Safety check in</string>
+    <string name="checkin_title">I\'m OK check in</string>
+    <string name="checkin_sub">If you don\'t confirm in time, Kin+ sends an SOS to your circles.</string>
+    <string name="checkin_every">Ask me after</string>
+    <string name="checkin_minutes">%1$d min</string>
+    <string name="checkin_start">Start check in</string>
+    <string name="checkin_stop">Stop</string>
+    <string name="checkin_active">Next check in at %1$s</string>
+    <string name="checkin_notif_title">Are you OK?</string>
+    <string name="checkin_notif_body">Tap I\'m OK within %1$d minutes or Kin+ will alert your circles.</string>
+    <string name="checkin_im_ok">I\'m OK</string>
+    <string name="checkin_escalated_title">Check in missed</string>
+    <string name="checkin_escalated_body">Kin+ sent an SOS to your circles because you did not check in.</string>
+    <string name="checkin_sos_message">Missed I\'m OK check in</string>
+    <string name="checkin_confirmed">Check in confirmed. Stay safe.</string>
+    <string name="nearby_help_title">Nearby help</string>
+    <string name="nearby_help_sub">Opens your maps app</string>
+    <string name="nearby_help_row_sub">Closest to where you are now</string>
+    <string name="nearby_police">Police station</string>
+    <string name="nearby_hospital">Hospital</string>
+    <string name="nearby_clinic">Clinic</string>
+    <string name="nearby_pharmacy">Pharmacy</string>
+    <string name="member_name_fallback">Kin+ member</string>
 </resources>

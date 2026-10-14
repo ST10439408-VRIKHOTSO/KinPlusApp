@@ -1,6 +1,10 @@
 package za.co.kinplus.app.ui.screens.alerts
 
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -22,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -36,6 +41,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.data.repository.AlertRepository
 import za.co.kinplus.app.domain.CommunityAlert
 import za.co.kinplus.app.location.LocationProvider
@@ -46,6 +52,10 @@ import za.co.kinplus.app.ui.components.KinTopAppBar
 import za.co.kinplus.app.ui.screens.auth.AuthMuted
 import za.co.kinplus.app.util.Resource
 import javax.inject.Inject
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 data class AlertsUiState(
     val nearby: List<CommunityAlert> = emptyList(),
@@ -105,6 +115,28 @@ private val filterCategories = listOf(
     "MEDICAL" to R.string.category_medical
 )
 
+/*
+ * Distance filter (Batch 1 enhancement to Community Alerts, FR-25). Reports are
+ * sorted nearest first, each card shows how far away it is, and the user can
+ * narrow the list to a radius. Distance is worked out on the device with the
+ * haversine formula, so no extra API call is needed.
+ *
+ * Reference: Veness, C. (2022) Calculate distance between two latitude
+ * longitude points. Available at: https://www.movable-type.co.uk/scripts/latlong.html
+ * [Accessed 13 October 2026].
+ */
+private val distanceFilters = listOf<Int?>(1, 5, 20, null)
+
+/** Great circle distance in kilometres between two points. */
+internal fun distanceKm(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
+    val earthRadiusKm = 6371.0
+    val dLat = Math.toRadians(lat2 - lat1)
+    val dLng = Math.toRadians(lng2 - lng1)
+    val a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) * sin(dLng / 2) * sin(dLng / 2)
+    return earthRadiusKm * 2 * atan2(sqrt(a), sqrt(1 - a))
+}
+
 private fun iconForCategory(category: String): ImageVector = when (category.uppercase()) {
     "CRIME" -> Icons.Filled.Gavel
     "HAZARD" -> Icons.Filled.Warning
@@ -123,8 +155,18 @@ fun CommunityAlertsScreen(
     val state by viewModel.state.collectAsState()
     var showReport by remember { mutableStateOf(false) }
     var filter by remember { mutableStateOf<String?>(null) }
+    var maxKm by remember { mutableStateOf<Int?>(null) }
+    var detailsFor by remember { mutableStateOf<CommunityAlert?>(null) }
 
-    val visible = state.nearby.filter { filter == null || it.category.equals(filter, ignoreCase = true) }
+    // Pair every alert with its distance from the user, then filter and sort nearest first.
+    val withDistance = state.nearby.map { alert ->
+        val km = if (state.lat != null && state.lng != null) distanceKm(state.lat!!, state.lng!!, alert.lat, alert.lng) else null
+        alert to km
+    }
+    val visible = withDistance
+        .filter { (alert, _) -> filter == null || alert.category.equals(filter, ignoreCase = true) }
+        .filter { (_, km) -> maxKm == null || km == null || km <= maxKm!! }
+        .sortedBy { (_, km) -> km ?: Double.MAX_VALUE }
 
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
@@ -142,12 +184,31 @@ fun CommunityAlertsScreen(
                     )
                 }
             }
+            Row(
+                Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                distanceFilters.forEach { km ->
+                    FilterChip(
+                        selected = maxKm == km,
+                        onClick = {
+                            maxKm = km
+                            Log.d("CommunityAlerts", "Distance filter set to ${km ?: "any"} km")
+                        },
+                        label = {
+                            Text(if (km == null) stringResource(R.string.alerts_distance_any) else stringResource(R.string.alerts_distance_km, km))
+                        }
+                    )
+                }
+            }
 
             if (visible.isEmpty() && !state.loading) {
                 EmptyState(stringResource(R.string.empty_alerts))
             } else {
                 LazyColumn(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
-                    items(visible) { alert -> AlertCard(alert) { viewModel.confirm(alert.id) } }
+                    items(visible) { (alert, km) ->
+                        AlertCard(alert, km, onConfirm = { viewModel.confirm(alert.id) }, onDetails = { detailsFor = alert })
+                    }
                     item { Spacer(Modifier.height(96.dp)) }
                 }
             }
@@ -166,6 +227,45 @@ fun CommunityAlertsScreen(
             ReportForm(state, viewModel, onSubmitted = { showReport = false })
         }
     }
+
+    detailsFor?.let { alert ->
+        val km = withDistance.firstOrNull { it.first.id == alert.id }?.second
+        AlertDetailsDialog(alert, km, onConfirm = { viewModel.confirm(alert.id) }, onDismiss = { detailsFor = null })
+    }
+}
+
+/** Full details of one report, with a shortcut to see the spot in the maps app. */
+@Composable
+private fun AlertDetailsDialog(alert: CommunityAlert, km: Double?, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(iconForCategory(alert.category), contentDescription = null, tint = MaterialTheme.colorScheme.error) },
+        title = { Text(alert.category.lowercase().replaceFirstChar { it.uppercase() }, fontWeight = FontWeight.Bold) },
+        text = {
+            Column {
+                Text(alert.description.ifBlank { stringResource(R.string.alert_no_description) }, fontSize = 15.sp)
+                Spacer(Modifier.height(12.dp))
+                if (km != null) Text(stringResource(R.string.km_away, km), color = AuthMuted, fontSize = 13.sp)
+                Text(stringResource(R.string.confirm_count, alert.confirmCount), color = AuthMuted, fontSize = 13.sp)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                Log.d("CommunityAlerts", "Opening alert ${alert.id} in maps")
+                val label = Uri.encode(alert.category)
+                runCatching {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("geo:${alert.lat},${alert.lng}?q=${alert.lat},${alert.lng}($label)")))
+                }
+            }) { Text(stringResource(R.string.alert_open_in_maps), fontWeight = FontWeight.Bold) }
+        },
+        dismissButton = {
+            Row {
+                TextButton(onClick = { onConfirm(); onDismiss() }) { Text(stringResource(R.string.i_see_it_too)) }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.alert_close)) }
+            }
+        }
+    )
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -201,10 +301,11 @@ private fun ReportForm(state: AlertsUiState, viewModel: CommunityAlertsViewModel
 }
 
 @Composable
-private fun AlertCard(alert: CommunityAlert, onConfirm: () -> Unit) {
+private fun AlertCard(alert: CommunityAlert, km: Double?, onConfirm: () -> Unit, onDetails: () -> Unit) {
     Surface(
         modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).clip(RoundedCornerShape(16.dp)),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface, border = kinCardBorder(),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -215,7 +316,10 @@ private fun AlertCard(alert: CommunityAlert, onConfirm: () -> Unit) {
                     Icon(iconForCategory(alert.category), contentDescription = null, tint = MaterialTheme.colorScheme.onErrorContainer, modifier = Modifier.size(18.dp))
                 }
                 Spacer(Modifier.width(10.dp))
-                Text(alert.category.lowercase().replaceFirstChar { it.uppercase() }, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                Column {
+                    Text(alert.category.lowercase().replaceFirstChar { it.uppercase() }, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
+                    if (km != null) Text(stringResource(R.string.km_away, km), color = AuthMuted, fontSize = 12.sp)
+                }
                 Spacer(Modifier.weight(1f))
                 Text(stringResource(R.string.confirm_count, alert.confirmCount), color = AuthMuted, fontSize = 12.sp)
             }
@@ -226,7 +330,7 @@ private fun AlertCard(alert: CommunityAlert, onConfirm: () -> Unit) {
                 OutlinedButton(onClick = onConfirm, modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.i_see_it_too), fontSize = 13.sp)
                 }
-                OutlinedButton(onClick = {}, modifier = Modifier.weight(1f)) {
+                OutlinedButton(onClick = onDetails, modifier = Modifier.weight(1f)) {
                     Text(stringResource(R.string.details), fontSize = 13.sp)
                 }
             }

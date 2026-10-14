@@ -34,6 +34,7 @@ import za.co.kinplus.app.ui.screens.profile.EmergencyInformationScreen
 import za.co.kinplus.app.ui.screens.profile.ProfileScreen
 import za.co.kinplus.app.ui.screens.safety.IncidentHistoryScreen
 import za.co.kinplus.app.ui.screens.safety.SafetyScreen
+import za.co.kinplus.app.ui.screens.settings.SettingsScreen
 import za.co.kinplus.app.ui.screens.sos.SosScreen
 import za.co.kinplus.app.ui.screens.zones.SafeZoneEditorScreen
 import za.co.kinplus.app.ui.screens.zones.SafeZonesScreen
@@ -123,8 +124,12 @@ fun KinPlusNavHost(
                 onBack = { navController.popBackStack() },
                 onEditProfile = { navController.navigate(Routes.EDIT_PROFILE) },
                 onOpenEmergencyInfo = { navController.navigate(Routes.EMERGENCY_INFO) },
+                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                 onSignedOut = { navController.navigate(Routes.LOGIN) { popUpTo(0) } }
             )
+        }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(onBack = { navController.popBackStack() })
         }
 
         // ----- Secondary destinations -----

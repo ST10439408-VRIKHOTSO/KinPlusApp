@@ -29,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.data.repository.ZoneRepository
 import za.co.kinplus.app.domain.SafeZone
 import za.co.kinplus.app.location.GeofenceManager
@@ -89,7 +90,7 @@ fun SafeZonesScreen(
                     modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 8.dp)
                 )
                 Column(Modifier.padding(horizontal = 16.dp)) {
-                    Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+                    Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                         Column {
                             zones.forEachIndexed { index, zone ->
                                 ZoneRow(zone, onClick = { onEditZone(zone.id) }, onDelete = { viewModel.delete(zone.id) })

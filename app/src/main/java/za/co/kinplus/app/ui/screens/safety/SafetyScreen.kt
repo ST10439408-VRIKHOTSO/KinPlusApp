@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.data.local.EmergencyContactEntity
 import za.co.kinplus.app.data.repository.EmergencyContactRepository
 import za.co.kinplus.app.data.repository.EmergencyInfoRepository
@@ -41,6 +42,8 @@ import za.co.kinplus.app.data.repository.SosRepository
 import za.co.kinplus.app.data.repository.UserRepository
 import za.co.kinplus.app.domain.EmergencyInfo
 import za.co.kinplus.app.location.LocationProvider
+import za.co.kinplus.app.ui.components.FakeCallHost
+import za.co.kinplus.app.ui.components.FakeCallSetupDialog
 import za.co.kinplus.app.ui.components.KinAppTopBar
 import za.co.kinplus.app.ui.screens.auth.AuthDivider
 import za.co.kinplus.app.ui.screens.auth.AuthMuted
@@ -149,6 +152,33 @@ private fun dial(context: Context, number: String) {
     context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number")))
 }
 
+/*
+ * Nearby help (Batch 1 enhancement to the Safety hub). Each row asks the
+ * phone's maps app to search around the user's current position, so it works
+ * without an extra API key. The search terms stay in English because that is
+ * what map providers index in South Africa.
+ */
+private data class NearbyPlace(val labelRes: Int, val query: String, val icon: ImageVector)
+private val nearbyPlaces = listOf(
+    NearbyPlace(R.string.nearby_police, "police station", Icons.Filled.LocalPolice),
+    NearbyPlace(R.string.nearby_hospital, "hospital", Icons.Filled.LocalHospital),
+    NearbyPlace(R.string.nearby_clinic, "clinic", Icons.Filled.MedicalServices),
+    NearbyPlace(R.string.nearby_pharmacy, "pharmacy", Icons.Filled.LocalPharmacy)
+)
+
+private fun openNearby(context: Context, query: String) {
+    android.util.Log.d("SafetyScreen", "Opening nearby search for '$query'")
+    val mapsIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query)))
+    try {
+        context.startActivity(mapsIntent)
+    } catch (e: android.content.ActivityNotFoundException) {
+        // No maps app installed: fall back to Google Maps in the browser.
+        context.startActivity(
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/" + Uri.encode(query)))
+        )
+    }
+}
+
 @Composable
 fun SafetyScreen(
     onOpenSos: (String?) -> Unit,
@@ -164,6 +194,8 @@ fun SafetyScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     var showAddContact by remember { mutableStateOf(false) }
+    var showFakeCallSetup by remember { mutableStateOf(false) }
+    var fakeCall by remember { mutableStateOf<Pair<String, Int>?>(null) }
 
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
         KinAppTopBar(title = stringResource(R.string.safety_hub_title), onFilter = {}, onProfile = onOpenProfile)
@@ -182,7 +214,7 @@ fun SafetyScreen(
         ) {
             QuickActionTile(Icons.Filled.NearMe, stringResource(R.string.quick_share_journey), stringResource(R.string.quick_share_journey_sub), Modifier.weight(1f), onClick = onOpenSmartAlerts)
             QuickActionTile(Icons.Filled.VerifiedUser, stringResource(R.string.quick_checkin), stringResource(R.string.quick_checkin_sub), Modifier.weight(1f)) { viewModel.shareLocation(context) }
-            QuickActionTile(Icons.Filled.PhoneCallback, stringResource(R.string.quick_fake_call), stringResource(R.string.quick_fake_call_sub), Modifier.weight(1f)) { onOpenSos(null) }
+            QuickActionTile(Icons.Filled.PhoneCallback, stringResource(R.string.quick_fake_call), stringResource(R.string.quick_fake_call_sub), Modifier.weight(1f)) { showFakeCallSetup = true }
         }
 
         SectionLabel(stringResource(R.string.emergency_contacts)) {
@@ -206,7 +238,7 @@ fun SafetyScreen(
 
         SectionLabel(stringResource(R.string.privacy_controls_title))
         Column(Modifier.padding(horizontal = 16.dp)) {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                 Column {
                     ListItem(
                         leadingContent = { Icon(Icons.Filled.LocationOff, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface) },
@@ -223,7 +255,7 @@ fun SafetyScreen(
 
         SectionLabel(stringResource(R.string.recent_activity))
         Column(Modifier.padding(horizontal = 16.dp)) {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                 SafetyNetworkRow(
                     Icons.Filled.History, stringResource(R.string.incident_history_title),
                     if (state.incidentCount == 0) stringResource(R.string.incident_history_sub)
@@ -233,9 +265,25 @@ fun SafetyScreen(
             }
         }
 
+        SectionLabel(stringResource(R.string.nearby_help_title)) {
+            Text(stringResource(R.string.nearby_help_sub), color = AuthMuted, fontSize = 12.sp)
+        }
+        Column(Modifier.padding(horizontal = 16.dp)) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
+                Column {
+                    nearbyPlaces.forEachIndexed { index, place ->
+                        SafetyNetworkRow(place.icon, stringResource(place.labelRes), stringResource(R.string.nearby_help_row_sub)) {
+                            openNearby(context, place.query)
+                        }
+                        if (index != nearbyPlaces.lastIndex) HorizontalDivider(color = AuthDivider)
+                    }
+                }
+            }
+        }
+
         SectionLabel(stringResource(R.string.emergency_numbers_section))
         Column(Modifier.padding(horizontal = 16.dp)) {
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
                 Column {
                     emergencyNumbers.forEachIndexed { index, entry ->
                         EmergencyNumberRow(entry) { dial(context, entry.number) }
@@ -245,6 +293,25 @@ fun SafetyScreen(
             }
         }
         Spacer(Modifier.height(24.dp))
+    }
+
+    if (showFakeCallSetup) {
+        FakeCallSetupDialog(
+            defaultCaller = state.contacts.firstOrNull()?.name ?: stringResource(R.string.fake_call_default_caller),
+            onDismiss = { showFakeCallSetup = false },
+            onSchedule = { caller, delaySeconds ->
+                showFakeCallSetup = false
+                fakeCall = caller to delaySeconds
+                if (delaySeconds > 0) {
+                    android.widget.Toast.makeText(
+                        context, context.getString(R.string.fake_call_scheduled, delaySeconds), android.widget.Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        )
+    }
+    fakeCall?.let { (caller, delaySeconds) ->
+        FakeCallHost(caller = caller, delaySeconds = delaySeconds, onFinished = { fakeCall = null })
     }
 
     if (showAddContact) {
@@ -264,7 +331,8 @@ private fun SecurityScoreCard(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface, border = kinCardBorder(),
+        shape = RoundedCornerShape(20.dp)
     ) {
         Column(Modifier.padding(18.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -330,7 +398,8 @@ private fun ScoreRing(percent: Int, size: androidx.compose.ui.unit.Dp = 56.dp) {
 private fun QuickActionTile(icon: ImageVector, title: String, subtitle: String, modifier: Modifier, onClick: () -> Unit) {
     Surface(
         modifier = modifier.clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick),
-        color = MaterialTheme.colorScheme.surface
+        color = MaterialTheme.colorScheme.surface, border = kinCardBorder(),
+        shape = RoundedCornerShape(16.dp)
     ) {
         Column(
             Modifier.fillMaxWidth().padding(vertical = 14.dp, horizontal = 6.dp),
@@ -352,7 +421,7 @@ private fun EmergencyContactsSection(
     onAdd: () -> Unit
 ) {
     Column(Modifier.padding(horizontal = 16.dp)) {
-        Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp)) {
+        Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp)) {
             Column {
                 if (contacts.isEmpty()) {
                     Column(Modifier.fillMaxWidth().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -386,8 +455,8 @@ private fun EmergencyContactsSection(
 @Composable
 private fun EmergencyContactRow(contact: EmergencyContactEntity, index: Int, onCall: () -> Unit, onDelete: () -> Unit) {
     ListItem(
-        leadingContent = { Box(Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainer), contentAlignment = Alignment.Center) {
-            Icon(Icons.Filled.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(20.dp))
+        leadingContent = { Box(Modifier.size(40.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
+            Icon(Icons.Filled.Person, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(20.dp))
         } },
         headlineContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -458,7 +527,7 @@ private fun LocalDeviceVaultSection(info: EmergencyInfo, onClick: () -> Unit, mo
 
 @Composable
 private fun VaultTile(icon: ImageVector, label: String, line1: String, line2: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Surface(modifier = modifier.clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick), color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(14.dp)) {
+    Surface(modifier = modifier.clip(RoundedCornerShape(14.dp)).clickable(onClick = onClick), color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(14.dp)) {
         Column(Modifier.padding(12.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Icon(icon, contentDescription = null, tint = AuthMuted, modifier = Modifier.size(16.dp))
@@ -514,10 +583,10 @@ private fun SectionLabel(text: String, trailing: (@Composable () -> Unit)? = nul
 @Composable
 private fun SafetyNetworkRow(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit) {
     ListItem(
-        leadingContent = { Box(Modifier.size(36.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceContainer), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(18.dp))
+        leadingContent = { Box(Modifier.size(38.dp).clip(RoundedCornerShape(12.dp)).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
+            Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
         } },
-        headlineContent = { Text(title, fontWeight = FontWeight.Medium) },
+        headlineContent = { Text(title, fontWeight = FontWeight.SemiBold) },
         supportingContent = { Text(subtitle, color = AuthMuted, fontSize = 13.sp) },
         trailingContent = { Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = AuthMuted) },
         colors = ListItemDefaults.colors(containerColor = Color.Transparent),

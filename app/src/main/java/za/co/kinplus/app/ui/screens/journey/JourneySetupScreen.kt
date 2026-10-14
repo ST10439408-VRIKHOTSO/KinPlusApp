@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.ui.components.kinCardBorder
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.JourneyRepository
 import za.co.kinplus.app.domain.Circle
@@ -127,7 +128,7 @@ fun JourneySetupScreen(
 
             Text(stringResource(R.string.trip_section), color = AuthMuted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(8.dp))
-            Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+            Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
                 Column {
                     TripRow(Icons.Filled.LocationOn, stringResource(R.string.from), stringResource(R.string.current_location))
                     HorizontalDivider(color = AuthDivider)
@@ -159,7 +160,7 @@ fun JourneySetupScreen(
                 Spacer(Modifier.height(8.dp))
                 Text(stringResource(R.string.notify_these_people), color = AuthMuted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                 Spacer(Modifier.height(8.dp))
-                Surface(color = MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
+                Surface(color = MaterialTheme.colorScheme.surface, border = kinCardBorder(), shape = RoundedCornerShape(16.dp), modifier = Modifier.fillMaxWidth()) {
                     Column {
                         state.members.forEachIndexed { index, member ->
                             ListItem(
@@ -189,6 +190,12 @@ fun JourneySetupScreen(
 
             Spacer(Modifier.height(24.dp))
             KinPrimaryButton(stringResource(R.string.start_journey), { viewModel.start(onStarted) }, loading = state.saving)
+
+            // Batch 1: "I'm OK" check in timer, independent of the journey itself.
+            Spacer(Modifier.height(24.dp))
+            Text(stringResource(R.string.checkin_section), color = AuthMuted, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.height(8.dp))
+            CheckInCard()
             Spacer(Modifier.height(24.dp))
         }
     }
