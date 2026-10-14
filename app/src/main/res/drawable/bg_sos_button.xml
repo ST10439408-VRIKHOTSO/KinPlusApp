@@ -3,7 +3,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
     <gradient
         android:type="radial"
-        android:gradientRadius="92dp"
+        android:gradientRadius="50%p"
         android:startColor="@color/kin_red_bright"
         android:centerColor="@color/kin_red"
         android:endColor="@color/kin_red_dark" />
