@@ -12,7 +12,7 @@ Changed: user interface rebuilt with XML views
 - The calm guardian design from version 1.1 was kept using a Material 3 theme, styles, colours and vector drawables.
 
 Added
-- Single sign on with Google (FR-05). A Continue with Google button on the Sign in screen, using the Android Credential Manager and Firebase Authentication. Cancelling the Google picker is not shown as an error.
+- Single sign on with Google (FR 05). A Continue with Google button on the Sign in screen, using the Android Credential Manager and Firebase Authentication. Cancelling the Google picker is not shown as an error.
 - Signed release build. The app is signed with a private upload key for Google Play. The key and its passwords are kept outside the repository.
 
 Fixed
