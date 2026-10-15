@@ -22,7 +22,7 @@ Kin+ helps people stay connected with the people they trust and get help quickly
 
 Get the latest installable APK from the [GitHub Releases page](https://github.com/ST10439408-VRIKHOTSO/KinPlusApp/releases/latest).
 
-> The release APK on GitHub is a debug build with a placeholder Firebase config, so Maps needs your own key as described in [Setup](#7-setup).
+> The APK on the Releases page is the signed release build (version 1.2 PoE). Download it on an Android phone running Android 8 or newer and open it to install. You may need to allow installs from your browser first.
 
 ## 3. Features
 
