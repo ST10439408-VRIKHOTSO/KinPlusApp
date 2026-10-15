@@ -16,7 +16,7 @@ val localProps = Properties().apply {
     if (f.exists()) f.inputStream().use { load(it) }
 }
 val apiBaseUrl: String = (localProps.getProperty("KINPLUS_API_BASE_URL")
-    ?: "https://kinplus-api.azurewebsites.net/")
+    ?: "https://kinplus-api-st10439408.azurewebsites.net/")
 
 android {
     namespace = "za.co.kinplus.app"
