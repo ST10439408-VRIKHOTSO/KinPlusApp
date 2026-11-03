@@ -16,6 +16,7 @@ import za.co.kinplus.app.data.repository.EmergencyInfoRepository
 import za.co.kinplus.app.data.repository.SosRepository
 import za.co.kinplus.app.data.repository.UserRepository
 import za.co.kinplus.app.domain.EmergencyInfo
+import za.co.kinplus.app.location.LocationFix
 import za.co.kinplus.app.location.LocationProvider
 import za.co.kinplus.app.util.Resource
 import javax.inject.Inject
@@ -99,6 +100,9 @@ class SafetyViewModel @Inject constructor(
             )
         )
     }
+
+    /** Where to centre a nearby help search: the cached fix if there is one, else a fresh fix (null without permission). */
+    suspend fun nearbyCentre(): LocationFix? = locationProvider.lastKnownFix() ?: locationProvider.currentFix()
 
     fun addContact(name: String, relationship: String, phone: String) = viewModelScope.launch {
         emergencyContactRepository.add(name, relationship, phone)

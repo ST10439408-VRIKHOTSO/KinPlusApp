@@ -12,8 +12,10 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
 import za.co.kinplus.app.databinding.DialogAddContactBinding
 import za.co.kinplus.app.databinding.FragmentSafetyBinding
@@ -277,14 +279,15 @@ class SafetyFragment : Fragment() {
         startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$number")))
     }
 
-    private fun openNearby(query: String) {
-        Log.d("SafetyFragment", "Opening nearby search for '$query'")
-        val mapsIntent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=" + Uri.encode(query)))
+    private fun openNearby(query: String) = viewLifecycleOwner.lifecycleScope.launch {
+        val fix = viewModel.nearbyCentre()
+        Log.d("SafetyFragment", "Opening nearby search for '$query' (centred on a fix: ${fix != null})")
+        val mapsIntent = Intent(Intent.ACTION_VIEW, Uri.parse(nearbyGeoUri(query, fix?.lat, fix?.lng)))
         try {
             startActivity(mapsIntent)
         } catch (e: ActivityNotFoundException) {
             // No maps app installed: fall back to Google Maps in the browser.
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/search/" + Uri.encode(query))))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(nearbyWebUrl(query, fix?.lat, fix?.lng))))
         }
     }
 
