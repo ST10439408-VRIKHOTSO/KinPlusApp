@@ -48,8 +48,8 @@ class SosRepository @Inject constructor(
         val request = SosRequest(lat, lng, message, circleIds)
 
         if (!connectivity.isOnlineNow()) {
-            offlineQueue.enqueue(ActionType.SOS, request)
-            logHistory(status = "QUEUED", message = message, lat = lat, lng = lng)
+            val actionId = offlineQueue.enqueue(ActionType.SOS, request)
+            logHistory(id = actionId, status = "QUEUED", message = message, lat = lat, lng = lng)
             Log.w(TAG, "Offline: SOS queued for delivery on reconnect")
             return Resource.Success(null, fromCache = true)
         }
@@ -60,8 +60,8 @@ class SosRepository @Inject constructor(
             Resource.Success(SosEvent(dto.id, dto.raisedByName, dto.status, dto.message))
         } catch (e: Exception) {
             // Network failed mid-flight: fall back to the queue so the alert is not lost.
-            offlineQueue.enqueue(ActionType.SOS, request)
-            logHistory(status = "QUEUED", message = message, lat = lat, lng = lng)
+            val actionId = offlineQueue.enqueue(ActionType.SOS, request)
+            logHistory(id = actionId, status = "QUEUED", message = message, lat = lat, lng = lng)
             Log.w(TAG, "SOS send failed; queued for retry", e)
             Resource.Success(null, fromCache = true)
         }
@@ -74,10 +74,17 @@ class SosRepository @Inject constructor(
         Resource.Error("Could not cancel the SOS.", e)
     }
 
-    private suspend fun logHistory(status: String, message: String?, lat: Double?, lng: Double?) {
+    /**
+     * A queued SOS is logged under its queued action's id, so the sync worker
+     * can flip the entry to "SENT" once the alert is delivered.
+     */
+    private suspend fun logHistory(
+        status: String, message: String?, lat: Double?, lng: Double?,
+        id: String = UUID.randomUUID().toString()
+    ) {
         sosHistoryDao.insert(
             SosHistoryEntity(
-                id = UUID.randomUUID().toString(),
+                id = id,
                 uid = authManager.currentUid,
                 status = status,
                 message = message,

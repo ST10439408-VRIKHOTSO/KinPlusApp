@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import za.co.kinplus.app.data.local.PendingActionDao
+import za.co.kinplus.app.data.local.SosHistoryDao
 import za.co.kinplus.app.data.remote.KinPlusApi
 import za.co.kinplus.app.data.remote.dto.*
 
@@ -24,6 +25,7 @@ class SyncWorker @AssistedInject constructor(
     @Assisted params: WorkerParameters,
     private val api: KinPlusApi,
     private val dao: PendingActionDao,
+    private val sosHistoryDao: SosHistoryDao,
     private val gson: Gson
 ) : CoroutineWorker(appContext, params) {
 
@@ -46,6 +48,8 @@ class SyncWorker @AssistedInject constructor(
                         val body = gson.fromJson(action.payloadJson, SosRequest::class.java)
                             .copy(clientActionId = action.clientActionId)
                         api.raiseSos(body)
+                        // Incident History logged this SOS as queued; it has now gone out.
+                        sosHistoryDao.markSent(action.clientActionId)
                     }
                     ActionType.ZONE_EVENT -> {
                         val body = gson.fromJson(action.payloadJson, QueuedZoneEvent::class.java)

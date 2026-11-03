@@ -100,6 +100,10 @@ interface SosHistoryDao {
 
     @Insert
     suspend fun insert(entry: SosHistoryEntity)
+
+    /** A queued SOS shares its id with the queued action, so the sync worker can mark it sent. */
+    @Query("UPDATE sos_history SET status = 'SENT' WHERE id = :id AND status = 'QUEUED'")
+    suspend fun markSent(id: String)
 }
 
 @Dao

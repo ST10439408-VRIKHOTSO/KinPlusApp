@@ -1,14 +1,19 @@
 package za.co.kinplus.app
 
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.local.SosHistoryDao
+import za.co.kinplus.app.data.local.SosHistoryEntity
 import za.co.kinplus.app.data.remote.KinPlusApi
 import za.co.kinplus.app.data.sync.ActionType
 import za.co.kinplus.app.data.sync.OfflineQueue
@@ -41,6 +46,28 @@ class SosRepositoryTest {
         // The alert must be queued, and the UI is told it is pending (data == null).
         coVerify(exactly = 1) { offlineQueue.enqueue(ActionType.SOS, any()) }
         assertTrue(result is Resource.Success && result.data == null)
+    }
+
+    @Test
+    fun `queued SOS is logged in history under its queued action id`() = runTest {
+        val api = mockk<KinPlusApi>(relaxed = true)
+        val offlineQueue = mockk<OfflineQueue>(relaxed = true)
+        val connectivity = mockk<ConnectivityObserver>()
+        val sosHistoryDao = mockk<SosHistoryDao>(relaxed = true)
+        val authManager = mockk<AuthManager>(relaxed = true)
+        val entry = slot<SosHistoryEntity>()
+
+        coEvery { connectivity.isOnlineNow() } returns false
+        every { authManager.currentUid } returns "u1"
+        coEvery { offlineQueue.enqueue(ActionType.SOS, any()) } returns "action-1"
+        coEvery { sosHistoryDao.insert(capture(entry)) } just Runs
+
+        val repository = SosRepository(api, offlineQueue, connectivity, sosHistoryDao, authManager)
+        repository.raiseSos(lat = -25.75, lng = 28.23, message = "Help", circleIds = listOf("c1"))
+
+        // The shared id is what lets SyncWorker mark this entry "SENT" later.
+        assertEquals("action-1", entry.captured.id)
+        assertEquals("QUEUED", entry.captured.status)
     }
 
     @Test
