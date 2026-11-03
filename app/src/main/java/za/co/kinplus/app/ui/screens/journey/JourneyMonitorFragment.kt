@@ -70,7 +70,7 @@ private class JourneyAdapter(
         val context = holder.itemView.context
         holder.binding.traveller.text = journey.travellerName
         holder.binding.destination.text = journey.destinationLabel
-        holder.binding.eta.text = "${context.getString(R.string.eta)}: ${journey.etaAt}"
+        holder.binding.eta.text = "${context.getString(R.string.eta)}: ${formatEta(journey.etaAt)}"
         holder.binding.arriveButton.setOnClickListener { onArrive(journey) }
     }
 
