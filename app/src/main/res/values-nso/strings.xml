@@ -91,6 +91,7 @@
     <string name="radius_metres">%1$d m</string>
     <string name="notify_on_enter">Tsebiša ge go tsenwa</string>
     <string name="notify_on_exit">Tsebiša ge go tšwiwa</string>
+    <string name="zone_notify_circle">Tsebiša sekele ye</string>
     <string name="save_safe_zone">Boloka Lefelo le Bolokegilego</string>
     <string name="zone_enter_exit">Ditemošo tša go tsena/go tšwa di bulegile</string>
 

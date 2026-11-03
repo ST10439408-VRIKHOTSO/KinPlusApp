@@ -136,6 +136,7 @@
     <string name="radius_metres">%1$d m</string>
     <string name="notify_on_enter">Notify on enter</string>
     <string name="notify_on_exit">Notify on exit</string>
+    <string name="zone_notify_circle">Notify this circle</string>
     <string name="save_safe_zone">Save Safe Zone</string>
     <string name="zone_enter_exit">Enter/Exit alerts on</string>
 

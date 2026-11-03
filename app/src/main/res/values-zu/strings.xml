@@ -91,6 +91,7 @@
     <string name="radius_metres">%1$d m</string>
     <string name="notify_on_enter">Yazisa uma kungenwa</string>
     <string name="notify_on_exit">Yazisa uma kuphumwa</string>
+    <string name="zone_notify_circle">Yazisa lesi siyingi</string>
     <string name="save_safe_zone">Londoloza Indawo Ephephile</string>
     <string name="zone_enter_exit">Izexwayiso zokungena/zokuphuma zivuliwe</string>
 

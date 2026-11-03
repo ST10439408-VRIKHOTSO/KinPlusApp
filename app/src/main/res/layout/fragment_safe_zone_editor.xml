@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Safe Zone editor (screen 9): name, radius (100 to 5000 m, FR-20) and notification choices. -->
+<!-- Safe Zone editor (screen 9): name, radius (100 to 5000 m, FR-20), notification choices and the circle to notify. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -87,6 +87,31 @@
                 android:text="@string/notify_on_exit"
                 android:textColor="@color/kin_ink"
                 android:textSize="15sp" />
+
+            <!-- The circle told about enter/exit crossings; hidden until the user has a circle. -->
+            <LinearLayout
+                android:id="@+id/circleGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Kin.Text.SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zone_notify_circle"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/circleChips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:selectionRequired="true"
+                    app:singleSelection="true" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/errorText"
