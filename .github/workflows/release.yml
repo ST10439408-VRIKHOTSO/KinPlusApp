@@ -1,3 +1,11 @@
+# Builds Kin+ when a version tag such as v1.3-poe is pushed and attaches the
+# result to a GitHub Release.
+#
+# With the upload key saved as repository secrets (KINPLUS_UPLOAD_KEYSTORE_B64,
+# KINPLUS_KEYSTORE_PASSWORD, KINPLUS_KEY_ALIAS and KINPLUS_KEY_PASSWORD) it
+# builds the signed release APK and the AAB for the Play Console. Without them
+# it builds a debug APK, names it "-debug" and marks the release as a
+# pre-release, so an unsigned build is never shown as the latest signed one.
 name: Release APK
 
 on:
@@ -41,17 +49,46 @@ jobs:
           GOOGLE_MAPS_API_KEY: ${{ secrets.KINPLUS_GOOGLE_MAPS_API_KEY }}
         run: echo "KINPLUS_GOOGLE_MAPS_API_KEY=$GOOGLE_MAPS_API_KEY" >> local.properties
 
+      - name: Set up release signing
+        id: signing
+        env:
+          KEYSTORE_B64: ${{ secrets.KINPLUS_UPLOAD_KEYSTORE_B64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KINPLUS_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KINPLUS_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KINPLUS_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/kinplus-upload.jks"
+            {
+              echo "storeFile=$RUNNER_TEMP/kinplus-upload.jks"
+              echo "storePassword=$KEYSTORE_PASSWORD"
+              echo "keyAlias=$KEY_ALIAS"
+              echo "keyPassword=$KEY_PASSWORD"
+            } > keystore.properties
+            echo "signed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Assemble debug APK
-        run: ./gradlew assembleDebug --console=plain
+      - name: Build signed release APK and AAB
+        if: steps.signing.outputs.signed == 'true'
+        run: |
+          ./gradlew assembleRelease bundleRelease --console=plain
+          cp app/build/outputs/apk/release/app-release.apk "KinPlus-${{ github.ref_name }}.apk"
+          cp app/build/outputs/bundle/release/app-release.aab "KinPlus-${{ github.ref_name }}.aab"
 
-      - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk KinPlus-${{ github.ref_name }}.apk
+      - name: Build debug APK (no signing secrets)
+        if: steps.signing.outputs.signed != 'true'
+        run: |
+          ./gradlew assembleDebug --console=plain
+          cp app/build/outputs/apk/debug/app-debug.apk "KinPlus-${{ github.ref_name }}-debug.apk"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: KinPlus-${{ github.ref_name }}.apk
+          files: KinPlus-${{ github.ref_name }}*
           generate_release_notes: true
+          prerelease: ${{ steps.signing.outputs.signed != 'true' }}

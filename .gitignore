@@ -20,3 +20,14 @@ app/google-services.json
 
 # Log/profiling files
 *.hprof
+
+# Release signing: the upload key and its passwords never go into git.
+keystore.properties
+*.jks
+*.keystore
+
+# Signed release builds are attached to GitHub Releases, not committed.
+/app/release/
+
+# Per-user IDE state.
+.idea/markdown.xml

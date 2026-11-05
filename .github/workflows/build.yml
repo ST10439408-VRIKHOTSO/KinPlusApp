@@ -1,3 +1,11 @@
+# Builds Kin+ and runs the unit tests on a clean GitHub machine for every push
+# and pull request, so the app is shown to work on more than our own laptops.
+#
+# Based on the guides given in the PoE brief:
+# Amir, F. (2026) Automated build Android app with GitHub Action. Available at:
+# https://github.com/marketplace/actions/automated-build-android-app-with-github-action [Accessed 5 November 2026].
+# IMAD5112 (2025) Github-actions: build.yml. Available at:
+# https://github.com/IMAD5112/Github-actions/blob/main/.github/workflows/build.yml [Accessed 5 November 2026].
 name: Build & test
 
 on:
@@ -20,11 +28,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # The Android Gradle plugin downloads the SDK 36 platform it compiles against.
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
           packages: platform-tools
 
+      # The real google-services.json is never committed, so CI builds with the placeholder.
       - name: Use placeholder Firebase config
         run: cp app/google-services.json.template app/google-services.json
 
@@ -58,3 +68,9 @@ jobs:
         with:
           name: unit-test-results
           path: app/build/reports/tests/testDebugUnitTest
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: kinplus-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
