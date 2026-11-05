@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import za.co.kinplus.app.KinPlusApplication
 import za.co.kinplus.app.MainActivity
 import za.co.kinplus.app.R
@@ -26,12 +27,19 @@ import javax.inject.Inject
  * Receives real-time push notifications (FR-30) for SOS, Safe Zone and Safe
  * Journey events. A tapped notification carries a "deepLink" data value
  * (kinplus://...) so the app opens the relevant safety screen directly.
+ * Nothing is registered or shown while the user has switched notifications
+ * off in Settings.
+ *
+ * Reference: Firebase (2026) Receive messages in Android apps. Available at:
+ * https://firebase.google.com/docs/cloud-messaging/android/receive
+ * [Accessed 5 November 2026].
  */
 @AndroidEntryPoint
 class KinPlusMessagingService : FirebaseMessagingService() {
 
     @Inject lateinit var userRepository: UserRepository
     @Inject lateinit var authManager: AuthManager
+    @Inject lateinit var pushRegistration: PushRegistration
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -40,6 +48,10 @@ class KinPlusMessagingService : FirebaseMessagingService() {
         Log.i(TAG, "New FCM token received")
         if (!authManager.isSignedIn) return
         scope.launch {
+            if (!pushRegistration.isEnabled()) {
+                Log.i(TAG, "Notifications are off in Settings; token not registered")
+                return@launch
+            }
             val result = userRepository.syncProfile(
                 displayName = authManager.currentDisplayName,
                 phone = null,
@@ -51,6 +63,11 @@ class KinPlusMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
+        // FCM calls this on a background thread, so a short blocking read of the setting is safe.
+        if (!runBlocking { pushRegistration.isEnabled() }) {
+            Log.i(TAG, "Push (${message.data["type"]}) ignored: notifications are off in Settings")
+            return
+        }
         val title = message.notification?.title
             ?: message.data["title"]
             ?: getString(R.string.app_name)

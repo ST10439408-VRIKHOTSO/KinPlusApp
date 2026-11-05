@@ -24,6 +24,7 @@ import za.co.kinplus.app.ui.common.collectWhileStarted
 import za.co.kinplus.app.ui.common.popBackSafely
 import za.co.kinplus.app.ui.common.setCheckedSilently
 import za.co.kinplus.app.ui.common.setup
+import za.co.kinplus.app.ui.common.toast
 
 /** Language options: tag to display name. */
 private val languages = listOf(
@@ -51,6 +52,7 @@ class SettingsFragment : Fragment() {
     private var unitsRow: ItemRowSwitchBinding? = null
     private var shownCircles: List<Circle>? = null
     private var shownPaused: Boolean? = null
+    private var shownSharing: Map<String, Boolean>? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
@@ -62,6 +64,7 @@ class SettingsFragment : Fragment() {
         binding.topBar.setup(title = getString(R.string.settings_title), onBack = { popBackSafely() })
         shownCircles = null
         shownPaused = null
+        shownSharing = null
 
         binding.pauseContainer.removeAllViews()
         pauseRow = binding.pauseContainer.addSwitchRow(
@@ -108,6 +111,13 @@ class SettingsFragment : Fragment() {
         )
 
         collectWhileStarted(viewModel.state) { state -> render(state) }
+        collectWhileStarted(viewModel.problems) { problem ->
+            val message = when (problem) {
+                SettingsProblem.NOTIFICATIONS -> R.string.error_notifications_update
+                SettingsProblem.SHARING -> R.string.error_update_sharing
+            }
+            requireContext().toast(getString(message), long = true)
+        }
     }
 
     private fun render(state: SettingsUiState) {
@@ -117,16 +127,18 @@ class SettingsFragment : Fragment() {
         unitsRow?.setCheckedSilently(state.useMetric)
         unitsRow?.subtitle?.setText(if (state.useMetric) R.string.units_metric else R.string.units_imperial)
 
-        // Per circle switches are rebuilt only when the circles or the global pause change.
-        if (state.circles != shownCircles || state.globalPaused != shownPaused) {
+        // Per circle switches are rebuilt only when the circles, the global pause
+        // or the saved sharing states change. Each one shows the saved state.
+        if (state.circles != shownCircles || state.globalPaused != shownPaused || state.circleSharing != shownSharing) {
             shownCircles = state.circles
             shownPaused = state.globalPaused
+            shownSharing = state.circleSharing
             binding.perCircleGroup.isVisible = state.circles.isNotEmpty()
             binding.circlesContainer.removeAllViews()
             state.circles.forEach { circle ->
                 binding.circlesContainer.addSwitchRow(
                     title = circle.name,
-                    checked = true,
+                    checked = state.circleSharing[circle.id] ?: true,
                     enabled = !state.globalPaused,
                     onChanged = { enabled -> viewModel.setCircleSharing(circle.id, enabled) }
                 )

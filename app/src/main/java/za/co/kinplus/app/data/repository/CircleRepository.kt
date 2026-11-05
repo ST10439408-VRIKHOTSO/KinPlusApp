@@ -12,7 +12,11 @@ import za.co.kinplus.app.data.local.MemberLocationEntity
 import za.co.kinplus.app.data.remote.KinPlusApi
 import za.co.kinplus.app.data.remote.dto.*
 import za.co.kinplus.app.domain.*
+import za.co.kinplus.app.util.LocaleManager
 import za.co.kinplus.app.util.Resource
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -25,6 +29,9 @@ import javax.inject.Singleton
  * and the UI observes Room, so cached circles remain visible without a
  * connection (FR-28). Writes go straight to the API because they need a server
  * round-trip (creating a circle, joining, changing sharing).
+ *
+ * Error messages are shown to the user, so they come from string resources in
+ * the in-app language (FR-31) rather than being written in English here.
  */
 @Singleton
 class CircleRepository @Inject constructor(
@@ -34,6 +41,9 @@ class CircleRepository @Inject constructor(
     private val authManager: AuthManager,
     @ApplicationContext private val context: Context
 ) {
+    /** User facing text in the language chosen in Settings. */
+    private fun text(id: Int): String = LocaleManager.localized(context).getString(id)
+
     /**
      * The API stores each member's name inside the circle when they create or
      * join it. Accounts that had no name at that moment come back blank, which
@@ -46,7 +56,7 @@ class CircleRepository @Inject constructor(
         if (uid == authManager.currentUid) {
             myName()?.let { return it }
         }
-        return context.getString(R.string.member_name_fallback)
+        return text(R.string.member_name_fallback)
     }
 
     /** The signed in user's best available name, or null when Firebase has neither name nor email. */
@@ -66,7 +76,7 @@ class CircleRepository @Inject constructor(
         Log.w(TAG, "Circle refresh failed, serving cache", e)
         val cached = circleDao.getAll().map { it.toDomain() }
         if (cached.isNotEmpty()) Resource.Success(cached, fromCache = true)
-        else Resource.Error("Could not load circles.", e)
+        else Resource.Error(text(R.string.error_load_circles), e)
     }
 
     suspend fun createCircle(name: String, description: String?): Resource<Circle> = try {
@@ -75,7 +85,7 @@ class CircleRepository @Inject constructor(
         Resource.Success(dto.toDomain())
     } catch (e: Exception) {
         Log.e(TAG, "Create circle failed", e)
-        Resource.Error("Could not create the circle. You may be offline.", e)
+        Resource.Error(text(R.string.error_create_circle), e)
     }
 
     suspend fun joinCircle(code: String): Resource<Circle> = try {
@@ -84,7 +94,7 @@ class CircleRepository @Inject constructor(
         Resource.Success(dto.toDomain())
     } catch (e: Exception) {
         Log.e(TAG, "Join circle failed", e)
-        Resource.Error("Could not join. Check the code and your connection.", e)
+        Resource.Error(text(R.string.error_join_circle), e)
     }
 
     suspend fun getCircleDetail(id: String): Resource<CircleDetail> = try {
@@ -92,22 +102,36 @@ class CircleRepository @Inject constructor(
         repairMyStoredName(dto.members.firstOrNull { it.uid == authManager.currentUid }?.displayName)
         Resource.Success(dto.toDomain(::nameFor))
     } catch (e: Exception) {
-        Resource.Error("Could not load circle details.", e)
+        Resource.Error(text(R.string.error_load_circle), e)
     }
 
     suspend fun setSharing(circleId: String, enabled: Boolean): Resource<Unit> = try {
         api.setCircleSharing(circleId, SharingRequest(enabled))
+        Log.i(TAG, "Location sharing for circle $circleId set to $enabled")
         Resource.Success(Unit)
     } catch (e: Exception) {
-        Resource.Error("Could not update sharing.", e)
+        Log.e(TAG, "Could not change sharing for circle $circleId", e)
+        Resource.Error(text(R.string.error_update_sharing), e)
     }
 
     /**
-     * Leaves a circle (or, called by an owner, removes their own membership —
-     * there is no separate "delete circle" endpoint). The local cache is
-     * cleared immediately on success so the circle disappears from the list
-     * without waiting on a follow-up [refreshCircles] round-trip.
+     * Whether the signed in user shares their location with each of [circleIds]
+     * (the per circle switches in Settings, FR-15). The circle list does not carry
+     * this, so each circle's member list is read in parallel. A circle that cannot
+     * be read is left out, and the screen then shows sharing as on, the default.
      */
+    suspend fun mySharingStates(circleIds: List<String>): Map<String, Boolean> = coroutineScope {
+        val me = authManager.currentUid
+        circleIds.map { id ->
+            async {
+                runCatching { api.getCircle(id).members.firstOrNull { it.uid == me }?.sharingEnabled }
+                    .onFailure { Log.w(TAG, "Could not read sharing for circle $id", it) }
+                    .getOrNull()
+                    ?.let { id to it }
+            }
+        }.awaitAll().filterNotNull().toMap()
+    }
+
     /**
      * Leaves a circle (or, for the owner, removes another member). Retrofit does
      * not throw for HTTP errors when the call returns Response, so the status is
@@ -120,8 +144,8 @@ class CircleRepository @Inject constructor(
             val res = api.removeMember(circleId, memberUid)
             if (!res.isSuccessful) {
                 Log.w(TAG, "Leave/remove refused for circle $circleId: HTTP ${res.code()}")
-                val message = if (res.code() == 400) "As the owner you can't leave this circle. Delete it from the Circles screen instead."
-                else "Could not leave this circle. Please try again."
+                val message = if (res.code() == 400) text(R.string.error_owner_cannot_leave)
+                else text(R.string.error_leave_circle)
                 return Resource.Error(message)
             }
             circleDao.deleteById(circleId)
@@ -130,7 +154,7 @@ class CircleRepository @Inject constructor(
             Resource.Success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Leave/remove failed for circle $circleId", e)
-            Resource.Error("Could not leave this circle. Check your connection and try again.", e)
+            Resource.Error(text(R.string.error_leave_circle), e)
         }
     }
 
@@ -140,7 +164,7 @@ class CircleRepository @Inject constructor(
             val res = api.deleteCircle(circleId)
             if (!res.isSuccessful) {
                 Log.w(TAG, "Delete refused for circle $circleId: HTTP ${res.code()}")
-                return Resource.Error("Could not delete this circle. Please try again.")
+                return Resource.Error(text(R.string.error_delete_circle))
             }
             circleDao.deleteById(circleId)
             locationDao.clearCircle(circleId)
@@ -148,7 +172,7 @@ class CircleRepository @Inject constructor(
             Resource.Success(Unit)
         } catch (e: Exception) {
             Log.e(TAG, "Delete failed for circle $circleId", e)
-            Resource.Error("Could not delete this circle. Check your connection and try again.", e)
+            Resource.Error(text(R.string.error_delete_circle), e)
         }
     }
 
@@ -181,7 +205,7 @@ class CircleRepository @Inject constructor(
         Resource.Success(remote.map { it.toDomain(::nameFor) })
     } catch (e: Exception) {
         Log.w(TAG, "Location refresh failed, serving cache", e)
-        Resource.Error("Showing last known locations.", e)
+        Resource.Error(text(R.string.map_status_offline), e)
     }
 
     private companion object {
