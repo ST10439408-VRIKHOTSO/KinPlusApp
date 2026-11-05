@@ -202,7 +202,7 @@ Photos for community reports are chosen with the Android photo picker, which nee
 
 ## 11. Demonstration video
 
-**Video walkthrough on YouTube:** https://youtu.be/xNa7XxI52-g
+**Video walkthrough on YouTube:** https://youtu.be/oOAyhTO3VkU
 
 A copy of the video is also in this repository: [KinPlus Demo Part 3](docs/video/KinPlus%20Demo%20Part%203.mp4).
 
