@@ -57,7 +57,7 @@ class CreateJoinCircleFragment : Fragment() {
             binding.errorText.setTextOrGone(
                 when (state.error) {
                     null -> null
-                    "NAME" -> getString(R.string.error_name_required)
+                    "NAME" -> getString(R.string.error_circle_name_required)
                     "CODE" -> getString(R.string.enter_join_code)
                     else -> state.error
                 }

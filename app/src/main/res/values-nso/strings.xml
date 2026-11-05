@@ -229,7 +229,7 @@
     <string name="register_subtitle">Beakanya akhaonto ya gago ya Kin+ ka metsotso e se mekae fela.</string>
     <string name="view_privacy_policy">Bona Pholisi ya Sephiri (POPIA)</string>
     <string name="privacy_policy_title">Pholisi ya Sephiri ya Kin+</string>
-    <string name="privacy_policy_body">Seo re se kgoboketšago: leina la gago, imeile, nomoro ya mogala, lefelo la gago ge go abelana go butšwe, le dintlha dife goba dife tša Polokego, Lefelo le Bolokegilego goba Leeto tšeo o kgethago go di beakanya.\n\nKa lebaka la eng: go dira gore dikarolo tšeo o di šomišago di šome, go swana le go abelana ka lefelo la gago le Disekele tša gago, go romela SOS e na le lefelo la gago, ditemošo tša go tsena le go tšwa Lefelong le Bolokegilego, le bahlokomedi ba Leeto le Bolokegilego.\n\nBao ba e bonago: ke maloko a Disekele tšeo o di kgokelago fela bao ba ka bonago lefelo la gago. Ga re rekiše tshedimošo ya gago go batho ba bangwe.\n\nTshedimošo ya gago ya Tšhoganetšo (dintlha tša maphelo, koloi, diaterese, dikhoutu tša tšhireletšo ya gae) le seswantšho sefe goba sefe seo o se tsenyago di bolokwa mo mogaleng wo fela. Ga di romelwe go diseba tša rena.\n\nDitokelo tša gago ka fase ga POPIA: o ka bona, wa lokiša goba wa phumola tshedimošo ya gago nako efe goba efe. O ka emiša go abelana ka lefelo gateetee go Dipeakanyo tša Lefelo, gomme wa phumola akhaonto ya gago le data ya yona go Profaele.\n\nPolokego: data ka moka yeo e romelwago go diseba tša rena e a notlelwa. Diphasewete di šireletšwa ke Firebase Authentication, Kin+ ga e boloke ebile ga e bone phasewete ya gago.</string>
+    <string name="privacy_policy_body">Seo re se kgoboketšago: leina la gago, imeile, nomoro ya mogala, lefelo la gago ge go abelana go butšwe, le dintlha dife goba dife tša Polokego, Lefelo le Bolokegilego goba Leeto tšeo o kgethago go di beakanya.\n\nKa lebaka la eng: go dira gore dikarolo tšeo o di šomišago di šome, go swana le go abelana ka lefelo la gago le Disekele tša gago, go romela SOS e na le lefelo la gago, ditemošo tša go tsena le go tšwa Lefelong le Bolokegilego, le bahlokomedi ba Leeto le Bolokegilego.\n\nBao ba e bonago: ke maloko a Disekele tšeo o di kgokelago fela bao ba ka bonago lefelo la gago. Ga re rekiše tshedimošo ya gago go batho ba bangwe.\n\nTshedimošo ya gago ya Tšhoganetšo (dintlha tša maphelo, koloi, diaterese, dikhoutu tša tšhireletšo ya gae) le seswantšho sefe goba sefe seo o se tsenyago di bolokwa mo mogaleng wo fela. Ga di romelwe go diseba tša rena. Seswantšho seo o kgethago go se kgomaretša pegong ya setšhaba se romelwa polokelong ya Kin+ ya inthaneteng (Microsoft Azure) gomme se bontšhwa le pego ge e šetše e dumeletšwe. Leina la mmegi ga le bontšhwe le ka mohla.\n\nDitokelo tša gago ka fase ga POPIA: o ka bona, wa lokiša goba wa phumola tshedimošo ya gago nako efe goba efe. O ka emiša go abelana ka lefelo gateetee go Dipeakanyo tša Lefelo, gomme wa phumola akhaonto ya gago le data ya yona go Profaele.\n\nPolokego: data ka moka yeo e romelwago go diseba tša rena e a notlelwa. Diphasewete di šireletšwa ke Firebase Authentication, Kin+ ga e boloke ebile ga e bone phasewete ya gago.</string>
     <string name="change_photo">Fetola seswantšho</string>
     <string name="error_invalid_phone">Hle tsenya nomoro ya mogala ye e nepagetšego.</string>
     <string name="map_mode_explore">Hlahloba</string>
@@ -431,4 +431,34 @@
     <string name="vault_blood">Madi: %1$s</string>
     <string name="vault_allergies">Ditlhohlo: %1$s</string>
     <string name="vault_plate">Poleiti: %1$s</string>
+
+    <!-- Final PoE: sign in errors, circle errors, settings, units and community report photos -->
+    <string name="error_email_required">Hle tsenya aterese ya gago ya imeile.</string>
+    <string name="error_password_required">Hle tsenya phasewete ya gago.</string>
+    <string name="error_wrong_credentials">Imeile goba phasewete ga e nepagale.</string>
+    <string name="error_email_in_use">Akhaonto ya imeile ye e šetše e le gona. Tsena ka yona.</string>
+    <string name="error_network">Ga go na kgokagano ya inthanete. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_too_many_attempts">Maiteko a mantši kudu. Ema metsotso e se mekae o leke gape.</string>
+    <string name="error_profile_save">Re paletšwe ke go boloka profaele ya gago. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_circle_name_required">Hle tsenya leina la sekele.</string>
+    <string name="error_zone_name_required">Hle tsenya leina la Lefelo le Bolokegilego.</string>
+    <string name="error_load_circles">Re paletšwe ke go laiša disekele tša gago.</string>
+    <string name="error_create_circle">Re paletšwe ke go hlama sekele. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_join_circle">Re paletšwe ke go kgokela. Hlahloba khoutu le kgokagano ya gago.</string>
+    <string name="error_load_circle">Re paletšwe ke go laiša dintlha tša sekele.</string>
+    <string name="error_update_sharing">Re paletšwe ke go fetola go abelana mo sekeleng ye. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_owner_cannot_leave">Bjalo ka mong wa sekele ga o kgone go tlogela sekele ye. E phumole go sekirini sa Disekele go e na le moo.</string>
+    <string name="error_leave_circle">Re paletšwe ke go tlogela sekele ye. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_delete_circle">Re paletšwe ke go phumola sekele ye. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="error_notifications_update">Re paletšwe ke go fetola ditsebišo. Hlahloba kgokagano ya gago o leke gape.</string>
+    <string name="mi_away">%1$.1f mi go ya</string>
+    <string name="alerts_distance_mi">Ka gare ga %1$d mi</string>
+    <string name="radius_feet">%1$d ft</string>
+    <string name="report_queued_offline">Ga o kgokagane. Pego ya gago e tla romelwa ge o boela inthaneteng.</string>
+    <string name="report_photo_optional">Seswantšho (ka boithaopo)</string>
+    <string name="add_photo">Tsenya seswantšho</string>
+    <string name="remove_photo">Tloša seswantšho</string>
+    <string name="report_photo_description">Seswantšho sa tiragalo ye e begilwego</string>
+    <string name="report_photo_failed">Seswantšho se paletšwe ke go romelwa, ka gona pego e rometšwe ntle le sona.</string>
+    <string name="report_photo_loading">Go laiša seswantšho…</string>
 </resources>

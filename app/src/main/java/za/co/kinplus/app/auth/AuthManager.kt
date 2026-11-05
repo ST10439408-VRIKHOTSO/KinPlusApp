@@ -9,7 +9,13 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
@@ -22,19 +28,22 @@ import javax.inject.Singleton
 /**
  * Wraps Firebase Authentication (FR-01 to FR-06).
  *
- * Password handling: the app never stores or transmits the password itself.
- * Firebase Authentication hashes and salts credentials on Google's servers
- * (scrypt), and all traffic is TLS. This is what satisfies the PoE requirement
- * to "encrypt the password" (FR-03).
+ * Password handling: the password is sent only to Firebase Authentication,
+ * over TLS. It is never stored on the phone, written to the logs or sent to
+ * the Kin+ API. Firebase stores only a salted scrypt hash of it on Google's
+ * servers. This is what satisfies the PoE requirement to "encrypt the
+ * password" (FR-03).
  *
  * Single sign on (FR-05, PoE): "Continue with Google" uses the Android
  * Credential Manager to get a Google ID token, which is exchanged for a
  * Firebase credential, so a Google account signs in to the same Firebase
  * project as email and password users.
  *
- * Reference: Android Developers (2024) Authenticate users with Sign in with
- * Google. Available at: https://developer.android.com/identity/sign-in/credential-manager-siwg
- * [Accessed 14 October 2026].
+ * References:
+ * Android Developers (2026) About Sign in with Google. Available at:
+ * https://developer.android.com/identity/sign-in/credential-manager-siwg [Accessed 5 November 2026].
+ * Firebase (2026) Authenticate with Firebase using Password-Based Accounts on Android.
+ * Available at: https://firebase.google.com/docs/auth/android/password-auth [Accessed 5 November 2026].
  */
 @Singleton
 class AuthManager @Inject constructor(
@@ -77,7 +86,10 @@ class AuthManager @Inject constructor(
         firebaseAuth.sendPasswordResetEmail(email.trim()).await()
         Resource.Success(Unit)
     } catch (e: Exception) {
-        Resource.Error(mapError(e), e)
+        Log.e(TAG, "Password reset email failed", e)
+        // A reset never says whether an account exists, so only connection problems are named.
+        val code = mapError(e).takeIf { it == NETWORK || it == TOO_MANY_ATTEMPTS } ?: AUTH_FAILED
+        Resource.Error(code, e)
     }
 
     // ----- Google single sign on -----
@@ -143,6 +155,21 @@ class AuthManager @Inject constructor(
         Log.i(TAG, "User signed out")
     }
 
+    /**
+     * Deletes the Firebase Authentication account itself (POPIA account deletion,
+     * FR-08), after the API has removed the Kin+ profile and location history.
+     * Firebase may ask for a recent sign in first; the profile data is already
+     * gone by then, so the result is only logged and returned.
+     */
+    suspend fun deleteFirebaseUser(): Boolean = try {
+        firebaseAuth.currentUser?.delete()?.await()
+        Log.i(TAG, "Firebase account deleted")
+        true
+    } catch (e: Exception) {
+        Log.w(TAG, "Firebase account could not be deleted (it may need a recent sign in)", e)
+        false
+    }
+
     /** Updates the display name on the Firebase user record (Profile > Edit Profile). */
     suspend fun updateDisplayName(name: String): Resource<Unit> = try {
         firebaseAuth.currentUser?.updateProfile(
@@ -151,7 +178,7 @@ class AuthManager @Inject constructor(
         Resource.Success(Unit)
     } catch (e: Exception) {
         Log.e(TAG, "Display name update failed", e)
-        Resource.Error("Could not update your name.", e)
+        Resource.Error(mapError(e), e)
     }
 
     // ----- validation helpers -----
@@ -163,8 +190,6 @@ class AuthManager @Inject constructor(
         return null
     }
 
-    private fun mapError(e: Exception): String = e.message ?: "AUTH_FAILED"
-
     companion object {
         private const val TAG = "AuthManager"
 
@@ -173,6 +198,33 @@ class AuthManager @Inject constructor(
         const val GOOGLE_CANCELLED = "GOOGLE_CANCELLED"
         const val GOOGLE_NO_ACCOUNT = "GOOGLE_NO_ACCOUNT"
         const val GOOGLE_FAILED = "GOOGLE_FAILED"
+
+        // Firebase failure codes. Firebase's own messages are English only, so the
+        // UI shows its own translated text for each code (see AuthMessages.kt).
+        const val WEAK_PASSWORD = "WEAK_PASSWORD"
+        const val EMAIL_IN_USE = "EMAIL_IN_USE"
+        const val WRONG_CREDENTIALS = "WRONG_CREDENTIALS"
+        const val NETWORK = "NETWORK"
+        const val TOO_MANY_ATTEMPTS = "TOO_MANY_ATTEMPTS"
+        const val AUTH_FAILED = "AUTH_FAILED"
+
+        /**
+         * Turns a Firebase Authentication exception into one of the codes above.
+         * The weak password check comes first because that exception is a kind of
+         * invalid credentials exception.
+         *
+         * Reference: Firebase (2026) FirebaseAuthException. Available at:
+         * https://firebase.google.com/docs/reference/android/com/google/firebase/auth/FirebaseAuthException
+         * [Accessed 5 November 2026].
+         */
+        fun mapError(e: Exception): String = when (e) {
+            is FirebaseAuthWeakPasswordException -> WEAK_PASSWORD
+            is FirebaseAuthUserCollisionException -> EMAIL_IN_USE
+            is FirebaseAuthInvalidUserException, is FirebaseAuthInvalidCredentialsException -> WRONG_CREDENTIALS
+            is FirebaseNetworkException -> NETWORK
+            is FirebaseTooManyRequestsException -> TOO_MANY_ATTEMPTS
+            else -> AUTH_FAILED
+        }
 
         /** FR-02: a syntactically valid email. */
         fun isValidEmail(email: String): Boolean =

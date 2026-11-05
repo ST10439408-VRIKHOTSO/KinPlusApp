@@ -1,5 +1,6 @@
 package za.co.kinplus.app.ui.screens.circles
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,22 +24,34 @@ class CreateJoinViewModel @Inject constructor(
 
     fun create(name: String, description: String, onDone: () -> Unit) {
         if (name.isBlank()) { _state.update { it.copy(error = "NAME") }; return }
-        run(onDone) { circleRepository.createCircle(name.trim(), description.ifBlank { null }) }
+        run("Create circle", onDone) { circleRepository.createCircle(name.trim(), description.ifBlank { null }) }
     }
 
     fun join(code: String, onDone: () -> Unit) {
+        // Join codes are six characters (KinDomain.IsValidJoinCode on the API).
         if (code.trim().length != 6) { _state.update { it.copy(error = "CODE") }; return }
-        run(onDone) { circleRepository.joinCircle(code) }
+        run("Join circle", onDone) { circleRepository.joinCircle(code) }
     }
 
-    private fun run(onDone: () -> Unit, block: suspend () -> Resource<*>) {
+    private fun run(action: String, onDone: () -> Unit, block: suspend () -> Resource<*>) {
         _state.update { it.copy(loading = true, error = null) }
         viewModelScope.launch {
             when (val res = block()) {
-                is Resource.Success -> { _state.update { it.copy(loading = false) }; onDone() }
-                is Resource.Error -> _state.update { it.copy(loading = false, error = res.message) }
+                is Resource.Success -> {
+                    Log.i(TAG, "$action succeeded")
+                    _state.update { it.copy(loading = false) }
+                    onDone()
+                }
+                is Resource.Error -> {
+                    Log.w(TAG, "$action failed: ${res.message}")
+                    _state.update { it.copy(loading = false, error = res.message) }
+                }
                 Resource.Loading -> Unit
             }
         }
+    }
+
+    private companion object {
+        const val TAG = "CreateJoinViewModel"
     }
 }

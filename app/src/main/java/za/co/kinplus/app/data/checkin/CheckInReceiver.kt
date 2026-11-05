@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import za.co.kinplus.app.R
+import za.co.kinplus.app.util.LocaleManager
 
 /** Handles the "I'm OK" button on the check in notification. */
 class CheckInReceiver : BroadcastReceiver() {
@@ -14,7 +15,7 @@ class CheckInReceiver : BroadcastReceiver() {
         if (intent.action != ACTION_IM_OK) return
         Log.i(TAG, "I'm OK tapped from notification")
         CheckInScheduler.confirmOk(context)
-        Toast.makeText(context, R.string.checkin_confirmed, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, LocaleManager.localized(context).getString(R.string.checkin_confirmed), Toast.LENGTH_SHORT).show()
     }
 
     companion object {

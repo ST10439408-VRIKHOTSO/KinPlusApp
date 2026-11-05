@@ -1,18 +1,18 @@
 package za.co.kinplus.app.ui.screens.auth
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.repository.UserRepository
+import za.co.kinplus.app.messaging.PushRegistration
 import za.co.kinplus.app.util.LocaleManager
 import za.co.kinplus.app.util.Resource
 import javax.inject.Inject
@@ -33,7 +33,7 @@ data class RegisterUiState(
 class RegisterViewModel @Inject constructor(
     private val authManager: AuthManager,
     private val userRepository: UserRepository,
-    private val messaging: FirebaseMessaging
+    private val pushRegistration: PushRegistration
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(RegisterUiState())
@@ -61,6 +61,7 @@ class RegisterViewModel @Inject constructor(
             else -> null
         }
         if (validationError != null) {
+            Log.d(TAG, "Registration blocked by validation: $validationError")
             _state.update { it.copy(error = validationError) }
             return
         }
@@ -69,7 +70,9 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = authManager.register(displayName, s.email, s.password)) {
                 is Resource.Success -> {
-                    val token = runCatching { messaging.token.await() }.getOrNull()
+                    // The new profile is created in MongoDB through the API; no token while notifications are off.
+                    val token = pushRegistration.tokenIfEnabled()
+                    Log.i(TAG, "Account created; creating the Kin+ profile through the API")
                     userRepository.syncProfile(
                         displayName = displayName,
                         phone = s.phone.trim(),
@@ -83,5 +86,9 @@ class RegisterViewModel @Inject constructor(
                 Resource.Loading -> Unit
             }
         }
+    }
+
+    private companion object {
+        const val TAG = "RegisterViewModel"
     }
 }

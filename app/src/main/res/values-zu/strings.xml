@@ -229,7 +229,7 @@
     <string name="register_subtitle">Setha i-akhawunti yakho ye-Kin+ emizuzwini embalwa nje.</string>
     <string name="view_privacy_policy">Buka Inqubomgomo Yobumfihlo (POPIA)</string>
     <string name="privacy_policy_title">Inqubomgomo Yobumfihlo ye-Kin+</string>
-    <string name="privacy_policy_body">Esikuqoqayo: igama lakho, i-imeyili, inombolo yocingo, indawo yakho ngenkathi ukwabelana kuvuliwe, kanye nemininingwane yoPhepho, yeNdawo Ephephile noma yoHambo ozikhethela ukuyisetha.\n\nKungani: ukwenza izici ozisebenzisayo zisebenze, njengokwabelana ngendawo yakho neZiyingi zakho, ukuthumela i-SOS enendawo yakho, izexwayiso zokungena nokuphuma eNdaweni Ephephile, nababheki boHambo Oluphephile.\n\nObona lokhu: amalungu eZiyingi ozijoyinayo kuphela angabona indawo yakho owabelana ngayo. Asisoze sathengisa imininingwane yakho kwabanye.\n\nUlwazi lwakho Lwezimo Eziphuthumayo (imininingwane yezempilo, imoto, amakheli, amakhodi okuphepha ekhaya) nanoma yisiphi isithombe osengezayo kugcinwa kule foni kuphela. Akuthunyelwa nanini kumaseva ethu.\n\nAmalungelo akho ngaphansi kwe-POPIA: ungabona, ulungise noma ususe imininingwane yakho noma nini. Ungamisa ukwabelana ngendawo ngokushesha kuZilungiselelo Zendawo, futhi ususe unomphela i-akhawunti yakho nedatha yayo kuPhrofayela.\n\nUkuphepha: yonke idatha ethunyelwa kumaseva ethu iyabethelwa. Amaphasiwedi avikelwa yi-Firebase Authentication, i-Kin+ ayiyigcini futhi ayiyiboni iphasiwedi yakho.</string>
+    <string name="privacy_policy_body">Esikuqoqayo: igama lakho, i-imeyili, inombolo yocingo, indawo yakho ngenkathi ukwabelana kuvuliwe, kanye nemininingwane yoPhepho, yeNdawo Ephephile noma yoHambo ozikhethela ukuyisetha.\n\nKungani: ukwenza izici ozisebenzisayo zisebenze, njengokwabelana ngendawo yakho neZiyingi zakho, ukuthumela i-SOS enendawo yakho, izexwayiso zokungena nokuphuma eNdaweni Ephephile, nababheki boHambo Oluphephile.\n\nObona lokhu: amalungu eZiyingi ozijoyinayo kuphela angabona indawo yakho owabelana ngayo. Asisoze sathengisa imininingwane yakho kwabanye.\n\nUlwazi lwakho Lwezimo Eziphuthumayo (imininingwane yezempilo, imoto, amakheli, amakhodi okuphepha ekhaya) nanoma yisiphi isithombe osengezayo kugcinwa kule foni kuphela. Akuthunyelwa nanini kumaseva ethu. Isithombe osikhethayo ukusinamathisela embikweni womphakathi silayishelwa endaweni yokugcina ye-Kin+ ku-inthanethi (Microsoft Azure) futhi siboniswa nombiko uma usuvunyiwe. Igama lombiki aliboniswa nanini.\n\nAmalungelo akho ngaphansi kwe-POPIA: ungabona, ulungise noma ususe imininingwane yakho noma nini. Ungamisa ukwabelana ngendawo ngokushesha kuZilungiselelo Zendawo, futhi ususe unomphela i-akhawunti yakho nedatha yayo kuPhrofayela.\n\nUkuphepha: yonke idatha ethunyelwa kumaseva ethu iyabethelwa. Amaphasiwedi avikelwa yi-Firebase Authentication, i-Kin+ ayiyigcini futhi ayiyiboni iphasiwedi yakho.</string>
     <string name="change_photo">Shintsha isithombe</string>
     <string name="error_invalid_phone">Sicela ufake inombolo yeselula efanele.</string>
     <string name="map_mode_explore">Hlola</string>
@@ -431,4 +431,34 @@
     <string name="vault_blood">Igazi: %1$s</string>
     <string name="vault_allergies">Ukungezwani komzimba: %1$s</string>
     <string name="vault_plate">Ipuleti: %1$s</string>
+
+    <!-- Final PoE: sign in errors, circle errors, settings, units and community report photos -->
+    <string name="error_email_required">Sicela ufake ikheli lakho le-imeyili.</string>
+    <string name="error_password_required">Sicela ufake iphasiwedi yakho.</string>
+    <string name="error_wrong_credentials">I-imeyili noma iphasiwedi ayilungile.</string>
+    <string name="error_email_in_use">Sekukhona i-akhawunti enale imeyili. Ngena ngayo kunalokho.</string>
+    <string name="error_network">Akukho ukuxhumana ne-inthanethi. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_too_many_attempts">Imizamo miningi kakhulu. Linda imizuzu embalwa bese uzama futhi.</string>
+    <string name="error_profile_save">Asikwazanga ukulondoloza iphrofayela yakho. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_circle_name_required">Sicela ufake igama lesiyingi.</string>
+    <string name="error_zone_name_required">Sicela ufake igama leNdawo Ephephile.</string>
+    <string name="error_load_circles">Asikwazanga ukulayisha iziyingi zakho.</string>
+    <string name="error_create_circle">Asikwazanga ukudala isiyingi. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_join_circle">Asikwazanga ukujoyina. Hlola ikhodi nokuxhumana kwakho.</string>
+    <string name="error_load_circle">Asikwazanga ukulayisha imininingwane yesiyingi.</string>
+    <string name="error_update_sharing">Asikwazanga ukushintsha ukwabelana kulesi siyingi. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_owner_cannot_leave">Njengomnikazi awukwazi ukuphuma kulesi siyingi. Sisuse esikrinini seZiyingi kunalokho.</string>
+    <string name="error_leave_circle">Asikwazanga ukuphuma kulesi siyingi. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_delete_circle">Asikwazanga ukususa lesi siyingi. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="error_notifications_update">Asikwazanga ukushintsha izaziso. Hlola ukuxhumana kwakho bese uzama futhi.</string>
+    <string name="mi_away">%1$.1f mi ukuya</string>
+    <string name="alerts_distance_mi">Ngaphakathi kwe %1$d mi</string>
+    <string name="radius_feet">%1$d ft</string>
+    <string name="report_queued_offline">Awuxhunyiwe. Umbiko wakho uzothunyelwa uma usuxhunyiwe futhi.</string>
+    <string name="report_photo_optional">Isithombe (okuzikhethela)</string>
+    <string name="add_photo">Engeza isithombe</string>
+    <string name="remove_photo">Susa isithombe</string>
+    <string name="report_photo_description">Isithombe sesigameko esibikiwe</string>
+    <string name="report_photo_failed">Isithombe asikwazanga ukulayishwa, ngakho umbiko uthunyelwe ngaphandle kwaso.</string>
+    <string name="report_photo_loading">Kulayishwa isithombe…</string>
 </resources>

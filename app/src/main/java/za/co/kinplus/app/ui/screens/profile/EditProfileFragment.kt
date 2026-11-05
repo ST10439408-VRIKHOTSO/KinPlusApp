@@ -19,6 +19,7 @@ import za.co.kinplus.app.ui.common.popBackSafely
 import za.co.kinplus.app.ui.common.setTextIfDifferent
 import za.co.kinplus.app.ui.common.setTextOrGone
 import za.co.kinplus.app.ui.common.setup
+import za.co.kinplus.app.ui.common.toast
 import za.co.kinplus.app.ui.screens.auth.mapAuthMessage
 
 /** Edit profile (screen 17). Name, phone number, profile photo and mailing list consent. */
@@ -79,7 +80,15 @@ class EditProfileFragment : Fragment() {
             else -> null
         }
         binding.errorText.setTextOrGone(error?.let { mapAuthMessage(requireContext(), it) })
-        if (error == null) viewModel.save { popBackSafely() }
+        if (error == null) {
+            viewModel.save(
+                onDone = {
+                    context?.toast(getString(R.string.profile_saved))
+                    popBackSafely()
+                },
+                onError = { _binding?.errorText?.setTextOrGone(getString(R.string.error_profile_save)) }
+            )
+        }
     }
 
     override fun onDestroyView() {

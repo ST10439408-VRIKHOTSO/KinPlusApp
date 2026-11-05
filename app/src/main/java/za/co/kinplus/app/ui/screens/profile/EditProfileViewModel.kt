@@ -1,6 +1,7 @@
 package za.co.kinplus.app.ui.screens.profile
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -75,11 +76,28 @@ class EditProfileViewModel @Inject constructor(
 
     fun pickPhoto(uri: Uri) = viewModelScope.launch { localPhotoRepository.setUserPhoto(uri) }
 
-    fun save(onDone: () -> Unit) = viewModelScope.launch {
+    /**
+     * Saves the name on Firebase and the name and phone number on the Kin+
+     * profile (MongoDB, through the API). [onDone] runs only when the profile
+     * was saved; otherwise [onError] gets an error code for the screen.
+     */
+    fun save(onDone: () -> Unit, onError: (String) -> Unit) = viewModelScope.launch {
         val e = edits.value
         val displayName = "${e.firstName.trim()} ${e.lastName.trim()}"
         authManager.updateDisplayName(displayName)
-        userRepository.updateProfile(displayName = displayName, phone = e.phone.trim())
-        onDone()
+        when (userRepository.updateProfile(displayName = displayName, phone = e.phone.trim())) {
+            is Resource.Success -> {
+                Log.i(TAG, "Profile saved")
+                onDone()
+            }
+            else -> {
+                Log.w(TAG, "Profile could not be saved")
+                onError("PROFILE_SAVE")
+            }
+        }
+    }
+
+    private companion object {
+        const val TAG = "EditProfileViewModel"
     }
 }

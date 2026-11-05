@@ -2,6 +2,7 @@ package za.co.kinplus.app.util
 
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import java.util.Locale
 
 /**
@@ -14,9 +15,18 @@ import java.util.Locale
  *   "en"  -> res/values           (English, default)
  *   "zu"  -> res/values-zu         (isiZulu)
  *   "nso" -> res/values-nso        (Sepedi)
+ *
+ * Only the Activity is wrapped in attachBaseContext, so text built outside it
+ * (repositories, background workers, notifications) uses [localized] to get a
+ * context in the same language instead of the phone's system language.
+ *
+ * Reference: Android Developers (2026) Support different languages and
+ * cultures. Available at: https://developer.android.com/training/basics/supporting-devices/languages
+ * [Accessed 5 November 2026].
  */
 object LocaleManager {
 
+    private const val TAG = "LocaleManager"
     private const val PREFS = "kinplus_locale"
     private const val KEY_LANG = "language_tag"
 
@@ -29,16 +39,24 @@ object LocaleManager {
     fun setLanguageTag(context: Context, tag: String) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .edit().putString(KEY_LANG, tag).apply()
+        Log.i(TAG, "App language changed to '$tag'")
     }
 
     /** Returns a context whose resources resolve to the saved language. */
     fun wrap(base: Context): Context {
         val tag = getLanguageTag(base)
-        val locale = Locale.forLanguageTag(tag)
-        Locale.setDefault(locale)
+        Locale.setDefault(Locale.forLanguageTag(tag))
+        return localized(base)
+    }
 
+    /**
+     * A context for [base] whose strings come from the saved in-app language,
+     * without changing the process default locale. Used wherever user facing
+     * text is built from the application context.
+     */
+    fun localized(base: Context): Context {
         val config = Configuration(base.resources.configuration)
-        config.setLocale(locale)
+        config.setLocale(Locale.forLanguageTag(getLanguageTag(base)))
         return base.createConfigurationContext(config)
     }
 }

@@ -45,7 +45,7 @@
     <string name="privacy_consent">I agree to the Privacy Policy (POPIA)</string>
     <string name="view_privacy_policy">View Privacy Policy (POPIA)</string>
     <string name="privacy_policy_title">Kin+ Privacy Policy</string>
-    <string name="privacy_policy_body">What we collect: your name, email, phone number, your location while sharing is switched on, and any Safety, Safe Zone or Journey details you choose to set up.\n\nWhy: to power the features you use: sharing your location with your Circles, sending an SOS with your location attached, Safe Zone entry/exit alerts and Safe Journey watchers.\n\nWho sees it: only the members of the Circles you join can see your shared location. We never sell your personal information to third parties.\n\nYour Emergency Information (medical details, vehicle, addresses, home security codes) and any profile or circle photo you add are stored only on this device and never sent to our servers.\n\nYour rights under POPIA: you can access, correct or delete your personal information at any time. You can pause location sharing instantly from Location Settings, and permanently delete your account and its data from Profile.\n\nSecurity: all data sent to our servers is encrypted in transit. Passwords are hashed and salted by Firebase Authentication. Kin+ never stores or sees your password.</string>
+    <string name="privacy_policy_body">What we collect: your name, email, phone number, your location while sharing is switched on, and any Safety, Safe Zone or Journey details you choose to set up.\n\nWhy: to power the features you use: sharing your location with your Circles, sending an SOS with your location attached, Safe Zone entry/exit alerts and Safe Journey watchers.\n\nWho sees it: only the members of the Circles you join can see your shared location. We never sell your personal information to third parties.\n\nYour Emergency Information (medical details, vehicle, addresses, home security codes) and any profile or circle photo you add are stored only on this device and never sent to our servers. A photo you choose to attach to a community report is uploaded to Kin+ cloud storage (Microsoft Azure) and shown with the report once it is approved. The name of the person who reported it is never shown.\n\nYour rights under POPIA: you can access, correct or delete your personal information at any time. You can pause location sharing instantly from Location Settings, and permanently delete your account and its data from Profile.\n\nSecurity: all data sent to our servers is encrypted in transit. Passwords are hashed and salted by Firebase Authentication. Kin+ never stores or sees your password.</string>
     <string name="checking_session">Checking your session…</string>
     <string name="password_hint">Min 8 chars, 1 letter, 1 number</string>
     <string name="reset_email_sent">Password reset email sent.</string>
@@ -463,4 +463,34 @@
     <string name="vault_blood">Blood: %1$s</string>
     <string name="vault_allergies">Allergies: %1$s</string>
     <string name="vault_plate">Plate: %1$s</string>
+
+    <!-- Final PoE: sign in errors, circle errors, settings, units and community report photos -->
+    <string name="error_email_required">Please enter your email address.</string>
+    <string name="error_password_required">Please enter your password.</string>
+    <string name="error_wrong_credentials">Incorrect email or password.</string>
+    <string name="error_email_in_use">An account with this email already exists. Log in instead.</string>
+    <string name="error_network">No internet connection. Check your connection and try again.</string>
+    <string name="error_too_many_attempts">Too many attempts. Wait a few minutes and try again.</string>
+    <string name="error_profile_save">Could not save your profile. Check your connection and try again.</string>
+    <string name="error_circle_name_required">Please enter a name for the circle.</string>
+    <string name="error_zone_name_required">Please enter a name for the Safe Zone.</string>
+    <string name="error_load_circles">Could not load your circles.</string>
+    <string name="error_create_circle">Could not create the circle. Check your connection and try again.</string>
+    <string name="error_join_circle">Could not join. Check the code and your connection.</string>
+    <string name="error_load_circle">Could not load the circle details.</string>
+    <string name="error_update_sharing">Could not update sharing for this circle. Check your connection and try again.</string>
+    <string name="error_owner_cannot_leave">As the owner you can\'t leave this circle. Delete it from the Circles screen instead.</string>
+    <string name="error_leave_circle">Could not leave this circle. Check your connection and try again.</string>
+    <string name="error_delete_circle">Could not delete this circle. Check your connection and try again.</string>
+    <string name="error_notifications_update">Could not update notifications. Check your connection and try again.</string>
+    <string name="mi_away">%1$.1f mi away</string>
+    <string name="alerts_distance_mi">Within %1$d mi</string>
+    <string name="radius_feet">%1$d ft</string>
+    <string name="report_queued_offline">You are offline. Your report will be sent when you reconnect.</string>
+    <string name="report_photo_optional">Photo (optional)</string>
+    <string name="add_photo">Add photo</string>
+    <string name="remove_photo">Remove photo</string>
+    <string name="report_photo_description">Photo of the reported incident</string>
+    <string name="report_photo_failed">The photo could not be uploaded, so the report was sent without it.</string>
+    <string name="report_photo_loading">Loading photo…</string>
 </resources>

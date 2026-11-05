@@ -18,6 +18,7 @@ import za.co.kinplus.app.R
 import za.co.kinplus.app.data.repository.CircleRepository
 import za.co.kinplus.app.data.repository.SosRepository
 import za.co.kinplus.app.location.LocationProvider
+import za.co.kinplus.app.util.LocaleManager
 
 /**
  * Fires when the check in interval runs out. Shows a high priority "Are you OK?"
@@ -31,6 +32,8 @@ class CheckInPromptWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         val context = applicationContext
+        // Notification text follows the in-app language, not only the phone's language (FR-31).
+        val text = LocaleManager.localized(context)
         Log.i(TAG, "Check in due, prompting user")
 
         val okIntent = Intent(context, CheckInReceiver::class.java).setAction(CheckInReceiver.ACTION_IM_OK)
@@ -42,18 +45,18 @@ class CheckInPromptWorker @AssistedInject constructor(
             Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val body = context.getString(R.string.checkin_notif_body, CheckInScheduler.GRACE_MINUTES.toInt())
+        val body = text.getString(R.string.checkin_notif_body, CheckInScheduler.GRACE_MINUTES.toInt())
 
         val notification = NotificationCompat.Builder(context, KinPlusApplication.SAFETY_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(context.getString(R.string.checkin_notif_title))
+            .setContentTitle(text.getString(R.string.checkin_notif_title))
             .setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setOngoing(true)
             .setContentIntent(openPending)
-            .addAction(0, context.getString(R.string.checkin_im_ok), okPending)
+            .addAction(0, text.getString(R.string.checkin_im_ok), okPending)
             .build()
 
         try {
@@ -87,6 +90,8 @@ class CheckInEscalateWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         val context = applicationContext
+        // Notification text follows the in-app language, not only the phone's language (FR-31).
+        val text = LocaleManager.localized(context)
         if (CheckInScheduler.dueAt(context) == null) {
             Log.i(TAG, "Check in was stopped before escalation, nothing to do")
             return Result.success()
@@ -99,16 +104,16 @@ class CheckInEscalateWorker @AssistedInject constructor(
         sosRepository.raiseSos(
             lat = fix?.lat,
             lng = fix?.lng,
-            message = context.getString(R.string.checkin_sos_message),
+            message = text.getString(R.string.checkin_sos_message),
             circleIds = circleIds
         )
         CheckInScheduler.clear(context)
 
         val notification = NotificationCompat.Builder(context, KinPlusApplication.SAFETY_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(context.getString(R.string.checkin_escalated_title))
-            .setContentText(context.getString(R.string.checkin_escalated_body))
-            .setStyle(NotificationCompat.BigTextStyle().bigText(context.getString(R.string.checkin_escalated_body)))
+            .setContentTitle(text.getString(R.string.checkin_escalated_title))
+            .setContentText(text.getString(R.string.checkin_escalated_body))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text.getString(R.string.checkin_escalated_body)))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .build()
