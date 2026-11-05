@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KinPlus"
         android:enableOnBackInvokedCallback="true"
-        tools:targetApi="34">
+        tools:targetApi="36">
 
         <activity
             android:name=".MainActivity"

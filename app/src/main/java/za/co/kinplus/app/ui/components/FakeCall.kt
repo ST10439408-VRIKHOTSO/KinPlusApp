@@ -11,6 +11,7 @@ import android.os.VibratorManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
 import za.co.kinplus.app.databinding.DialogFakeCallSetupBinding
 import za.co.kinplus.app.databinding.ViewFakeCallBinding
+import za.co.kinplus.app.ui.common.padForSystemBars
 
 /*
  * Fake incoming call (Batch 1 enhancement to Emergency SOS, FR-17).
@@ -32,9 +34,8 @@ import za.co.kinplus.app.databinding.ViewFakeCallBinding
  * screen incoming call, and once answered shows a running call timer. Nothing
  * is ever dialled and no data leaves the device.
  *
- * Reference: Android Developers (2024) RingtoneManager and VibrationEffect.
- * Available at: https://developer.android.com/reference/android/media/RingtoneManager
- * [Accessed 13 October 2026].
+ * Reference: Android Developers (2026) RingtoneManager. Available at:
+ * https://developer.android.com/reference/android/media/RingtoneManager [Accessed 5 November 2026].
  */
 
 private const val TAG = "FakeCall"
@@ -107,7 +108,14 @@ class FakeCallController(private val fragment: Fragment, private val onStateChan
                 dialog = Dialog(context, R.style.Theme_KinPlus_FakeCall).apply {
                     setContentView(view.root)
                     setCancelable(false)
-                    window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                    window?.let { w ->
+                        w.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                        // Full screen call drawn edge to edge on every Android version
+                        // (Android 15+ forces this), with the caller and buttons kept
+                        // clear of the status and navigation bars.
+                        WindowCompat.setDecorFitsSystemWindows(w, false)
+                    }
+                    view.root.padForSystemBars()
                     show()
                 }
                 Log.d(TAG, "Fake call ringing")

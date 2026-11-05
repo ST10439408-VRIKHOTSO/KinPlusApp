@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--
       Kin+ app theme, built on Material Components (Material 3) for XML views.
       Light mode only by design. Every screen inherits the brand colours, the
@@ -37,12 +37,16 @@
         <item name="colorOutline">@color/kin_outline</item>
         <item name="colorOutlineVariant">@color/kin_outline</item>
 
-        <!-- Window and system bars. -->
+        <!--
+          Window and system bars. MainActivity switches to edge to edge in
+          onCreate, after which the bars are transparent; these colours cover
+          the moment before that. Dark navigation icons need Android 8.1 (27).
+        -->
         <item name="android:windowBackground">@color/kin_page</item>
         <item name="android:statusBarColor">@color/kin_page</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:navigationBarColor">@color/kin_surface</item>
-        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
 
         <!-- Brand font everywhere. -->
         <item name="android:fontFamily">@font/plus_jakarta_sans</item>

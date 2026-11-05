@@ -20,14 +20,19 @@ val apiBaseUrl: String = (localProps.getProperty("KINPLUS_API_BASE_URL")
 
 android {
     namespace = "za.co.kinplus.app"
-    compileSdk = 34
+    // Google Play only accepts new apps and updates that target Android 16
+    // (API 36) since 31 August 2026, so the app compiles against and targets 36.
+    // Reference: Android Developers (2026) Meet Google Play's target API level
+    // requirement. Available at: https://developer.android.com/google/play/requirements/target-sdk
+    // [Accessed 5 November 2026].
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "za.co.kinplus.app"
         minSdk = 26          // NFR-06: Android 8.0 and above
-        targetSdk = 34
-        versionCode = 4      // Version 1.2: XML views, Google sign in and release build
-        versionName = "1.2-poe"
+        targetSdk = 36
+        versionCode = 5      // Version 1.3: final PoE build (target SDK 36, report photos, settings fixes)
+        versionName = "1.3-poe"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -40,7 +45,10 @@ android {
         manifestPlaceholders["MAPS_API_KEY"] = localProps.getProperty("KINPLUS_GOOGLE_MAPS_API_KEY") ?: ""
     }
 
-    // Release signing is read from keystore.properties when present (see PLAY_STORE.md).
+    // Release signing is read from keystore.properties when present (see Play Store.md).
+    // Neither that file nor the keystore is committed (.gitignore).
+    // Reference: Android Developers (2026) Sign your app. Available at:
+    // https://developer.android.com/studio/publish/app-signing [Accessed 5 November 2026].
     val keystoreProps = Properties().apply {
         val f = rootProject.file("keystore.properties")
         if (f.exists()) f.inputStream().use { load(it) }

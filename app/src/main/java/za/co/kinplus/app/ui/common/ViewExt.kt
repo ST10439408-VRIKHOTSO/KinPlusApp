@@ -7,6 +7,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -22,8 +24,9 @@ import kotlinx.coroutines.launch
  * visible (repeatOnLifecycle) is the recommended way to observe state from
  * Views.
  *
- * Reference: Android Developers (2024) A safer way to collect flows from
- * Android UIs. Available at: https://developer.android.com/topic/libraries/architecture/coroutines
+ * Reference: Android Developers (2026) Use Kotlin coroutines with lifecycle-aware
+ * components. Available at: https://developer.android.com/topic/libraries/architecture/coroutines
+ * [Accessed 5 November 2026].
  */
 
 /** Collects [flow] while the Fragment's view is at least STARTED, calling [block] with each value. */
@@ -74,6 +77,24 @@ fun TextView.setTextOrGone(text: CharSequence?) {
 }
 
 fun View.show(visible: Boolean) { isVisible = visible }
+
+/**
+ * Adds the system bar and display cutout insets to this view's own padding,
+ * for windows drawn edge to edge (every window on Android 15+ for apps that
+ * target API 35 or higher). Used by full screen windows outside MainActivity,
+ * such as the fake incoming call.
+ */
+fun View.padForSystemBars() {
+    val left = paddingLeft
+    val top = paddingTop
+    val right = paddingRight
+    val bottom = paddingBottom
+    ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+        val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
+        v.setPadding(left + bars.left, top + bars.top, right + bars.right, bottom + bars.bottom)
+        WindowInsetsCompat.CONSUMED
+    }
+}
 
 /**
  * A profile or circle avatar: the picked photo when [photoPath] is set, or
