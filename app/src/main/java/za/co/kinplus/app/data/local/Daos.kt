@@ -38,6 +38,9 @@ interface LocationDao {
     @Query("DELETE FROM member_locations WHERE circleId = :circleId")
     suspend fun clearCircle(circleId: String)
 
+    @Query("DELETE FROM member_locations")
+    suspend fun clearAll()
+
     @Transaction
     suspend fun replaceForCircle(circleId: String, items: List<MemberLocationEntity>) {
         clearCircle(circleId)
@@ -131,4 +134,7 @@ interface PendingActionDao {
 
     @Query("DELETE FROM pending_actions WHERE clientActionId = :id")
     suspend fun remove(id: String)
+
+    @Query("DELETE FROM pending_actions")
+    suspend fun clearAll()
 }

@@ -20,6 +20,7 @@ import za.co.kinplus.app.ui.common.collectWhileStarted
 import za.co.kinplus.app.ui.common.navigateSafely
 import za.co.kinplus.app.ui.common.popBackSafely
 import za.co.kinplus.app.ui.common.setup
+import za.co.kinplus.app.ui.common.toast
 
 /**
  * Profile (screen 16). Identity and account management: edit profile,
@@ -67,8 +68,8 @@ class ProfileFragment : Fragment() {
         )
 
         binding.signOutButton.setOnClickListener {
-            viewModel.signOut()
-            goToLogin()
+            binding.signOutButton.isEnabled = false
+            viewModel.signOut { goToLogin() }
         }
         binding.deleteAccountButton.setOnClickListener { confirmDeleteAccount() }
 
@@ -84,7 +85,12 @@ class ProfileFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.delete_account)
             .setMessage(R.string.delete_account_confirm)
-            .setPositiveButton(R.string.delete_account) { _, _ -> viewModel.deleteAccount { goToLogin() } }
+            .setPositiveButton(R.string.delete_account) { _, _ ->
+                viewModel.deleteAccount(
+                    onDone = { goToLogin() },
+                    onError = { context?.toast(getString(R.string.error_network), long = true) }
+                )
+            }
             .setNegativeButton(R.string.cancel, null)
             .show()
     }
