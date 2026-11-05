@@ -11,13 +11,12 @@ import kotlin.math.sqrt
  * narrow the list to a radius. Distance is worked out on the device with the
  * haversine formula, so no extra API call is needed.
  *
- * Reference: Veness, C. (2022) Calculate distance between two latitude
- * longitude points. Available at: https://www.movable-type.co.uk/scripts/latlong.html
- * [Accessed 13 October 2026].
+ * Reference: Veness, C. (2022) Calculate distance and bearing between two
+ * Latitude/Longitude points using haversine formula in JavaScript. Available at:
+ * https://www.movable-type.co.uk/scripts/latlong.html [Accessed 5 November 2026].
  */
 
-/** Radius choices for the distance filter in km; null means any distance. */
-internal val distanceFilters = listOf<Int?>(1, 5, 20, null)
+// The radius choices (km or miles, from Settings > Units) live in ui/common/DistanceFormat.kt.
 
 /** Great circle distance in kilometres between two points. */
 internal fun distanceKm(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {

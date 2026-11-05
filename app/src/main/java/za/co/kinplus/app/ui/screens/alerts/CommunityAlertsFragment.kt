@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -20,14 +23,20 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import za.co.kinplus.app.R
+import za.co.kinplus.app.data.repository.ReportOutcome
 import za.co.kinplus.app.databinding.FragmentCommunityAlertsBinding
 import za.co.kinplus.app.databinding.ItemAlertBinding
 import za.co.kinplus.app.databinding.SheetReportAlertBinding
+import za.co.kinplus.app.databinding.ViewReportPhotoBinding
 import za.co.kinplus.app.domain.CommunityAlert
+import za.co.kinplus.app.ui.common.DistanceFormat
 import za.co.kinplus.app.ui.common.collectWhileStarted
+import za.co.kinplus.app.ui.common.dp
 import za.co.kinplus.app.ui.common.setTextOrGone
 import za.co.kinplus.app.ui.common.setup
+import za.co.kinplus.app.ui.common.toast
 
 /** Category filter chips: null shows every category. */
 private val filterCategories = listOf(
@@ -70,7 +79,11 @@ private fun categoryLabel(context: android.content.Context, category: String): S
 /**
  * Community alerts (screen 15). Nearby reports from other Kin+ users, sorted
  * nearest first and filtered by category and distance (FR-25), with
- * confirmations ("I see it too") and a form to report a new incident (FR-26).
+ * confirmations ("I see it too") and a form to report a new incident with an
+ * optional photo (FR-26). Distances follow Settings > Units.
+ *
+ * Reference: Android Developers (2026) Photo picker. Available at:
+ * https://developer.android.com/training/data-storage/shared/photopicker [Accessed 5 November 2026].
  */
 @AndroidEntryPoint
 class CommunityAlertsFragment : Fragment() {
@@ -80,9 +93,19 @@ class CommunityAlertsFragment : Fragment() {
     private val viewModel: CommunityAlertsViewModel by viewModels()
 
     private var categoryFilter: String? = null
-    private var maxKm: Int? = null
+    /** Distance filter in the chosen unit (km or miles); null means any distance. */
+    private var maxDistance: Int? = null
+    private var shownMetric: Boolean? = null
     private var latestState = AlertsUiState()
     private lateinit var adapter: AlertAdapter
+
+    private var reportSheet: BottomSheetDialog? = null
+    private var reportForm: SheetReportAlertBinding? = null
+
+    /** The system photo picker: no storage permission is needed to choose one image. */
+    private val pickReportPhoto = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) viewModel.onPhotoPicked(uri)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCommunityAlertsBinding.inflate(inflater, container, false)
@@ -92,8 +115,10 @@ class CommunityAlertsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.setup(title = getString(R.string.community_alerts))
+        shownMetric = null
 
         adapter = AlertAdapter(
+            distanceText = { km -> DistanceFormat.away(requireContext(), km, latestState.useMetric) },
             onConfirm = { alert -> viewModel.confirm(alert.id) },
             onDetails = { alert, km -> showDetails(alert, km) }
         )
@@ -104,23 +129,34 @@ class CommunityAlertsFragment : Fragment() {
             categoryFilter = it
             renderList()
         }
-        addChoiceChips(
-            binding.distanceChips,
-            distanceFilters.map { km ->
-                km to if (km == null) getString(R.string.alerts_distance_any) else getString(R.string.alerts_distance_km, km)
-            },
-            maxKm
-        ) {
-            maxKm = it
-            Log.d("CommunityAlerts", "Distance filter set to ${it ?: "any"} km")
-            renderList()
-        }
 
         binding.reportButton.setOnClickListener { showReportSheet() }
 
         collectWhileStarted(viewModel.state) { state ->
             latestState = state
             binding.loading.isVisible = state.loading && state.nearby.isEmpty()
+            if (state.useMetric != shownMetric) renderDistanceChips(state.useMetric)
+            renderList()
+            renderReportForm(state)
+        }
+        collectWhileStarted(viewModel.events) { event -> onEvent(event) }
+    }
+
+    /** Distance chips in km or miles. A choice from the other unit is cleared when the unit changes. */
+    private fun renderDistanceChips(metric: Boolean) {
+        val options = DistanceFormat.filterOptions(metric)
+        val unitChanged = shownMetric != null
+        if (unitChanged && maxDistance !in options) maxDistance = null
+        shownMetric = metric
+        // Rows already on screen show their distance in the old unit, so draw them again.
+        if (unitChanged) adapter.notifyItemRangeChanged(0, adapter.itemCount)
+        addChoiceChips(
+            binding.distanceChips,
+            options.map { value -> value to DistanceFormat.filterLabel(requireContext(), value, metric) },
+            maxDistance
+        ) {
+            maxDistance = it
+            Log.d(TAG, "Distance filter set to ${it ?: "any"} ${if (metric) "km" else "mi"}")
             renderList()
         }
     }
@@ -142,10 +178,11 @@ class CommunityAlertsFragment : Fragment() {
     private fun visibleAlerts(state: AlertsUiState): List<Pair<CommunityAlert, Double?>> {
         val lat = state.lat
         val lng = state.lng
+        val limitKm = maxDistance?.let { DistanceFormat.filterToKm(it, state.useMetric) }
         return state.nearby
             .map { alert -> alert to if (lat != null && lng != null) distanceKm(lat, lng, alert.lat, alert.lng) else null }
             .filter { (alert, _) -> categoryFilter == null || alert.category.equals(categoryFilter, ignoreCase = true) }
-            .filter { (_, km) -> maxKm == null || km == null || km <= maxKm!! }
+            .filter { (_, km) -> limitKm == null || km == null || km <= limitKm }
             .sortedBy { (_, km) -> km ?: Double.MAX_VALUE }
     }
 
@@ -156,20 +193,37 @@ class CommunityAlertsFragment : Fragment() {
         adapter.submitList(visible)
     }
 
-    /** Full details of one report, with a shortcut to see the spot in the maps app. */
+    private fun onEvent(event: AlertsEvent) {
+        val context = context ?: return
+        when (event) {
+            is AlertsEvent.Submitted -> {
+                reportSheet?.dismiss()
+                val message = when (event.outcome) {
+                    ReportOutcome.SENT -> R.string.report_submitted
+                    ReportOutcome.SENT_WITHOUT_PHOTO -> R.string.report_photo_failed
+                    ReportOutcome.QUEUED -> R.string.report_queued_offline
+                }
+                context.toast(getString(message), long = true)
+            }
+            AlertsEvent.NoLocation -> context.toast(getString(R.string.location_unavailable), long = true)
+            AlertsEvent.PhotoUnreadable -> context.toast(getString(R.string.error_generic))
+        }
+    }
+
+    /** Full details of one report, its photo when it has one, and a shortcut to the maps app. */
     private fun showDetails(alert: CommunityAlert, km: Double?) {
         val lines = buildList {
             add(alert.description.ifBlank { getString(R.string.alert_no_description) })
             add("")
-            if (km != null) add(getString(R.string.km_away, km))
+            if (km != null) add(DistanceFormat.away(requireContext(), km, latestState.useMetric))
             add(getString(R.string.confirm_count, alert.confirmCount))
         }
-        MaterialAlertDialogBuilder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
             .setIcon(iconForCategory(alert.category))
             .setTitle(categoryLabel(requireContext(), alert.category))
             .setMessage(lines.joinToString("\n"))
             .setPositiveButton(R.string.alert_open_in_maps) { _, _ ->
-                Log.d("CommunityAlerts", "Opening alert ${alert.id} in maps")
+                Log.d(TAG, "Opening alert ${alert.id} in maps")
                 val label = Uri.encode(alert.category)
                 runCatching {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("geo:${alert.lat},${alert.lng}?q=${alert.lat},${alert.lng}($label)")))
@@ -177,11 +231,29 @@ class CommunityAlertsFragment : Fragment() {
             }
             .setNeutralButton(R.string.i_see_it_too) { _, _ -> viewModel.confirm(alert.id) }
             .setNegativeButton(R.string.alert_close, null)
-            .show()
+
+        val photoUrl = alert.photoUrl
+        if (!photoUrl.isNullOrBlank()) {
+            // The photo is downloaded from Azure Blob Storage while the dialog is open.
+            val photoView = ViewReportPhotoBinding.inflate(layoutInflater)
+            builder.setView(photoView.root)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val bitmap = viewModel.loadPhoto(photoUrl, requireContext().dp(PHOTO_MAX_DP))
+                photoView.photoLoading.isVisible = false
+                if (bitmap != null) {
+                    photoView.photo.setImageBitmap(bitmap)
+                    photoView.photo.isVisible = true
+                } else {
+                    photoView.root.isVisible = false
+                }
+            }
+        }
+        builder.show()
     }
 
     /** Bottom sheet to report a new incident at the user's location. */
     private fun showReportSheet() {
+        if (reportSheet?.isShowing == true) return
         val sheet = BottomSheetDialog(requireContext())
         val form = SheetReportAlertBinding.inflate(layoutInflater)
         sheet.setContentView(form.root)
@@ -191,21 +263,59 @@ class CommunityAlertsFragment : Fragment() {
         }
         form.descriptionInput.setText(viewModel.state.value.description)
         form.descriptionInput.doAfterTextChanged { viewModel.onDescription(it?.toString().orEmpty()) }
-        form.submitButton.setOnClickListener {
-            viewModel.submit()
-            sheet.dismiss()
+        form.addPhotoButton.setOnClickListener {
+            pickReportPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+        form.removePhotoButton.setOnClickListener { viewModel.removePhoto() }
+        // The sheet stays open while sending, so a missing location fix can be fixed and retried.
+        form.submitButton.setOnClickListener { viewModel.submit() }
+        sheet.setOnDismissListener {
+            reportSheet = null
+            reportForm = null
+        }
+
+        reportSheet = sheet
+        reportForm = form
+        renderReportForm(viewModel.state.value)
         sheet.show()
+    }
+
+    /** Shows the picked photo, and disables sending while a photo is prepared or the report is sent. */
+    private fun renderReportForm(state: AlertsUiState) {
+        val form = reportForm ?: return
+        val photo = state.photo
+        form.photoPreviewFrame.isVisible = photo != null || state.preparingPhoto
+        form.photoProgress.isVisible = state.preparingPhoto
+        if (photo != null && form.photoPreview.tag != photo.path) {
+            form.photoPreview.tag = photo.path
+            form.photoPreview.setImageURI(Uri.fromFile(photo))
+        } else if (photo == null) {
+            form.photoPreview.tag = null
+            form.photoPreview.setImageDrawable(null)
+        }
+        form.removePhotoButton.isVisible = photo != null && !state.submitting
+        form.addPhotoButton.isEnabled = !state.submitting && !state.preparingPhoto
+        form.submitButton.isEnabled = !state.submitting && !state.preparingPhoto
+        form.submitProgress.isVisible = state.submitting
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        reportSheet?.dismiss()
+        reportSheet = null
+        reportForm = null
         _binding = null
+    }
+
+    private companion object {
+        const val TAG = "CommunityAlerts"
+        const val PHOTO_MAX_DP = 400
     }
 }
 
 /** RecyclerView adapter for alert cards, each paired with its distance in km. */
 private class AlertAdapter(
+    private val distanceText: (Double) -> String,
     private val onConfirm: (CommunityAlert) -> Unit,
     private val onDetails: (CommunityAlert, Double?) -> Unit
 ) : ListAdapter<Pair<CommunityAlert, Double?>, AlertAdapter.Holder>(Diff) {
@@ -220,9 +330,9 @@ private class AlertAdapter(
         val context = holder.itemView.context
         holder.binding.icon.setImageResource(iconForCategory(alert.category))
         holder.binding.category.text = categoryLabel(context, alert.category)
-        holder.binding.distance.setTextOrGone(km?.let { context.getString(R.string.km_away, it) })
+        holder.binding.distance.setTextOrGone(km?.let(distanceText))
         holder.binding.confirmCount.text = context.getString(R.string.confirm_count, alert.confirmCount)
-        holder.binding.description.text = alert.description
+        holder.binding.description.setTextOrGone(alert.description)
         holder.binding.confirmButton.setOnClickListener { onConfirm(alert) }
         holder.binding.detailsButton.setOnClickListener { onDetails(alert, km) }
     }

@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Bottom sheet to report a community incident: category and description. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Bottom sheet to report a community incident: category, an optional
+  description and an optional photo, which is uploaded to Azure Blob Storage.
+  It scrolls so the whole form stays reachable on small phones with the
+  keyboard open.
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -44,12 +53,78 @@
             android:layout_height="wrap_content"
             android:gravity="top"
             android:inputType="textMultiLine|textCapSentences"
+            android:maxLength="500"
             android:minLines="3" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        style="@style/Kin.Text.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/report_photo_optional" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/photoPreviewFrame"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/photoPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/kin_stone_inset"
+                android:contentDescription="@string/report_photo_description"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.Kin.Small" />
+
+            <ProgressBar
+                android:id="@+id/photoProgress"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addPhotoButton"
+            style="@style/Widget.Kin.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/add_photo"
+            app:icon="@drawable/ic_photo_camera" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/removePhotoButton"
+            style="@style/Widget.Kin.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:text="@string/remove_photo"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
         style="@style/Widget.Kin.Button.Primary"
         android:layout_marginTop="20dp"
         android:text="@string/submit_report" />
+
+    <ProgressBar
+        android:id="@+id/submitProgress"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:visibility="gone" />
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>

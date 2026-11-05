@@ -12,6 +12,8 @@ import za.co.kinplus.app.data.local.PendingActionDao
 import za.co.kinplus.app.data.local.SosHistoryDao
 import za.co.kinplus.app.data.remote.KinPlusApi
 import za.co.kinplus.app.data.remote.dto.*
+import za.co.kinplus.app.data.repository.ReportPhotoRepository
+import java.io.File
 
 /**
  * Replays queued offline actions against the API when connectivity returns
@@ -26,7 +28,8 @@ class SyncWorker @AssistedInject constructor(
     private val api: KinPlusApi,
     private val dao: PendingActionDao,
     private val sosHistoryDao: SosHistoryDao,
-    private val gson: Gson
+    private val gson: Gson,
+    private val photoRepository: ReportPhotoRepository
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
@@ -56,8 +59,13 @@ class SyncWorker @AssistedInject constructor(
                         api.reportZoneEvent(body.zoneId, ZoneEventRequest(body.type))
                     }
                     ActionType.ALERT -> {
-                        val body = gson.fromJson(action.payloadJson, AlertRequest::class.java)
-                        api.createAlert(body)
+                        val queued = gson.fromJson(action.payloadJson, QueuedAlert::class.java)
+                        val localPhoto = queued.localPhotoPath?.let(::File)?.takeIf { it.exists() }
+                        // A photo attached offline is uploaded to blob storage first. If
+                        // that fails the report still goes out, without the photo.
+                        val blobUrl = queued.photoBlobUrl ?: localPhoto?.let { photoRepository.upload(it) }
+                        api.createAlert(AlertRequest(queued.category, queued.description, queued.lat, queued.lng, blobUrl))
+                        photoRepository.discard(localPhoto)
                     }
                 }
                 dao.remove(action.clientActionId)
@@ -80,3 +88,17 @@ class SyncWorker @AssistedInject constructor(
 
 /** Zone-event payload persisted in the queue (the id is not part of the API body). */
 data class QueuedZoneEvent(val zoneId: String, val type: String)
+
+/**
+ * Community report payload persisted in the queue. It has the same fields as
+ * the API's AlertRequest (so reports queued by older versions still parse),
+ * plus the local path of a photo that still has to be uploaded.
+ */
+data class QueuedAlert(
+    val category: String,
+    val description: String,
+    val lat: Double,
+    val lng: Double,
+    val photoBlobUrl: String? = null,
+    val localPhotoPath: String? = null
+)

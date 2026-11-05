@@ -3,6 +3,10 @@
 # Keep Retrofit/Gson DTO models (serialized by reflection).
 -keep class za.co.kinplus.app.data.remote.dto.** { *; }
 
+# Offline queue payloads are stored as Gson JSON in Room, so their field names
+# must stay the same between app versions or queued actions could not be read.
+-keep class za.co.kinplus.app.data.sync.Queued* { *; }
+
 # Retrofit + OkHttp.
 -dontwarn okhttp3.**
 -dontwarn retrofit2.**
