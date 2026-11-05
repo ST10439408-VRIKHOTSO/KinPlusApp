@@ -52,6 +52,30 @@ class ZoneRepository @Inject constructor(
         Resource.Error("Could not save the Safe Zone. You may be offline.", e)
     }
 
+    /**
+     * Saves changes to an existing zone (PATCH zones/{id}). The API can change
+     * the name, radius and alert switches; the centre and circle stay as they
+     * were. The cached copy is only updated once the server has accepted it.
+     */
+    suspend fun updateZone(
+        zone: SafeZone, name: String, radiusM: Int, notifyEnter: Boolean, notifyExit: Boolean
+    ): Resource<SafeZone> {
+        return try {
+            val res = api.patchZone(zone.id, ZonePatchRequest(name, radiusM, notifyEnter, notifyExit))
+            if (!res.isSuccessful) {
+                Log.w(TAG, "Zone update refused for ${zone.id}: HTTP ${res.code()}")
+                return Resource.Error("Could not save the Safe Zone.")
+            }
+            val updated = zone.copy(name = name, radiusM = radiusM, notifyOnEnter = notifyEnter, notifyOnExit = notifyExit)
+            zoneDao.upsertAll(listOf(updated.toEntity()))
+            Log.i(TAG, "Updated zone ${zone.id}")
+            Resource.Success(updated)
+        } catch (e: Exception) {
+            Log.e(TAG, "Update zone failed", e)
+            Resource.Error("Could not save the Safe Zone. You may be offline.", e)
+        }
+    }
+
     suspend fun deleteZone(id: String): Resource<Unit> {
         return try {
             // Only remove the cached zone once the server has really deleted it.
@@ -88,3 +112,4 @@ class ZoneRepository @Inject constructor(
 private fun ZoneDto.toEntity() = ZoneEntity(id, name, lat, lng, radiusM, circleId, notifyOnEnter, notifyOnExit)
 private fun ZoneDto.toDomain() = SafeZone(id, name, lat, lng, radiusM, circleId, notifyOnEnter, notifyOnExit)
 private fun ZoneEntity.toDomain() = SafeZone(id, name, lat, lng, radiusM, circleId, notifyOnEnter, notifyOnExit)
+private fun SafeZone.toEntity() = ZoneEntity(id, name, lat, lng, radiusM, circleId, notifyOnEnter, notifyOnExit)

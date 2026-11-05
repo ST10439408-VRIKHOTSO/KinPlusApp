@@ -11,7 +11,9 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import za.co.kinplus.app.R
 import za.co.kinplus.app.databinding.FragmentSafeZonesBinding
+import kotlinx.coroutines.flow.combine
 import za.co.kinplus.app.domain.SafeZone
+import za.co.kinplus.app.ui.common.DistanceFormat
 import za.co.kinplus.app.ui.common.addRow
 import za.co.kinplus.app.ui.common.collectWhileStarted
 import za.co.kinplus.app.ui.common.navigateSafely
@@ -37,14 +39,14 @@ class SafeZonesFragment : Fragment() {
         binding.topBar.setup(title = getString(R.string.safe_zones_title), onBack = { popBackSafely() })
         binding.addZoneButton.setOnClickListener { navigateSafely(R.id.safeZoneEditorFragment) }
 
-        collectWhileStarted(viewModel.zones) { zones ->
+        collectWhileStarted(combine(viewModel.zones, viewModel.useMetric) { zones, metric -> zones to metric }) { (zones, metric) ->
             binding.emptyText.isVisible = zones.isEmpty()
             binding.zonesGroup.isVisible = zones.isNotEmpty()
             binding.zonesContainer.removeAllViews()
             zones.forEach { zone ->
                 val row = binding.zonesContainer.addRow(
                     title = zone.name,
-                    subtitle = zoneSummary(zone),
+                    subtitle = zoneSummary(zone, metric),
                     icon = iconForZone(zone.name),
                     onClick = { navigateSafely(R.id.safeZoneEditorFragment, bundleOf("zoneId" to zone.id)) }
                 )
@@ -56,13 +58,14 @@ class SafeZonesFragment : Fragment() {
         }
     }
 
-    /** "200 m · Notify on enter · Notify on exit". */
-    private fun zoneSummary(zone: SafeZone): String {
-        val directions = listOfNotNull(
+    /** "200 m · Notify on enter · Notify on exit", with the radius in the units chosen in Settings. */
+    private fun zoneSummary(zone: SafeZone, metric: Boolean): String {
+        val parts = listOfNotNull(
+            DistanceFormat.radius(requireContext(), zone.radiusM, metric),
             getString(R.string.notify_on_enter).takeIf { zone.notifyOnEnter },
             getString(R.string.notify_on_exit).takeIf { zone.notifyOnExit }
-        ).joinToString(" · ")
-        return "${zone.radiusM} m · $directions"
+        )
+        return parts.joinToString(" · ")
     }
 
     private fun iconForZone(name: String): Int = when {

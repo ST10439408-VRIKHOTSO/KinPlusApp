@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import za.co.kinplus.app.R
 import za.co.kinplus.app.databinding.FragmentSafeZoneEditorBinding
 import za.co.kinplus.app.domain.Circle
+import za.co.kinplus.app.ui.common.DistanceFormat
 import za.co.kinplus.app.ui.common.collectWhileStarted
 import za.co.kinplus.app.ui.common.popBackSafely
 import za.co.kinplus.app.ui.common.setTextIfDifferent
@@ -22,7 +23,8 @@ import za.co.kinplus.app.ui.common.setup
 /**
  * Safe Zone editor (screen 9). Creates a zone centred on the device's current
  * position with a radius of 100 to 5000 m (FR-20) and enter or exit alerts,
- * sent to the circle picked here (the primary circle by default).
+ * sent to the circle picked here (the primary circle by default). Opened from
+ * the Safe Zones list it edits that zone instead.
  */
 @AndroidEntryPoint
 class SafeZoneEditorFragment : Fragment() {
@@ -39,7 +41,11 @@ class SafeZoneEditorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topBar.setup(title = getString(R.string.create_safe_zone), onBack = { popBackSafely() })
+        val editing = viewModel.state.value.editing
+        binding.topBar.setup(
+            title = getString(if (editing) R.string.edit_safe_zone else R.string.create_safe_zone),
+            onBack = { popBackSafely() }
+        )
         shownCircles = emptyList()
 
         binding.nameInput.doAfterTextChanged { viewModel.onName(it?.toString().orEmpty()) }
@@ -55,14 +61,15 @@ class SafeZoneEditorFragment : Fragment() {
             // The slider moves in 50 m steps from 100 m, so snap the value onto a step.
             val radius = (100 + ((state.radiusM.coerceIn(100, 5000) - 100) / 50) * 50).toFloat()
             if (binding.radiusSlider.value != radius) binding.radiusSlider.value = radius
-            binding.radiusValue.text = getString(R.string.radius_metres, state.radiusM)
+            binding.radiusValue.text = DistanceFormat.radius(requireContext(), state.radiusM, state.useMetric)
             if (binding.notifyEnterSwitch.isChecked != state.notifyEnter) binding.notifyEnterSwitch.isChecked = state.notifyEnter
             if (binding.notifyExitSwitch.isChecked != state.notifyExit) binding.notifyExitSwitch.isChecked = state.notifyExit
             renderCircles(state)
             binding.errorText.setTextOrGone(
                 when (state.error) {
                     null -> null
-                    "NAME" -> getString(R.string.error_name_required)
+                    "NAME" -> getString(R.string.error_zone_name_required)
+                    "LOCATION" -> getString(R.string.location_unavailable)
                     else -> getString(R.string.error_generic)
                 }
             )
@@ -90,6 +97,8 @@ class SafeZoneEditorFragment : Fragment() {
         for (i in 0 until binding.circleChips.childCount) {
             val chip = binding.circleChips.getChildAt(i) as Chip
             chip.isChecked = chip.tag == state.selectedCircleId
+            // The API cannot move an existing zone to another circle, so the choice is fixed when editing.
+            chip.isEnabled = !state.editing
         }
     }
 
