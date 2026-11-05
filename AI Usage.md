@@ -17,6 +17,3 @@ The application's concept, features, use cases, requirements, screen designs, AP
 
 The group takes full responsibility for the work submitted in the Portfolio of Evidence. AI generated explanations were treated as guidance rather than completed work. The group was responsible for understanding the relevant concepts, implementing the solutions and verifying the application's functionality. GitHub Actions was used to build the application and run unit tests, providing additional checks for compilation and test results.
 
-## Video
-
-The demo video was recorded by the group on a physical phone. The voice over narration was generated with a text to speech tool, and AI was used to trim the recording and time the narration to each screen.
