@@ -21,6 +21,9 @@ import javax.inject.Singleton
  * Registers Android geofences for the user's Safe Zones (FR-21). Transitions
  * are delivered to [GeofenceBroadcastReceiver], which reports the crossing to
  * the API (or queues it while offline).
+ *
+ * Reference: Android Developers (2026) Create and monitor geofences. Available at:
+ * https://developer.android.com/develop/sensors-and-location/location/geofencing [Accessed 5 November 2026].
  */
 @Singleton
 class GeofenceManager @Inject constructor(

@@ -20,6 +20,9 @@ import javax.inject.Singleton
  * repository calls [enqueue]. The action is persisted in Room with a stable
  * clientActionId and a WorkManager job is scheduled with a network constraint,
  * so Android flushes the queue automatically once the device is back online.
+ *
+ * Reference: Android Developers (2026) Task scheduling. Available at:
+ * https://developer.android.com/topic/libraries/architecture/workmanager [Accessed 5 November 2026].
  */
 @Singleton
 class OfflineQueue @Inject constructor(

@@ -17,6 +17,9 @@ import javax.inject.Singleton
  * Emits the device's online/offline state as a Flow. The UI shows an offline
  * banner and the sync layer uses it to decide when to flush the offline queue
  * (FR-28, FR-29).
+ *
+ * Reference: Android Developers (2026) Read network state. Available at:
+ * https://developer.android.com/training/basics/network-ops/reading-network-state [Accessed 5 November 2026].
  */
 @Singleton
 class ConnectivityObserver @Inject constructor(

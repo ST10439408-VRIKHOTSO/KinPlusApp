@@ -17,6 +17,9 @@ private val Context.dataStore by preferencesDataStore(name = "kinplus_settings")
  * User preferences (FR-32): units, notification opt-in and the mirrored
  * language tag. Backed by Jetpack DataStore so reads are reactive Flows the
  * Settings screen can observe.
+ *
+ * Reference: Android Developers (2026) DataStore. Available at:
+ * https://developer.android.com/topic/libraries/architecture/datastore [Accessed 5 November 2026].
  */
 @Singleton
 class SettingsStore @Inject constructor(

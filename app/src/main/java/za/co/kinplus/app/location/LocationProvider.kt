@@ -27,6 +27,9 @@ fun hasAnyLocationPermission(context: Context): Boolean =
  * Thin wrapper over the Fused Location Provider (FR-13). Returns the current
  * fix plus battery level, or null if permission has not been granted. Location
  * accuracy is balanced against battery use per NFR-02.
+ *
+ * Reference: Android Developers (2026) Get the last known location. Available at:
+ * https://developer.android.com/develop/sensors-and-location/location/retrieve-current [Accessed 5 November 2026].
  */
 @Singleton
 class LocationProvider @Inject constructor(

@@ -1,5 +1,6 @@
 package za.co.kinplus.app.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import za.co.kinplus.app.auth.AuthManager
@@ -51,6 +52,12 @@ class EmergencyInfoRepository @Inject constructor(
     private suspend fun upsert(transform: (EmergencyInfoEntity) -> EmergencyInfoEntity) {
         val existing = dao.getOnce(authManager.currentUid) ?: EmergencyInfoEntity(uid = authManager.currentUid)
         dao.upsert(transform(existing).copy(updatedAt = System.currentTimeMillis()))
+        // The values are medical and security details, so only the save itself is logged.
+        Log.i(TAG, "Emergency Information saved on this device (never sent to the API)")
+    }
+
+    private companion object {
+        const val TAG = "EmergencyInfoRepo"
     }
 }
 

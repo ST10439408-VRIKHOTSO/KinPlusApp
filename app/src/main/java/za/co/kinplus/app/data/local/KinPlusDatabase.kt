@@ -6,6 +6,9 @@ import androidx.room.RoomDatabase
 /**
  * The Room database backing the Kin+ offline cache and sync queue (FR-28,
  * FR-29). Bumped to version 1 for the Part 2/PoE build.
+ *
+ * Reference: Android Developers (2026) Save data in a local database using Room.
+ * Available at: https://developer.android.com/training/data-storage/room [Accessed 5 November 2026].
  */
 @Database(
     entities = [

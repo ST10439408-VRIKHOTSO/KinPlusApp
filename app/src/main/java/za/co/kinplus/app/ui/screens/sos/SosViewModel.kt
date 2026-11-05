@@ -1,5 +1,6 @@
 package za.co.kinplus.app.ui.screens.sos
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,19 +62,28 @@ class SosViewModel @Inject constructor(
         _state.update { it.copy(sending = true, error = null) }
         viewModelScope.launch {
             val fix = s.fix ?: locationProvider.currentFix()
+            Log.i(TAG, "Raising SOS to ${s.selectedCircleIds.size} circle(s), location attached: ${fix != null}")
             when (val res = sosRepository.raiseSos(
                 lat = fix?.lat, lng = fix?.lng,
                 message = s.message.ifBlank { null },
                 circleIds = s.selectedCircleIds.toList()
             )) {
-                is Resource.Success -> _state.update {
-                    it.copy(sending = false, sent = res.data != null, sentQueued = res.data == null)
+                is Resource.Success -> {
+                    // data is null when the SOS was queued offline (FR-29).
+                    Log.i(TAG, if (res.data != null) "SOS sent" else "SOS queued until the phone is back online")
+                    _state.update { it.copy(sending = false, sent = res.data != null, sentQueued = res.data == null) }
                 }
-                is Resource.Error -> _state.update { it.copy(sending = false, error = res.message) }
+                is Resource.Error -> {
+                    Log.e(TAG, "SOS failed: ${res.message}")
+                    _state.update { it.copy(sending = false, error = res.message) }
+                }
                 Resource.Loading -> Unit
             }
         }
     }
 
-    companion object { const val HOLD_SECONDS = 3 }
+    companion object {
+        const val HOLD_SECONDS = 3
+        private const val TAG = "SosViewModel"
+    }
 }

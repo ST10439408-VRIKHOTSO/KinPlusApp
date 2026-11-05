@@ -1,5 +1,6 @@
 package za.co.kinplus.app.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import za.co.kinplus.app.auth.AuthManager
 import za.co.kinplus.app.data.local.EmergencyContactDao
@@ -30,7 +31,16 @@ class EmergencyContactRepository @Inject constructor(
                 phone = phone
             )
         )
+        // Only the event is logged: contact details are personal and stay on this phone.
+        Log.i(TAG, "Emergency contact added on this device")
     }
 
-    suspend fun delete(id: String) = dao.delete(id)
+    suspend fun delete(id: String) {
+        dao.delete(id)
+        Log.i(TAG, "Emergency contact $id removed")
+    }
+
+    private companion object {
+        const val TAG = "EmergencyContactRepo"
+    }
 }

@@ -2,6 +2,7 @@ package za.co.kinplus.app.data.repository
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -43,8 +44,13 @@ class LocalPhotoRepository @Inject constructor(
             file.outputStream().use { output -> input.copyTo(output) }
         }
         dao.upsert(LocalPhotoEntity(id = key, path = file.absolutePath))
+        Log.i(TAG, "Saved photo for ${key.substringBefore(':')} (${file.length() / 1024} KB, on this device only)")
     }
 
     private fun userKey() = "user:${authManager.currentUid}"
     private fun circleKey(circleId: String) = "circle:$circleId"
+
+    private companion object {
+        const val TAG = "LocalPhotoRepository"
+    }
 }

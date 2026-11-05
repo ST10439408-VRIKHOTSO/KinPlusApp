@@ -23,9 +23,8 @@ import kotlinx.coroutines.launch
  * full alarm volume and flashes the camera torch. The previous alarm volume is
  * restored when the siren stops. Devices without a torch still get the sound.
  *
- * Reference: Android Developers (2024) CameraManager.setTorchMode.
- * Available at: https://developer.android.com/reference/android/hardware/camera2/CameraManager
- * [Accessed 13 October 2026].
+ * Reference: Android Developers (2026) CameraManager. Available at:
+ * https://developer.android.com/reference/android/hardware/camera2/CameraManager [Accessed 5 November 2026].
  */
 class SirenStrobeController(private val context: Context) {
 

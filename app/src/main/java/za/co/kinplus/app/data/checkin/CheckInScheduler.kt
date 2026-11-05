@@ -19,9 +19,8 @@ import java.util.concurrent.TimeUnit
  * Scheduling uses WorkManager so the timer survives the app being closed and
  * the phone restarting.
  *
- * Reference: Android Developers (2024) Schedule tasks with WorkManager.
- * Available at: https://developer.android.com/topic/libraries/architecture/workmanager
- * [Accessed 13 October 2026].
+ * Reference: Android Developers (2026) Task scheduling. Available at:
+ * https://developer.android.com/topic/libraries/architecture/workmanager [Accessed 5 November 2026].
  */
 object CheckInScheduler {
 
