@@ -1,6 +1,6 @@
 # Kin+ Privacy Policy
 
-**Last updated:** 14 October 2026
+**Last updated:** 5 November 2026
 
 Kin+ is a family and community safety app built by Vukosi Rikhotso and Theo Golele as part of the OPSC6312 Open Source Coding module at Rosebank College (IIE), Pretoria. This policy explains what information Kin+ collects, why it is needed and how you stay in control of it.
 
@@ -20,7 +20,7 @@ Location is only shared with circles you have joined, and you can pause sharing 
 
 **Circles and safety events.** The circles you create or join, your Safe Zones, Safe Journeys, SOS alerts and check in timers.
 
-**Community reports.** The category, description and location of incidents you report. Your identity is never shown to other users on a report.
+**Community reports.** The category, description and location of incidents you report, and a photo if you choose to add one. Your identity is never shown to other users on a report.
 
 **Device information.** A Firebase Cloud Messaging token so we can send you safety notifications, and basic app usage data collected by Firebase Analytics to help us find problems.
 
@@ -32,7 +32,8 @@ Your information is only used to run the safety features of Kin+. We do not sell
 
 * **Firebase (Google)** handles sign in, notifications and analytics.
 * **Our Kin+ API** stores circles, locations and safety events in a MongoDB Atlas database.
-* **Your phone** keeps a copy in a local database so the app works offline. It is removed when you sign out or uninstall the app.
+* **Microsoft Azure Blob Storage** stores photos attached to community reports. The photo goes straight from your phone to Azure through a short lived upload link, and is shown with the report once it is approved.
+* **Your phone** keeps a copy of your circles, Safe Zones and last known locations in a local database so the app works offline, together with anything waiting to be sent. This copy is removed when you sign out. Your Emergency Information, emergency contacts and profile photos are stored only on your phone and are removed when you delete your account or uninstall the app.
 
 All information is sent over encrypted (HTTPS) connections.
 
@@ -41,7 +42,7 @@ All information is sent over encrypted (HTTPS) connections.
 * **Pause sharing** at any time in the Privacy Control Centre.
 * **Leave a circle** to stop sharing with its members.
 * **Turn off location or notification permissions** in your phone's settings. Some safety features will not work without them.
-* **Delete your account** from the Profile screen. This permanently deletes your account and location history.
+* **Delete your account** from the Profile screen. This permanently deletes your account, your location history and all Kin+ data on your phone.
 
 ## Children
 

@@ -38,7 +38,7 @@ SAFE JOURNEY
 Set a destination, an arrival time and who should watch over you. If you do not arrive in time, they are alerted. The "I'm OK" timer raises an SOS if you do not check in.
 
 COMMUNITY ALERTS
-See reports of crime, hazards, fires and medical emergencies near you, filtered by distance. Report what you see anonymously, and confirm other reports with "I see it too".
+See reports of crime, hazards, fires and medical emergencies near you, filtered by distance. Report what you see anonymously, add a photo if it helps, and confirm other reports with "I see it too".
 
 NEARBY HELP
 One tap finds the closest police station, hospital, clinic or pharmacy.
@@ -67,6 +67,7 @@ Kin+ does not replace emergency services. In an emergency, call 10111 (police) o
 | Name | Yes | No | Account management, app functionality | No |
 | Email address | Yes | No | Account management | No |
 | User generated content (community reports) | Yes | No | App functionality | Yes |
+| Photos (attached to community reports) | Yes | No | App functionality | Yes |
 | Device or other IDs (FCM token) | Yes | No | App functionality (notifications) | No |
 | App interactions (Firebase Analytics) | Yes | No | Analytics | No |
 

@@ -1,5 +1,48 @@
 Kin+ Release Notes
 
+Version 1.3 PoE (final submission): blob storage photos, Android 16 and settings that work
+
+This is the final PoE version. It adds photos to community reports, stored in Azure Blob Storage, moves the app to Android 16 (API 36) so it can be published on Google Play, and fixes the problems we found when we checked the app against the PoE brief.
+
+Added: innovative feature
+- Photos on community reports (Community Alerts, FR 26). A report can now carry one photo. The photo is resized on the phone, the Kin+ API gives the app a short lived upload link (a SAS URL that expires after 15 minutes), and the photo goes straight to Azure Blob Storage without passing through our API. The report details show the photo once the report is approved. A report made offline keeps its photo, and the sync worker uploads it when the phone reconnects. If the upload fails, the report is still sent without the photo.
+
+Added
+- Editing a Safe Zone. Tapping a saved zone now opens it for editing (name, radius and alerts) instead of an empty form that created a copy.
+- Messages after sending a community report: sent for review, sent without the photo, or saved offline.
+
+Changed
+- The app targets Android 16 (API 36), which Google Play requires for new apps and updates since 31 August 2026. The Android Gradle plugin is now 8.13.2 and the app compiles against API 36.
+- Every screen is drawn edge to edge, with padding for the status bar, the navigation bar and the keyboard, as Android 15 and later require.
+- Signing out now clears the cached circles, Safe Zones, locations and queued actions, removes the geofences and the check in timer, and stops this phone receiving the account's notifications. Deleting the account also deletes the Firebase sign in and all Kin+ data on the phone.
+- Version 1.3 PoE (version code 5).
+
+Fixed
+- The Notifications switch in Settings did nothing. Switching it off now stops push notifications on this phone, even while the app is closed, and switching it on registers the phone again.
+- The Units switch in Settings did nothing. Community Alert distances and Safe Zone radii now show in kilometres and metres, or in miles and feet.
+- The sharing switch for each circle in Settings always showed as on. It now shows the saved setting, and goes back if the change cannot be saved.
+- Error messages on the circle, sign in and profile screens were in English even in isiZulu and Sepedi. They now come from the translated strings. Firebase's English errors are replaced with our own text for a wrong password, an email that is already used, no connection and too many attempts.
+- Signing in with an empty email or password showed a technical message. The form is now checked first.
+- The check in notifications and the notification channel name now use the language chosen in the app, not only the phone's language.
+- Creating a circle or a Safe Zone without a name showed the message meant for a person's first and last name.
+- The community report description is optional, as its label says. Before, a report without a description was silently not sent.
+- A community report or a Safe Zone could be placed at the Pretoria campus when the phone had no location fix. Kin+ now asks the user to turn on location instead, and does not show distances that were not measured from the user.
+- Saving the profile always said it was saved, even when the save failed.
+
+Changes since version 1.2 that were committed before this release
+- The Safe Zone editor lets the user choose the circle to notify.
+- A queued SOS is marked as sent in Incident History once it syncs.
+- Nearby help searches are centred on the user's location.
+- The journey ETA is shown as a short local time.
+- HTTP traffic is only logged in debug builds, and the sign in token is hidden in the log.
+
+Tests and GitHub
+- 46 unit tests, up from 23. The new tests cover community report photos (AlertRepositoryTest, ReportPhotoTest), offline reports with a photo (SyncWorkerTest), sign in errors (AuthErrorTest) and units (DistanceFormatTest).
+- The build workflow also uploads the debug APK from every run.
+- The release workflow builds the signed APK and AAB when the upload key is saved as repository secrets, and otherwise marks the build as a debug pre-release.
+- Logging was added to the main screens and repositories, and every source used in the code is referenced in the comments and listed in the README.
+
+
 Version 1.2 PoE (Part 3): XML views and release build
 
 This version rebuilds the whole user interface with Android XML layouts, brings back Google sign in, completes the translations and adds a signed release build.
