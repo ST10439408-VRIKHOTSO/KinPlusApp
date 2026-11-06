@@ -35,8 +35,11 @@ object NetworkModule {
     fun provideOkHttp(authInterceptor: AuthInterceptor): OkHttpClient {
         val builder = OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
+            // The API runs on Azure's free tier, which sleeps when idle. The first
+            // request after a quiet spell takes about 25 seconds while it wakes up,
+            // so the read timeout leaves room for that instead of failing at 20 s.
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
         // Request logging is added in debug builds only, and the Firebase
         // bearer token is redacted so it never reaches logcat.
         if (BuildConfig.DEBUG) {
