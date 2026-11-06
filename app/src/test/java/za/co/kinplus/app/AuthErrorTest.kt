@@ -20,32 +20,38 @@ import za.co.kinplus.app.ui.screens.auth.LoginViewModel
  */
 class AuthErrorTest {
 
+    // Wrong input: a blank email is stopped before Firebase is called.
     @Test
     fun emptyEmailIsCaughtBeforeSignIn() {
         assertEquals("EMAIL_REQUIRED", LoginViewModel.validateLogin("  ", "secret123"))
     }
 
+    // Wrong input: an email with no domain is rejected.
     @Test
     fun badlyFormedEmailIsCaughtBeforeSignIn() {
         assertEquals("INVALID_EMAIL", LoginViewModel.validateLogin("thandi@", "secret123"))
     }
 
+    // Wrong input: an empty password is rejected.
     @Test
     fun emptyPasswordIsCaughtBeforeSignIn() {
         assertEquals("PASSWORD_REQUIRED", LoginViewModel.validateLogin("thandi@example.com", ""))
     }
 
+    // Right input: a valid email and a password pass the checks.
     @Test
     fun completeFormIsSent() {
         assertNull(LoginViewModel.validateLogin("thandi@example.com", "secret123"))
     }
 
+    // Wrong input: Firebase's weak password error must give the weak password message, not wrong credentials.
     @Test
     fun weakPasswordIsCheckedBeforeInvalidCredentials() {
         // FirebaseAuthWeakPasswordException is a kind of invalid credentials exception.
         assertEquals(AuthManager.WEAK_PASSWORD, AuthManager.mapError(mockk<FirebaseAuthWeakPasswordException>(relaxed = true)))
     }
 
+    // Wrong input: each Firebase failure (wrong password, unknown user, email in use, no network, too many attempts) maps to its own translated message.
     @Test
     fun firebaseExceptionsMapToTranslatableCodes() {
         assertEquals(AuthManager.WRONG_CREDENTIALS, AuthManager.mapError(mockk<FirebaseAuthInvalidCredentialsException>(relaxed = true)))
@@ -55,6 +61,7 @@ class AuthErrorTest {
         assertEquals(AuthManager.TOO_MANY_ATTEMPTS, AuthManager.mapError(mockk<FirebaseTooManyRequestsException>(relaxed = true)))
     }
 
+    // Wrong input: an unexpected error falls back to the general sign in failed message.
     @Test
     fun unknownFailureGetsTheGeneralCode() {
         assertEquals(AuthManager.AUTH_FAILED, AuthManager.mapError(IllegalStateException("boom")))

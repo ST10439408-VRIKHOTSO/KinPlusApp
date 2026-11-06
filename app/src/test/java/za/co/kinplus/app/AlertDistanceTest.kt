@@ -12,11 +12,13 @@ import za.co.kinplus.app.ui.screens.alerts.distanceKm
  */
 class AlertDistanceTest {
 
+    // Right input: the same point twice must give a distance of 0 km.
     @Test
     fun samePointIsZeroKilometres() {
         assertEquals(0.0, distanceKm(-25.7545, 28.2314, -25.7545, 28.2314), 0.0001)
     }
 
+    // Right input: two real cities must come out close to the known 55 km.
     @Test
     fun pretoriaToJohannesburgIsAboutFiftyFiveKilometres() {
         // Pretoria CBD to Johannesburg CBD is roughly 54 to 56 km in a straight line.
@@ -24,6 +26,7 @@ class AlertDistanceTest {
         assertTrue("Expected about 55 km but was $km", km in 52.0..58.0)
     }
 
+    // Right input: swapping the start and end must not change the distance.
     @Test
     fun distanceIsTheSameInBothDirections() {
         val there = distanceKm(-25.7545, 28.2314, -25.8601, 28.1891)
@@ -31,6 +34,7 @@ class AlertDistanceTest {
         assertEquals(there, back, 0.0001)
     }
 
+    // Wrong value guarded: no check in timer may be zero or negative, and the choices must be in order.
     @Test
     fun checkInIntervalsArePositiveAndSorted() {
         val options = CheckInScheduler.intervalOptions
@@ -39,6 +43,7 @@ class AlertDistanceTest {
         assertEquals(options.sorted(), options)
     }
 
+    // Wrong value guarded: a grace period longer than the shortest timer would let two prompts overlap.
     @Test
     fun graceWindowIsShorterThanTheSmallestInterval() {
         assertTrue(CheckInScheduler.GRACE_MINUTES < CheckInScheduler.intervalOptions.first())

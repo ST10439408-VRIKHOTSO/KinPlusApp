@@ -35,6 +35,7 @@ class AlertRepositoryTest {
 
     private fun repository() = AlertRepository(api, offlineQueue, connectivity, photoRepository)
 
+    // Right input: online with a photo that uploads, so the report carries the blob URL and the local copy is deleted.
     @Test
     fun `online report uploads the photo and sends its blob URL`() = runTest {
         every { connectivity.isOnlineNow() } returns true
@@ -47,6 +48,7 @@ class AlertRepositoryTest {
         verify(exactly = 1) { photoRepository.discard(photo) }
     }
 
+    // Wrong input: the photo cannot be uploaded, so the report must still be sent without it.
     @Test
     fun `report is still sent when the photo upload fails`() = runTest {
         every { connectivity.isOnlineNow() } returns true
@@ -58,6 +60,7 @@ class AlertRepositoryTest {
         coVerify(exactly = 1) { api.createAlert(AlertRequest("CRIME", "", -25.75, 28.23, null)) }
     }
 
+    // Wrong condition: no connection, so nothing is uploaded and the report is queued with its photo.
     @Test
     fun `offline report is queued with the local photo path`() = runTest {
         every { connectivity.isOnlineNow() } returns false
@@ -72,6 +75,7 @@ class AlertRepositoryTest {
         verify(exactly = 0) { photoRepository.discard(any()) }
     }
 
+    // Right input: a report with no photo must not touch blob storage at all.
     @Test
     fun `report without a photo never calls blob storage`() = runTest {
         every { connectivity.isOnlineNow() } returns true

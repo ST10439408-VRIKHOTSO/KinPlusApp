@@ -12,12 +12,14 @@ import za.co.kinplus.app.auth.AuthManager
  */
 class AuthValidationTest {
 
+    // Right input: well formed email addresses must be accepted.
     @Test
     fun `valid emails are accepted`() {
         assertTrue(AuthManager.isValidEmail("vukosi@example.com"))
         assertTrue(AuthManager.isValidEmail("theo.golele@rc.iie.ac.za"))
     }
 
+    // Wrong input: emails with no @, no domain ending, no name or nothing at all must be rejected.
     @Test
     fun `invalid emails are rejected`() {
         assertFalse(AuthManager.isValidEmail("no-at-sign"))
@@ -26,12 +28,14 @@ class AuthValidationTest {
         assertFalse(AuthManager.isValidEmail(""))
     }
 
+    // Right input: passwords with 8 or more characters, a letter and a number are accepted.
     @Test
     fun `strong passwords need 8 chars a letter and a number`() {
         assertTrue(AuthManager.isStrongPassword("kinplus1"))
         assertTrue(AuthManager.isStrongPassword("SafeR2024"))
     }
 
+    // Wrong input: passwords that are too short, have no number or have no letter are rejected.
     @Test
     fun `weak passwords are rejected`() {
         assertFalse(AuthManager.isStrongPassword("short1"))     // < 8

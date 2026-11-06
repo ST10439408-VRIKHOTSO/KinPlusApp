@@ -28,6 +28,7 @@ import za.co.kinplus.app.util.Resource
  */
 class SosRepositoryTest {
 
+    // Wrong condition: no connection, so the SOS must be queued and not lost.
     @Test
     fun `SOS raised while offline is queued`() = runTest {
         val api = mockk<KinPlusApi>(relaxed = true)
@@ -48,6 +49,7 @@ class SosRepositoryTest {
         assertTrue(result is Resource.Success && result.data == null)
     }
 
+    // Wrong condition: offline, so the history entry is saved as QUEUED with the queue id to be marked sent later.
     @Test
     fun `queued SOS is logged in history under its queued action id`() = runTest {
         val api = mockk<KinPlusApi>(relaxed = true)
@@ -70,6 +72,7 @@ class SosRepositoryTest {
         assertEquals("QUEUED", entry.captured.status)
     }
 
+    // Right condition: online, so the SOS goes straight to the API and nothing is queued.
     @Test
     fun `SOS raised while online is sent to the API`() = runTest {
         val api = mockk<KinPlusApi>(relaxed = true)

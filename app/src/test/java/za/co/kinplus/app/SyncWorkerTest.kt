@@ -40,6 +40,7 @@ class SyncWorkerTest {
     private fun queuedSos(id: String) =
         PendingActionEntity(id, "SOS", gson.toJson(SosRequest(-25.75, 28.23, "Help", listOf("c1"))))
 
+    // Right case: the queued SOS reaches the API, so it is marked sent and removed from the queue.
     @Test
     fun `synced SOS is marked sent in history`() = runTest {
         coEvery { pendingDao.getAll() } returns listOf(queuedSos("a1"))
@@ -52,6 +53,7 @@ class SyncWorkerTest {
         assertEquals(ListenableWorker.Result.success(), result)
     }
 
+    // Wrong case: the API cannot be reached, so the SOS stays queued and WorkManager retries.
     @Test
     fun `SOS that fails to sync stays queued in history`() = runTest {
         coEvery { pendingDao.getAll() } returns listOf(queuedSos("a1"))
@@ -64,6 +66,7 @@ class SyncWorkerTest {
         assertEquals(ListenableWorker.Result.retry(), result)
     }
 
+    // Right case: a report made offline uploads its photo first, then is sent with the photo URL.
     @Test
     fun `report queued offline uploads its photo before it is sent`() = runTest {
         val photo = File.createTempFile("report", ".jpg").apply { writeBytes(byteArrayOf(1, 2, 3)) }
@@ -83,6 +86,7 @@ class SyncWorkerTest {
         photo.delete()
     }
 
+    // Edge case: a report saved by version 1.2 (with no photo field) is still read and sent.
     @Test
     fun `report queued by an older version without a photo still syncs`() = runTest {
         // Version 1.2 queued the plain API body; it must still be read after the update.

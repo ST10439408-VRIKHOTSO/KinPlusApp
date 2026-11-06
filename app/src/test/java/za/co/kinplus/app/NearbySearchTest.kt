@@ -12,21 +12,25 @@ import za.co.kinplus.app.ui.screens.safety.nearbyWebUrl
  */
 class NearbySearchTest {
 
+    // Right input: with a location fix, the search is centred on the user.
     @Test
     fun geoUriIsCentredOnTheLastKnownFix() {
         assertEquals("geo:-25.747700,28.185800?q=police+station", nearbyGeoUri("police station", -25.7477, 28.1858))
     }
 
+    // Wrong input: with no location, the maps app chooses where to search instead of failing.
     @Test
     fun geoUriWithoutAFixLetsTheMapsAppChoose() {
         assertEquals("geo:0,0?q=hospital", nearbyGeoUri("hospital", null, null))
     }
 
+    // Wrong input: special characters such as & are encoded so the link stays valid.
     @Test
     fun queryIsEncoded() {
         assertEquals("geo:0,0?q=clinic+%26+pharmacy", nearbyGeoUri("clinic & pharmacy", null, null))
     }
 
+    // Right and wrong input: the web link is centred on the fix when there is one, and still works without one.
     @Test
     fun webFallbackIsCentredOnTheLastKnownFix() {
         assertEquals(
